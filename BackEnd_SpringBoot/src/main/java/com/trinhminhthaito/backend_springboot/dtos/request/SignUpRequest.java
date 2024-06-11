@@ -1,13 +1,13 @@
 package com.trinhminhthaito.backend_springboot.dtos.request;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public record SignUpRequest(
 		String username,
 		String password,
 		String verifyCode,
 		String fullName,
-		LocalDateTime birthDate,
+		Date birthDate,
 		int gender,
 		String address
 ) {

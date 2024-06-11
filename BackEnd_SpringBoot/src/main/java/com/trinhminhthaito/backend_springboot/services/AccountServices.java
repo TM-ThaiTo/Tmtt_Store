@@ -9,9 +9,9 @@ import com.trinhminhthaito.backend_springboot.models.accountModels.Account;
 import java.util.List;
 
 public interface AccountServices {
+	MessageResponse deleteAccountById(String id);
 	MessageResponse createAccount(SignUpRequest dto);
 	MessageResponse forgotPassword(ForgotPasswordRequest dto);
 	Account findAccountByUserName(String email);
-	List<Account> findAllAccounts();
 	MessageResponse passwordCheck(LoginRequest dto);
 }

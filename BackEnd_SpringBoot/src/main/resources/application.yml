@@ -17,7 +17,20 @@ spring:
           starttls:
             enable: true
 
+cloudinary:
+  cloud_name: duvnxrvqr
+  api_key: 797378195252422
+  api_secret: Urp4eOvXb46ePXEDntPXFSdDKgw
+
 key_public: classpath:app.pub
 key_private: classpath:app.key
+
+open:
+  api:
+    title: API document
+    version: v1.0.0
+    description: Mota API document
+    serverUrl: http://localhost:9999
+    serverName: server test
 
 

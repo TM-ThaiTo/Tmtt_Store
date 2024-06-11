@@ -1,49 +1,40 @@
 package com.trinhminhthaito.backend_springboot.config;
 
 import com.trinhminhthaito.backend_springboot.models.accountModels.Account;
-import com.trinhminhthaito.backend_springboot.models.accountModels.Role;
 import com.trinhminhthaito.backend_springboot.repository.accountRepository.AccountRepository;
-import com.trinhminhthaito.backend_springboot.repository.accountRepository.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import com.trinhminhthaito.backend_springboot.enums.Role;
+import java.util.HashSet;
 
 @Configuration
 public class AdminConfig implements CommandLineRunner {
 
-	private final RoleRepository roleRepository;
 	private final AccountRepository accountRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
 
-	public AdminConfig(RoleRepository roleRepository, AccountRepository accountRepository,
+	public AdminConfig(AccountRepository accountRepository,
 					   BCryptPasswordEncoder passwordEncoder) {
-		this.roleRepository = roleRepository;
 		this.accountRepository = accountRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
 	@Transactional
-	public void run(String... args) throws Exception{
+	public void run(String... args) {
+		HashSet<String> roles = new HashSet<>();
+		roles.add(Role.ADMIN.name());
 
-		Role roleAdmin = roleRepository.findByName(Role.Vales.ADMIN.name())
-				.orElseGet(() -> roleRepository.save(new Role(null, Role.Vales.ADMIN.name())));
-
-		Role roleUser = roleRepository.findByName(Role.Vales.USER.name())
-				.orElseGet(() -> roleRepository.save(new Role(null, Role.Vales.USER.name())));
-
-		var userAdmin = accountRepository.findByUsername("admin");
-
-		userAdmin.ifPresentOrElse(
-				account -> System.out.println("admin ja exit"),
-				() -> {
-					var account = new Account();
-					account.setUsername("admin");
-					account.setPassword(passwordEncoder.encode("12345"));
-					account.setRole(roleAdmin);
-					accountRepository.save(account);
-				}
-		);
+		if (accountRepository.findByUsername("admin").isPresent()) {
+			System.out.println("admin already exists");
+		} else {
+			Account newAdmin = new Account();
+			newAdmin.setUsername("admin");
+			newAdmin.setPassword(passwordEncoder.encode("12345"));
+			newAdmin.setRoles(roles);
+			accountRepository.save(newAdmin);
+		}
 	}
 }

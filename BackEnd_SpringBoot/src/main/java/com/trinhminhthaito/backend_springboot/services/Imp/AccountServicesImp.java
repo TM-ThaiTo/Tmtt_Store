@@ -6,21 +6,18 @@ import com.trinhminhthaito.backend_springboot.dtos.request.SendMailRequest;
 import com.trinhminhthaito.backend_springboot.dtos.request.SignUpRequest;
 import com.trinhminhthaito.backend_springboot.dtos.response.MessageResponse;
 import com.trinhminhthaito.backend_springboot.models.accountModels.Account;
-import com.trinhminhthaito.backend_springboot.models.accountModels.Role;
 import com.trinhminhthaito.backend_springboot.models.accountModels.User;
 import com.trinhminhthaito.backend_springboot.repository.accountRepository.AccountRepository;
-import com.trinhminhthaito.backend_springboot.repository.accountRepository.RoleRepository;
 import com.trinhminhthaito.backend_springboot.repository.accountRepository.UserRepository;
 import com.trinhminhthaito.backend_springboot.services.AccountServices;
 import com.trinhminhthaito.backend_springboot.services.MailServices;
 import com.trinhminhthaito.backend_springboot.services.VerifyServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import com.trinhminhthaito.backend_springboot.enums.Role;
 
-import java.util.List;
+import java.util.HashSet;
 
 @Service
 public class AccountServicesImp implements AccountServices {
@@ -28,7 +25,6 @@ public class AccountServicesImp implements AccountServices {
 	private final AccountRepository accountRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final UserRepository userRepository;
-	private final RoleRepository roleRepository;
 	private final VerifyServices verifyServices;
 	private final MailServices mailServices;
 
@@ -36,23 +32,24 @@ public class AccountServicesImp implements AccountServices {
 	private AccountServicesImp(AccountRepository accountRepository,
 							   BCryptPasswordEncoder bCryptPasswordEncoder,
 							   UserRepository userRepository,
-							   RoleRepository roleRepository,
 							   VerifyServices verifyServices,
 							   MailServices mailServices) {
 		this.accountRepository = accountRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.userRepository = userRepository;
-		this.roleRepository = roleRepository;
 		this.verifyServices = verifyServices;
 		this.mailServices = mailServices;
 	}
 
 	// fn: add account to database
-	private void addAccount(SignUpRequest dto, Role userRole){
+	private void addAccount(SignUpRequest dto){
 		var newAccount = new Account();
+		HashSet<String> roles = new HashSet<>();
+		roles.add(Role.USER.name());
+		newAccount.setRoles(roles);
+
 		newAccount.setUsername(dto.username());
 		newAccount.setPassword(bCryptPasswordEncoder.encode(dto.password()));
-		newAccount.setRole(userRole);
 		newAccount.setGoogleId(null);
 		newAccount.setAuthType("LOCAL");
 		newAccount.setFailedLoginTimes(0);
@@ -67,6 +64,7 @@ public class AccountServicesImp implements AccountServices {
 		user.setAccountId(accountId);
 		user.setFullName(dto.fullName());
 		user.setGender(dto.gender());
+		user.setDateOfBirth(dto.birthDate());
 		user.setAddress(dto.address());
 		userRepository.save(user);
 	}
@@ -80,10 +78,6 @@ public class AccountServicesImp implements AccountServices {
 	@Override
 	public MessageResponse createAccount(SignUpRequest dto) {
 		MessageResponse response = new MessageResponse();
-
-		// check role
-		var userRole = roleRepository.findByName(Role.Vales.USER.name())
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "User role not found"));
 
 		if(!checkOTP(dto.username(), dto.verifyCode())){
 			response.setCode(1);
@@ -99,7 +93,7 @@ public class AccountServicesImp implements AccountServices {
 			response.setMessage("Account đã tồn tại");
 			return response;
 		}
-		addAccount(dto, userRole);
+		addAccount(dto);
 		response.setCode(0);
 		response.setMessage("Account created successfully");
 		verifyServices.deleteVerify(dto.username());
@@ -143,29 +137,20 @@ public class AccountServicesImp implements AccountServices {
 		return response;
 	}
 
-	// fn: findAllAccounts
-	@Override
-	public List<Account> findAllAccounts(){
-		return accountRepository.findAll();
-	}
-
 	// fn: check password
 	private Boolean checkPassword(String email, String password) {
 		return bCryptPasswordEncoder.matches(password, findAccountByUserName(email).getPassword());
 	}
 
 	// fn: check failed login
-	private Boolean checkFailedLogin(LoginRequest dto){
-		var userFromDb = findAccountByUserName(dto.username());
-		if(userFromDb.getFailedLoginTimes() >= 4){
-			return false;
-		}
-		return true;
+	private Boolean checkFailedLogin(LoginRequest dto) {
+		var userFromDb = findAccountByUserName(dto.email());
+		return userFromDb.getFailedLoginTimes() < 4;
 	}
 
 	// fn: tang failed login
 	private void failedLogin(LoginRequest dto){
-		var userFromDb = findAccountByUserName(dto.username());
+		var userFromDb = findAccountByUserName(dto.email());
 		userFromDb.setFailedLoginTimes(userFromDb.getFailedLoginTimes() + 1);
 		accountRepository.save(userFromDb);
 	}
@@ -183,7 +168,7 @@ public class AccountServicesImp implements AccountServices {
 		MessageResponse response = new MessageResponse();
 		try{
 			if(!checkFailedLogin(dto)){
-				SendMailRequest sendMail = new SendMailRequest(dto.username(), 3);
+				SendMailRequest sendMail = new SendMailRequest(dto.email(), 3);
 				response = mailServices.sendMail(sendMail);
 				if(response.getCode() != 0){
 					return response;
@@ -193,13 +178,13 @@ public class AccountServicesImp implements AccountServices {
 				return response;
 			} // login very failed
 
-			if(!checkPassword(dto.username(), dto.password())){
+			if(!checkPassword(dto.email(), dto.password())){
 				response.setCode(2);
 				response.setMessage("Mật khẩu sai");
 				failedLogin(dto);
 				return response;
 			}
-			updateFailedLogin(dto.username());
+			updateFailedLogin(dto.email());
 			response.setCode(0);
 			response.setMessage("success");
 		}
@@ -207,6 +192,44 @@ public class AccountServicesImp implements AccountServices {
 			response.setCode(-1);
 			response.setMessage(e.getMessage());
 		}
+		return response;
+	}
+
+	// fn: delete account by Id
+	@Override
+	public MessageResponse deleteAccountById(String id) {
+		MessageResponse response = new MessageResponse();
+
+		Account account = accountRepository.findById(id).orElse(null);
+		User user = userRepository.findById(id).orElse(null);
+
+		// Defensive programming: Check for null account first
+		if (account == null) {
+			response.setCode(1);
+			response.setMessage("Account not found");
+			return response;
+		}
+
+		// Check if the account has the ADMIN role
+		boolean isAdmin = account.getRoles().contains(Role.ADMIN.name());
+		if (isAdmin) {
+			response.setCode(2);
+			response.setMessage("Cannot delete account with ADMIN role");
+			return response;
+		}
+
+		// Now we can safely check for null user
+		if (user == null) {
+			response.setCode(3); // A new code for this case
+			response.setMessage("User associated with account not found");
+			return response;
+		}
+
+		accountRepository.delete(account);
+		userRepository.delete(user);
+
+		response.setCode(0);
+		response.setMessage("Account deleted successfully");
 		return response;
 	}
 }

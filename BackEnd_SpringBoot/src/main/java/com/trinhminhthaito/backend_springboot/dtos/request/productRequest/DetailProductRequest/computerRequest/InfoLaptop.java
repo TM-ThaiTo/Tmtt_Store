@@ -1,5 +1,6 @@
-package com.trinhminhthaito.backend_springboot.dtos.request.productRequest.DetailProductRequest;
+package com.trinhminhthaito.backend_springboot.dtos.request.productRequest.DetailProductRequest.computerRequest;
 
+import com.trinhminhthaito.backend_springboot.dtos.request.productRequest.DetailProductRequest.ProductDetailRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class InfoLaptop extends ProductDetailRequest{
-	private Cpu cpu;
+public class InfoLaptop extends ProductDetailRequest {
+	private String chipBrand;
+	private Number processorCount;
+	private String series;
+	private String detail;
 	private String displaySize;
 	private String display;
 	private String operating;
@@ -18,15 +22,4 @@ public class InfoLaptop extends ProductDetailRequest{
 	private String ram;
 	private String pin;
 	private String weight;
-}
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-class Cpu {
-	private String chipBrand;
-	private Number processorCount;
-	private String series;
-	private String detail;
 }

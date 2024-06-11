@@ -1,2 +1,21 @@
-package com.trinhminhthaito.backend_springboot.dtos.request.productRequest.DescProductRequest;public class ProductRequest {
+package com.trinhminhthaito.backend_springboot.dtos.request.productRequest;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class ProductRequest {
+	private String id;
+	private String name;
+	private String code;
+	private int type;
+	private Number price;
+	private String brand;
+	private int stock;
+	private String avt;
 }

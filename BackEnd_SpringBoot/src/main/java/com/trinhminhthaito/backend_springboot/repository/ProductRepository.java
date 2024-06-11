@@ -1,4 +1,4 @@
-package com.trinhminhthaito.backend_springboot.repository.productRepository;
+package com.trinhminhthaito.backend_springboot.repository;
 
 import com.mongodb.lang.NonNull;
 import com.trinhminhthaito.backend_springboot.models.productModels.Product;

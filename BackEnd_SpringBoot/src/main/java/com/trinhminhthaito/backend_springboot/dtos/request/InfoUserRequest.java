@@ -1,6 +1,11 @@
 package com.trinhminhthaito.backend_springboot.dtos.request;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
-public record InfoUserRequest(String accountId, String fullName, LocalDateTime birthday, int gender, String address) {
+public record InfoUserRequest(
+		String accountId,
+		String fullName,
+		Date birthday,
+		int gender,
+		String address) {
 }

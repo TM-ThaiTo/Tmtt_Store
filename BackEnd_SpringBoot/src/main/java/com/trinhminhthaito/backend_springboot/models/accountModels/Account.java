@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,10 +17,9 @@ public class Account {
 	private String id;
 	private String username;
 	private String password;
-	private Role role;
-
-	private String googleId;
-	private String authType;
-	private int failedLoginTimes;
-	private String refreshToken;
+	private Set<String> roles;
+	private String googleId = "";
+	private String authType = "";
+	private int failedLoginTimes = 0;
+	private String refreshToken = "";
 }

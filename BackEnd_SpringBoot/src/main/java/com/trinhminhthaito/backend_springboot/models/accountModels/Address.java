@@ -1,17 +1,14 @@
-package com.trinhminhthaito.backend_springboot.models;
+package com.trinhminhthaito.backend_springboot.models.accountModels;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "deliveryAddress")
 public class Address {
-	private String id;
-	private String idUser;
+	private int id;
 	private String name;
 	private String phone;
 	private String province;
@@ -19,4 +16,5 @@ public class Address {
 	private String wards;
 	private String street;
 	private String details;
+	private String note;
 }

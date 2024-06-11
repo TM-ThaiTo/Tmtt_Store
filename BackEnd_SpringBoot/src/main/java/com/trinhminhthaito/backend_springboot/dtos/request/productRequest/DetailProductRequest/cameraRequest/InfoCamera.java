@@ -1,5 +1,6 @@
-package com.trinhminhthaito.backend_springboot.dtos.request.productRequest.DetailProductRequest;
+package com.trinhminhthaito.backend_springboot.dtos.request.productRequest.DetailProductRequest.cameraRequest;
 
+import com.trinhminhthaito.backend_springboot.dtos.request.productRequest.DetailProductRequest.ProductDetailRequest;
 import lombok.*;
 
 @AllArgsConstructor

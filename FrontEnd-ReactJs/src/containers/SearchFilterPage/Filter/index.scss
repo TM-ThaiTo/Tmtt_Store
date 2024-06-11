@@ -1,0 +1,81 @@
+.Filer-Content {
+    margin-top: 20px;
+
+    .pagination {
+        margin: 16px 0;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    .ketqua {
+        margin-top: 10px;
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+
+    .Filter-Options {
+        padding: 16px 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+
+        .list-active {
+            padding: 0 16px;
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+
+            .title-filter {
+                font-size: 22px;
+                margin-right: 20px;
+            }
+
+            .show-tag {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            .btn-delete {
+                border-radius: 4;
+            }
+
+            .render-filter {
+                padding: 0 16px;
+                padding-top: 16px;
+            }
+        }
+
+        .Filter-Options-item {
+            margin: 0 14px;
+            display: flex;
+            flex-wrap: wrap;
+
+            .Filter-Options-item-title {
+                font-size: 20px;
+                flex-basis: 180px;
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .btn-chon {
+                border-radius: 4px;
+                margin-right: 8px;
+            }
+
+            .filter-active-btn {
+                border: solid 1px #3a5dd8;
+                color: #fff;
+                background-color: #3a5dd8;
+                transition: all 0.25s;
+            }
+
+            .ant-tag-hidden {
+                display: inline;
+            }
+        }
+
+
+    }
+}

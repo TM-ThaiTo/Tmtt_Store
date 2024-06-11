@@ -1,0 +1,73 @@
+.Product-View {
+    &-price {
+        &--main {
+            color: #155bde;
+        }
+
+        &--cancel {
+            text-decoration: line-through;
+            color: #828384;
+        }
+
+        &--discount {
+            color: #3c902b;
+        }
+
+        &--cancel,
+        &--main {
+            letter-spacing: 1px;
+        }
+
+        &--contact {
+            background-color: #eeeeff;
+            color: #155bde;
+            padding: 2px 8px;
+            font-size: 1rem;
+            width: -webkit-fit-content;
+            width: -moz-fit-content;
+            width: fit-content;
+            font-weight: 500;
+        }
+    }
+
+    &-stock {
+        color: #d98929;
+    }
+
+    &:hover {
+        transform: scale(1.01);
+        transition: all 0.35s;
+    }
+
+    .ant-card-body {
+        padding: 12px;
+    }
+
+    .text-name {
+        font-size: 16px;
+    }
+
+    .text-price {
+        font-size: 20px;
+    }
+
+    .img-container {
+        padding-top: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+    }
+
+    .img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+    }
+}
+
+a {
+    text-decoration: none !important;
+}

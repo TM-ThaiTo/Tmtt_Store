@@ -1,0 +1,66 @@
+.Admin-Page {
+    .header-admin-page {
+        padding-top: 10px;
+        display: flex;
+        text-align: center;
+
+        .logo {
+            flex-basis: 200px;
+        }
+
+        .link-page {
+            padding-top: 10px;
+            flex-grow: 1;
+            display: flex;
+
+            .main-title {
+                flex-grow: 1;
+
+                .admin-page-title {
+                    color: red;
+                }
+
+                .option-title {
+                    color: white;
+                }
+            }
+
+            .open-web {
+                padding-right: 24px;
+                font-weight: 500;
+                padding-bottom: 10px;
+
+                .icon {
+                    font-size: 30px;
+                    margin-right: 10px;
+                }
+
+                .open-web-title {
+                    font-size: 20px;
+                }
+            }
+
+            .user-admin {
+                padding-right: 24px;
+                font-weight: 500;
+
+                .avt-admin {
+                    margin-right: 10px;
+                }
+
+                .user-admin-title {
+                    font-size: 20px;
+                    color: white;
+                }
+            }
+
+            .btn-logout {
+                margin-right: 44px;
+            }
+        }
+
+        .menu {
+            padding-top: 24px;
+        }
+    }
+}

@@ -1,0 +1,79 @@
+.footer {
+    background-color: #f1f1f1;
+
+    .footer-lienhe {
+        background-color: #3a5dd8;
+
+        .footer-container {
+            height: 100px;
+            text-align: center;
+
+            .footer-content {
+                height: 100px;
+                display: flex;
+
+                .icon {
+                    padding-top: 10px;
+
+                    span {
+                        font-size: 50px;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+.contact {
+    padding-top: 15px;
+    font-size: 20px;
+    text-align: left;
+    color: white;
+}
+
+.introduce {
+    height: 270px;
+    display: flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    .logo-hutech {
+        width: 200px;
+        height: 230px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-image: url('../../../assets/Logo/Logo_HUECH.webp');
+    }
+
+    .title-doAn {
+        text-align: center;
+        margin-left: 20px;
+        padding-left: 60px;
+
+        .giangvien {
+            margin: 10px 0;
+            font-size: 20px;
+        }
+
+        .truong {
+            font-size: 30px;
+            color: red;
+        }
+
+        .gioithieumon {
+            font-size: 30px;
+        }
+
+        .detai {
+            font-size: 20px;
+        }
+
+        .nguoithuchien {
+            display: grid;
+            font-size: 20px;
+        }
+    }
+}

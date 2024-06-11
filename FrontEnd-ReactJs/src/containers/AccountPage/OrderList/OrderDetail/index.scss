@@ -1,0 +1,37 @@
+.time-order {
+    text-align: right;
+
+    b {
+        font-size: 14px;
+    }
+}
+
+h3 {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.content-order {
+    padding: 12px 16px;
+    background: #0000000d;
+    border-radius: 8px;
+}
+
+.pice {
+    text-align: right;
+
+    .van-chuyen {
+        display: flex;
+        font-weight: 500;
+        justify-content: flex-end;
+
+        .conten-vt {
+            margin-left: 32px;
+        }
+
+        .content-tong {
+            margin-left: 32px;
+            font-size: 18px;
+        }
+    }
+}

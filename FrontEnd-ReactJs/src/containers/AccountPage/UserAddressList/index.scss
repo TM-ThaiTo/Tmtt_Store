@@ -1,0 +1,16 @@
+.box-sha-home-address-form {
+    cursor: pointer;
+}
+
+.item-active {
+    cursor: pointer;
+
+    &,
+    &:hover,
+    &:active {
+        >* {
+            color: #3a5dd9;
+            font-weight: bold;
+        }
+    }
+}

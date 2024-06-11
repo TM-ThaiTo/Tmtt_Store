@@ -1,0 +1,86 @@
+.account-page {
+    padding-top: 20px;
+    min-height: 50vh;
+
+    a {
+        color: #444;
+    }
+
+    .intro {
+        border-bottom: solid 1px #ddd;
+    }
+
+    .icon {
+        color: #888;
+    }
+
+    .name {
+        color: #444;
+    }
+
+    &-menu {
+        margin-right: 0 !important;
+
+        &-item {
+
+            &.active,
+            &:hover,
+            &:active {
+                &>* {
+                    color: #3a5dd9;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .account-page {
+        min-height: 100vh;
+    }
+}
+
+.page-account {
+    background-color: #f1f1f1;
+}
+
+.menu-list {
+    padding: 0;
+
+    .menu-item {
+        padding: 10px 0;
+        font-size: 30px;
+    }
+}
+
+// update
+.box-sha-home-update-form {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 8px;
+    margin: 10px;
+
+    .row {
+        padding: 16px;
+    }
+
+    .input-update-form {
+        padding-bottom: 0;
+    }
+
+    .btn-update-from {
+        padding: 16px 0;
+        text-align: left;
+    }
+}
+
+// address
+.box-sha-home-address-form {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 8px 16px;
+    margin-bottom: 16px;
+    margin-top: 10px;
+}

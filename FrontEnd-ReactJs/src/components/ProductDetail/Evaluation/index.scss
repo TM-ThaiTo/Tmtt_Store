@@ -1,0 +1,104 @@
+.Evaluation-View {
+    background: white;
+    padding: 16px;
+    border-radius: 8;
+
+    // .title-tieude {
+    //     h2 {
+    //         font-weight: 700;
+    //     }
+    // }
+
+
+    .tongquan {
+        padding: 16px;
+
+        .danhgia {
+            font-size: 28px;
+        }
+
+        .noidung {
+            display: flex;
+            padding: 16px 0;
+        }
+
+        .tongket {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+
+            h2 {
+                font-size: 32px;
+            }
+
+            .nhanxet {
+                color: gray;
+                font-weight: 500;
+            }
+        }
+
+        .chitiet {
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            padding: 0 16px;
+
+            .item-chitiet {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .rate-chitiet {
+                padding-top: 5px;
+                font-size: 13px;
+                flex-basis: 100px;
+            }
+
+            .rate-name {
+                padding-left: 8px;
+                color: gray;
+            }
+        }
+
+        .UserComment {
+            .author {
+                font-size: 14px;
+            }
+        }
+
+        .comment {
+            display: flex;
+
+            .text {
+                flex-grow: 1;
+                margin-right: 16px;
+            }
+
+            .rate-button {
+                margin-top: 20px;
+
+                .rate {
+                    margin-right: 16px;
+                }
+
+                .button-comment-f {
+                    flex-basis: 122;
+                }
+            }
+
+        }
+
+        .overview {
+            flex-direction: column;
+            align-items: center;
+
+            &--total {
+                border-right: none;
+            }
+
+            &--detail {
+                padding: 0 !important;
+            }
+        }
+    }
+}

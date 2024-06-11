@@ -1,0 +1,126 @@
+$text-color-special: #3555c5;
+
+.price-sp {
+    text-align: center;
+    font-weight: 700;
+    padding: 8px 0;
+    color: red;
+}
+
+.discount-title {
+    font-weight: 700;
+    color: #333;
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.discount-sp {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    padding: 6px 16px;
+
+    .discount-price {
+        font-size: 16px;
+        font-weight: 700;
+        margin-left: 20px;
+        color: #3555c5;
+    }
+
+    .discount-price1 {
+        font-size: 16px;
+        font-weight: 700;
+        margin-left: 20px;
+        color: #3555c5;
+    }
+
+    .discount-mark {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 0px;
+        height: 0px;
+        border-style: solid;
+        border-width: 0px 36px 36px 0px;
+        border-color: transparent $text-color-special transparent transparent;
+    }
+
+    .discount-markicon {
+        position: absolute;
+        top: 4px;
+        right: 6px;
+        color: #fff;
+        z-index: 0;
+        font-size: 8px;
+    }
+}
+
+.add_cart {
+    display: flex;
+    justify-content: center;
+
+    .btn-chon-so-luong {
+        padding-top: 12px;
+        border-top: dashed 1px $text-color-special;
+
+        .item-het-hang {
+            margin-right: 8px;
+            margin-top: 8px;
+            font-size: 18px;
+        }
+
+        .input-so-luong {
+            margin: 0 20px;
+        }
+    }
+
+    .btn-hang {
+        padding: 16px 0;
+        display: flex;
+        justify-content: space-around;
+        padding-top: 40px;
+
+        .btn-item {
+            margin-right: 16px;
+            width: 100;
+
+            border-radius: 4px;
+            color: #fff !important;
+            font-weight: 500;
+            height: 48px;
+            border: none;
+
+            &:hover,
+            &:active {
+                -webkit-filter: brightness(1.1);
+                filter: brightness(1.1);
+            }
+        }
+    }
+
+    .lienhe-hethang {
+        margin: 16px 0;
+        width: 150px;
+    }
+}
+
+.Product-Overview {
+    .hinhanh {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .listHinhAnh {
+        display: flex;
+        width: 100%;
+        background: white;
+        padding-bottom: 16px;
+        padding-top: 8px;
+    }
+
+    .fs_24px {
+        font-size: 24px;
+    }
+}

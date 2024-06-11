@@ -1,0 +1,114 @@
+import axios from '../axios';
+
+// api: lấy sản phẩm theo id
+const getProductById = (id) => {
+    return axios.get(`product/one?id=${id}`);
+};
+
+// api: GET lấy tất cả sản phẩm
+const getAPIProductList = () => {
+    return axios.get("/apis/products/all");
+}
+
+// api: GET lấy sản phẩm và phân trang
+// const getProductAndPage = () => {
+//     // return axios.get("/apis/products/list/product", { params: { PageNumber, PageSize } });
+//     return axios.get("/product/page", {
+//         params: {
+//             page: 1,
+//             size: 1
+//         },
+//     });
+// }
+
+const getProductAndPage = () => {
+    return axios.get("/product/page", {
+        params: {
+            page: 1,
+            size: 1
+        }
+    });
+}
+
+// api lấy sản phẩm theo loại (vd: laptop, ...)
+const getProductType = (type, id) => {
+    return axios.get("/apis/products/list/related", {
+        params:
+        {
+            type: type,
+            id: id,
+        }
+    });
+}
+
+// api lấy sản phẩm đã từng mua của người dùng đã đăng nhập
+const getProductPurchased = () => {
+    const token = localStorage.getItem("refresh_token");
+    return axios.get("/apis/products/list-reorder", {
+        params: {
+            token: token
+        }
+    })
+}
+
+// api: tìm kiếm sản phẩm
+const getSearchProductsApi = (value = '', page = 1, perPage = 8) => {
+    return axios.get("/apis/products/search", {
+        params: {
+            value: value,
+            page: page,
+            perPage: perPage,
+        }
+    })
+}
+
+// api: filter sản phẩm v1
+const getFilterProductApi = (
+    type = 0,
+    page = 0,
+    perPage = 8,
+) => {
+    const params = {
+        type,
+        page,
+        perPage,
+    }
+    return axios.get("apis/products/filter", {
+        params
+    });
+}
+
+// api: filter sản phẩm v2
+const getFilterProductApi_v2 = (data) => {
+    return axios.post("apis/products/filter_v2", data);
+}
+
+// api: tìm kiếm sản phẩm cho trang SeeProduct
+const getProductToPageAdmin = (codeP, nameP, typeP) => {
+    const params = {
+        codeP: codeP,
+        nameP: nameP,
+        typeP: typeP
+    }
+    return axios.get("apis/products/admin-search", {
+        params
+    })
+}
+
+// api: lấy sản phẩm nỗi bật
+const getProductOutstandong = () => {
+    return axios.get("apis/products/outstanding-product");
+}
+
+export {
+    getProductById,
+    getAPIProductList,
+    getProductAndPage,
+    getProductPurchased,
+    getProductType,
+    getSearchProductsApi,
+    getProductToPageAdmin,
+    getProductOutstandong,
+    getFilterProductApi,
+    getFilterProductApi_v2
+}

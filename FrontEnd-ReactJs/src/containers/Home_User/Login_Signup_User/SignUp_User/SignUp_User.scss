@@ -1,0 +1,42 @@
+.br {
+    background-color: white;
+    height: 630px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+
+    .SignUp-title {
+        text-align: left;
+        padding-left: 0 !important;
+        margin-bottom: 20px;
+    }
+
+    .SignUp {
+        border-radius: 15px;
+        // background-color: white;
+        // box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        padding-top: 10px;
+        padding: 20px 20px;
+    }
+}
+
+.SignUp {
+    height: 530px;
+}
+
+.bd {
+    width: 100%;
+}
+
+.google {
+    padding-top: 0;
+    display: grid;
+    justify-content: center;
+    text-align: center;
+
+    .item-khac {
+        margin-top: 10px;
+    }
+}

@@ -1,0 +1,25 @@
+.Cart-Detail-View {
+    margin-top: 20px;
+    min-height: 80vh;
+    font-size: 20px;
+
+    .page-positions {
+        display: flex;
+
+        .r-arrow {
+            line-height: 40px;
+        }
+
+        .icon-home {
+            padding: 12px;
+            font-size: 20px;
+            background: white;
+        }
+
+        .cart-name {
+            padding: 8px;
+            font-weight: 500;
+            padding: 0 8px;
+        }
+    }
+}

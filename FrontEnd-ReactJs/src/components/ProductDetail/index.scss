@@ -1,0 +1,38 @@
+.Product-Detail-View {
+    height: auto;
+
+    .page-position {
+
+        .icon-home {
+            border-radius: 50%;
+            padding-top: 9px;
+        }
+
+        .r-arrow {
+            line-height: 40px;
+        }
+
+        .pro-name {
+            border-radius: 18px;
+            padding-top: 5px;
+        }
+    }
+
+    .policy {
+        border-radius: 8px;
+    }
+
+    .underline-title {
+        &::after {
+            width: 48px;
+        }
+
+        &:hover::after {
+            width: 100%;
+        }
+    }
+}
+
+.font {
+    font-size: 20px;
+}

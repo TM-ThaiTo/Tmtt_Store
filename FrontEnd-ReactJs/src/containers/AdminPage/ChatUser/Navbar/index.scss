@@ -1,0 +1,67 @@
+.menu-chat {
+    background-color: #e3e3e3;
+    width: 300px;
+    height: 100%;
+    overflow: auto;
+    border-right: 0.5px solid black;
+
+    .chucnang-chat {
+        margin-bottom: 20px;
+
+        .title-danhsach {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .title-doanchat {
+                font-size: 30px;
+                margin-right: 20px;
+            }
+
+            .icon-doanchat {
+                font-size: 30px;
+                padding-bottom: 10px;
+            }
+        }
+
+        .search {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .btn-search {
+                width: 50px;
+                font-size: 20px;
+                display: flex;
+                justify-content: center;
+                cursor: pointer;
+            }
+        }
+
+    }
+
+    .menu-item-chat {
+        background-color: #e3e3e3;
+    }
+
+    .menu-item-navbar {
+        height: 60px !important;
+
+        .message-content {
+            height: 100%;
+            width: 100%;
+
+            .nameDB {
+                font-size: 16px;
+            }
+
+            .lastMessage {
+                width: 100%;
+            }
+        }
+    }
+}

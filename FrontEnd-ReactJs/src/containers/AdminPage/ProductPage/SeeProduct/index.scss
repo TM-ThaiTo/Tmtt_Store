@@ -1,0 +1,33 @@
+.search-product-admin {
+    display: flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    justify-items: right;
+
+    .inputValue-code {
+        width: 200px;
+        margin-right: 20px;
+        height: 39px;
+    }
+
+    .inputValue-name {
+        width: 250px;
+        margin-right: 20px;
+        height: 39px;
+    }
+
+    .selectType {
+        width: 200px;
+    }
+
+    .btn_search {
+        margin-left: 20px;
+        margin-right: 20px;
+        height: 40px;
+    }
+
+    .btn-reset {
+        margin-right: 20px;
+        height: 40px;
+    }
+}

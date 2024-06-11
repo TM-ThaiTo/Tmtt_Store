@@ -1,0 +1,87 @@
+.payment-page {
+    height: 1200px;
+
+    .duong-dan {
+        display: flex;
+        position: relative;
+        font-size: 20px;
+
+        .icon {
+            padding: 12px;
+            background: white;
+        }
+
+        .icon-duong-dan {
+            padding: 0 8;
+            font-weight: 500;
+        }
+
+        .name {
+            padding: 0 8px;
+            font-weight: 500;
+            background: white;
+            padding-top: 6px;
+        }
+    }
+
+    .thong-tin-giao-hang {
+        padding: 12px;
+        background: #0000000a;
+        border-radius: 8px;
+        margin: 16px 0;
+    }
+
+    .thong-tin-ghi-chu {
+        padding: 12px;
+        background: #0000000a;
+        border-radius: 8px;
+    }
+
+    .thong-tin-thanh-toan {
+        padding: 12px;
+        background: #0000000a;
+        border-radius: 8px;
+        margin: 16px 0;
+
+        .thanh-toan-tien-mat {
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .thanh-toan-VNPAY {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: #e3e3e3;
+            cursor: pointer;
+        }
+
+        .item-active {
+            background-color: #e3e3e3;
+            color: black;
+            font-weight: bold;
+        }
+
+        .hover-active {
+            :hover {
+                // background: black;
+                border: 1px solid red;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .thong-tin-don-hang {
+        padding-top: 12px;
+        border-radius: 8px;
+
+        .content-don-hang {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    .tien-hanh-dat-hang {
+        margin-top: 20px;
+    }
+}

@@ -90,7 +90,7 @@ public class AddressServicesImp implements AddressServices {
 	@Override
 	public MessageResponse addAddress(DeliveryAddressRequest addressRequest){
 		MessageResponse messageResponse = new MessageResponse();
-		User user = userRepository.findByAccountId(addressRequest.getAccountId());
+		User user = userRepository.findByAccountId(addressRequest.getUserId());
 		if(user == null){
 			messageResponse.setCode(1);
 			messageResponse.setMessage("User not found");

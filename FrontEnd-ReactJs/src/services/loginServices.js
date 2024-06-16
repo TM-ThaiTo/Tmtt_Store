@@ -8,36 +8,39 @@ const post_loginuser = (account) => {
     return axios.post(endpoint + "/login", account);
 };
 
-// GET: auth
 const getAuth = () => {
-    const authToken = localStorage.getItem(constants.REFRESH_TOKEN_KEY);
-    return axios.get("/apis/auth", {
-        params: {
-            token: authToken,
+    const authToken = localStorage.getItem(constants.ACCESS_TOKEN_KEY);
+    return axios.get(endpoint + "/auth", {
+        headers: {
+            Authorization: `Bearer ${authToken}`
         }
     })
-}
+};
 
 // POST: SignUp bằng Google
 const postLoginWithGoogle = (data) => {
     return axios.post('/apis/gg', data);
 }
 
-// POST: Refresh Token
-const postRefreshToken = (refreshToken) => {
-    return axios.post("/apis/refresh_token", refreshToken);
+// GET: Refresh Token
+const getRefreshToken = (refresh_token) => {
+    return axios.get(endpoint + "/refresh_token", {
+        headers: {
+            Authorization: `Bearer ${refresh_token}`
+        }
+    });
 }
 
 // POST: Logout
 const postLogout = () => {
     const token = localStorage.getItem(constants.REFRESH_TOKEN_KEY);
-    return axios.post("/apis/logout", { refreshToken: token });
+    return axios.post(`${endpoint}/logout`, token)
 }
 
 export {
     post_loginuser,
     getAuth,
-    postRefreshToken,
+    getRefreshToken,
     postLogout,
     postLoginWithGoogle
 }

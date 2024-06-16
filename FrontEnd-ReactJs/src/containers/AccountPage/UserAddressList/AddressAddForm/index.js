@@ -161,7 +161,7 @@ class AddressAddForm extends Component {
         try {
             const { name, phone, street, detail } = newAddress;
             const data = {
-                userId: user.id_account,
+                userId: user.id,
                 name: name,
                 phone: phone,
                 province: nameProvince,

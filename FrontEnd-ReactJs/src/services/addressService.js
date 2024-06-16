@@ -1,53 +1,80 @@
 import axios from '../axios';
+import constants from '../constants';
+
+const endpoint = "/api/v1/address";
 
 // fn: get list address 
 const getDeliveryAddress = (userId) => {
-    return axios.get("/apis/address/delivery", {
+    const authToken = localStorage.getItem(constants.ACCESS_TOKEN_KEY);
+    return axios.get(endpoint + "/delivery", {
+        headers: {
+            Authorization: `Bearer ${authToken}`
+        },
         params: {
-            IdUser: userId
+            accountId: userId
         }
     });
 };
 
+
 // api: Thêm một địa chỉ mới
 const postNewDeliveryAddress = (data) => {
-    return axios.post("/apis/address/delivery", data);
-}
+    const authToken = localStorage.getItem(constants.ACCESS_TOKEN_KEY);
+    return axios.post(endpoint + "/delivery/add", data, {
+        headers: {
+            Authorization: `Bearer ${authToken}`
+        }
+    });
+};
 
 // api: Delete địa chỉ
 const delDeliveryAddress = (idUser, idAddress) => {
-    return axios.delete("/apis/address/delivery", {
+    const authToken = localStorage.getItem(constants.ACCESS_TOKEN_KEY);
+    return axios.delete(endpoint + "/delivery", {
+        headers: {
+            Authorization: `Bearer ${authToken}`
+        },
         params: {
-            idUser: idUser,
-            idAdress: idAddress
+            idAccount: idUser,
+            idAddress: idAddress
         }
     })
 }
 
 // api: PUT cài đặt địa chỉ làm mặc định
-const putSetDefaultAdress = (data) => {
-    return axios.put("/apis/address/delivery", data);
+const putSetDefaultAdress = (id, idA) => {
+    const authToken = localStorage.getItem(constants.ACCESS_TOKEN_KEY);
+    return axios.put(endpoint + "/delivery", null, {
+        headers: {
+            Authorization: `Bearer ${authToken}`
+        },
+        params: {
+            idAccount: id,
+            idAddress: idA
+        }
+    });
 }
+
 
 // api: lấy Danh sách tỉnh
 const getProvince = () => {
-    return axios.get(`/apis/address/province`);
+    return axios.get(endpoint + "/provinces");
 }
 
 // api: lấy Danh sách huyện theo id tỉnh
 const getDistrict = (id) => {
-    return axios.get(`/apis/address/district`, {
+    return axios.get(endpoint + '/districts', {
         params: {
-            idProvince: id
+            provinceId: id
         },
     });
 }
 
 // api: lấy danh sách phường theo id huyện
 const getCommune = (id) => {
-    return axios.get(`/apis/address/commune`, {
+    return axios.get(endpoint + "/communes", {
         params: {
-            idDistrict: id
+            districtId: id
         },
     });
 }

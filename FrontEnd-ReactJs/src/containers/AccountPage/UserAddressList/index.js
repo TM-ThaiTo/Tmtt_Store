@@ -36,16 +36,16 @@ class AddressUserList extends Component {
         const { user } = this.props;
         try {
             this.setState({ isLoading: true });
-            const response = await getDeliveryAddress(user.id_account);
+            const response = await getDeliveryAddress(user.id);
             if (response && response.code === 0) {
                 this.setState({
-                    list: response.data.list,
+                    list: response.data,
                     isLoading: false,
                 });
             }
             else if (response.code === 3) {
                 this.setState({
-                    list: response.data.list,
+                    list: response.data,
                     isLoading: false,
                 });
             }
@@ -62,7 +62,8 @@ class AddressUserList extends Component {
     onDelDeliveryAdd = async (item) => {
         try {
             const { user } = this.props;
-            const response = await delDeliveryAddress(user.id_account, item);
+            console.log("check item: ", item);
+            const response = await delDeliveryAddress(user.id, item);
             if (response && response.code === 0) {
                 message.success('Xoá địa chỉ thành công');
                 this.setState({ updateList: !this.state.updateList });
@@ -79,7 +80,7 @@ class AddressUserList extends Component {
     onSetDefaultDeliveryAdd = async (item) => {
         try {
             const { user } = this.props;
-            const response = await putSetDefaultAdress(user.id_account, item);
+            const response = await putSetDefaultAdress(user.id, item);
             if (response && response.code === 0) {
                 message.success('Cập nhật thành công');
                 this.setState({ updateList: !this.state.updateList });
@@ -94,25 +95,28 @@ class AddressUserList extends Component {
 
     // fn: Hàm show danh sách delivery address
     showAddressList = (list) => {
+        // Sort the list by id in ascending order
+        const sortedList = list.sort((a, b) => a.id - b.id);
+
         return (
-            list &&
-            list.map((item, index) => (
+            sortedList &&
+            sortedList.map((item, index) => (
                 <div
                     className={`box-sha-home-address-form 
-                    ${this.state.activeItem === index && this.props.isCheckout ? 'item-active' : ''}`}
+                ${this.state.activeItem === item.id && this.props.isCheckout ? 'item-active' : ''}`}
                     onClick={() => {
                         message.success("Đã chọn địa chỉ nhận hàng", 1);
                         if (this.props.isCheckout) {
-                            this.setState({ activeItem: index });
-                            this.props.onChecked(index);
+                            this.setState({ activeItem: item.id });
+                            this.props.onChecked(item.id);
                         }
                     }}
-                    key={index}
+                    key={item.id}
                 >
                     <div className="d-flex justify-content-between m-b-4">
                         <h3>
                             <b>{item.name}</b>
-                            {index === 0 && !this.props.isCheckout && (
+                            {item.id === 1 && !this.props.isCheckout && (
                                 <span
                                     className="font-size-12px p-tb-4 p-lr-8 m-l-8 bor-rad-4"
                                     style={{ border: 'solid 1px #3a5dd9', color: '#3a5dd9' }}>
@@ -120,15 +124,15 @@ class AddressUserList extends Component {
                                 </span>
                             )}
                         </h3>
-                        {index !== 0 && !this.props.isCheckout && (
+                        {item.id !== 1 && !this.props.isCheckout && (
                             <div>
-                                {/* <Button type="link" onClick={() => this.onSetDefaultDeliveryAdd(index)}>
+                                <Button type="link" onClick={() => this.onSetDefaultDeliveryAdd(item.id)}>
                                     Đặt mặc định
-                                </Button> */}
+                                </Button>
                                 <Button
                                     danger
                                     type="primary"
-                                    disabled={index === 0}
+                                    disabled={item.id === 0}
                                     onClick={() => this.onDelDeliveryAdd(item.id)}>
                                     Xoá
                                 </Button>
@@ -145,6 +149,7 @@ class AddressUserList extends Component {
             ))
         );
     };
+
 
     // fn: render
     render() {

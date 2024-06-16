@@ -13,7 +13,7 @@ class DoanhMuc extends Component {
             list: [],
             currentPage: props.currentPage,
             productsPerPage: props.productsPerPage,
-            type: "",
+            type: 0,
             title: "",
             total: 0,
         };
@@ -21,16 +21,16 @@ class DoanhMuc extends Component {
 
     componentDidMount() {
         const typeMapping = {
-            LAPTOP: {
-                type: "laptop",
+            5: {
+                type: 5,
                 title: "Máy tính xách tay",
             },
-            GEAR: {
-                type: "mouse",
+            13: {
+                type: 13,
                 title: "Phụ kiện máy tính",
             },
-            MONITOR: {
-                type: "monitor",
+            12: {
+                type: 12,
                 title: "Màn hình",
             },
             FORYOU: {
@@ -55,17 +55,18 @@ class DoanhMuc extends Component {
                 } else if (type === "NOIBAT") {
                     this.getProductNoiBat();
                 } else {
-                    this.getProduct();
+                    this.getProductToType();
                 }
             });
         }
     }
 
     // get product theo loại
-    getProduct = async () => {
+    getProductToType = async () => {
         const type = this.state.type;
+        const count = this.props.count;
         try {
-            const response = await getProductType(type);
+            const response = await getProductType(type, count);
             if (response) {
                 const data = response.data;
                 const count = response.count;
@@ -125,10 +126,10 @@ class DoanhMuc extends Component {
         const currentProducts = list.slice(indexOfFirstProduct, indexOfLastProduct);
 
         return currentProducts.map((product, index) => {
-            const { avt, name, price, discount, stock, id_product } = product;
+            const { avt, name, price, discount, stock, id } = product;
             return (
                 <Col key={index} span={24} sm={12} lg={8} xl={6}>
-                    <Link to={`/product/${id_product}`}>
+                    <Link to={`/product/${id}`}>
                         <ProductView
                             className="m-auto"
                             name={name}

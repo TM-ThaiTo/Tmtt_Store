@@ -1,8 +1,10 @@
 import axios from '../axios';
 
+const endpoint = "/api/v1/order";
+
 // api: Tạo đơn hàng
 const postCreateOrder = (data) => {
-    return axios.post("/apis/orders", data);
+    return axios.post(endpoint, data);
 };
 
 // api: Lấy danh sách đơn hàng

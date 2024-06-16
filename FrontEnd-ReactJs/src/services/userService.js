@@ -1,12 +1,14 @@
 import axios from '../axios';
 import constants from '../constants';
 
+const endpoint = "/api/v1/user"
+
 // GET user
 const getUserApi = () => {
-    const token = localStorage.getItem(constants.REFRESH_TOKEN_KEY);
-    return axios.get('/apis/user', {
-        params: {
-            RefreshToken: token
+    const token = localStorage.getItem(constants.ACCESS_TOKEN_KEY);
+    return axios.get(endpoint, {
+        headers: {
+            Authorization: `Bearer ${token}`
         }
     });
 }

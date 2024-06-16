@@ -33,6 +33,12 @@ class App extends Component {
         if (this.props.isAuth && !prevProps.isAuth) {
             this.props.getUserRequest();
         }
+        // if (this.props.isAuth !== prevProps.isAuth) {
+        //     // Call the API if isAuth has become true
+        //     if (this.props.isAuth) {
+        //         this.props.getUserRequest();
+        //     }
+        // }
     }
 
     // fn: rendering

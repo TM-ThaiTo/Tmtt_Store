@@ -8,9 +8,11 @@ import com.trinhminhthaito.backend_springboot.models.accountModels.Address;
 import com.trinhminhthaito.backend_springboot.services.AddressServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -67,22 +69,43 @@ public class AddressController {
 
 	// api: Get list delivery by id
 	@GetMapping("/delivery")
-	public ResponseEntity<?> getDeliveryByIdAccount(@RequestParam String accountId){
+	@PreAuthorize("hasAuthority('SCOPE_USER')")
+	public ResponseEntity<?> getDeliveryByIdAccount(@RequestParam String accountId) {
+		List<DeliveryAddressRequest> deliveryAddressRequests = new ArrayList<>();
 		List<Address> deliveryAddress = addressServices.getDeliveryAddressByAccountId(accountId);
+
+		for (Address address : deliveryAddress) {
+			DeliveryAddressRequest item = new DeliveryAddressRequest();
+			item.setId(address.getId());
+			item.setName(address.getName());
+			item.setPhone(address.getPhone());
+			item.setProvince(address.getProvince());
+			item.setStreet(address.getStreet());
+			item.setDistrict(address.getDistrict());
+			item.setWards(address.getWards());
+			item.setDetails(address.getDetails());
+			item.setNote(address.getNote());
+			String add = String.join(", ", address.getStreet(), address.getWards(), address.getDistrict(), address.getProvince());
+			item.setAddress(add);
+			deliveryAddressRequests.add(item);
+		}
+
 		MessageDataResponse messageDataResponse = new MessageDataResponse();
-		if(deliveryAddress.isEmpty()){
+		if (deliveryAddress.isEmpty()) {
 			messageDataResponse.setCode(1);
-			messageDataResponse.setMessage("address not found");
+			messageDataResponse.setMessage("Address not found");
 			return ResponseEntity.ok(messageDataResponse);
 		}
+
 		messageDataResponse.setCode(0);
-		messageDataResponse.setMessage("success");
-		messageDataResponse.setData(deliveryAddress);
+		messageDataResponse.setMessage("Success");
+		messageDataResponse.setData(deliveryAddressRequests);
 		return ResponseEntity.ok(messageDataResponse);
 	}
 
 	// api: add delivery address
-	@PostMapping("/delivery")
+	@PostMapping("/delivery/add")
+	@PreAuthorize("hasAuthority('SCOPE_USER')")
 	public ResponseEntity<?> addDelivery(@RequestBody DeliveryAddressRequest address){
 		MessageResponse messageResponse = addressServices.addAddress(address);
 		return ResponseEntity.ok(messageResponse);
@@ -90,6 +113,7 @@ public class AddressController {
 
 	// api: delete delivery address
 	@DeleteMapping("/delivery")
+	@PreAuthorize("hasAuthority('SCOPE_USER')")
 	public ResponseEntity<?> deleteDelivery(@RequestParam String idAccount, @RequestParam int idAddress){
 		MessageResponse messageResponse = addressServices.deleteDeliveryAddress(idAccount, idAddress);
 		return ResponseEntity.ok(messageResponse);
@@ -97,6 +121,7 @@ public class AddressController {
 
 	// api: update default delivery address
 	@PutMapping("/delivery")
+	@PreAuthorize("hasAuthority('SCOPE_USER')")
 	public ResponseEntity<?> updateDelivery(@RequestParam String idAccount, @RequestParam int idAddress){
 		MessageResponse messageResponse = addressServices.updateDefaultAddress(idAccount, idAddress);
 		return ResponseEntity.ok(messageResponse);

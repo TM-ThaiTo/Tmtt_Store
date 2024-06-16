@@ -1,4 +1,4 @@
-import { getAuth, postRefreshToken } from '../../services/loginServices.js';
+import { getAuth, getRefreshToken } from '../../services/loginServices.js';
 import constants from '../../constants/index.js';
 import actionTypes from '../actions/actionTypes.js';
 
@@ -20,11 +20,10 @@ const refreshToken = () => {
             if (!refToken) {
                 return dispatch(setIsAuth(false));
             }
-            const result = await postRefreshToken({
-                refresh_token: refToken,
-            });
-            if (result.status === 200) {
+            const result = await getRefreshToken(refToken);
+            if (result.code === 0) {
                 dispatch(setIsAuth(true));
+                localStorage.setItem(constants.ACCESS_TOKEN_KEY, result.accessToken);
             } else {
                 dispatch(setIsAuth(false));
             }
@@ -38,6 +37,7 @@ const getIsAuth = () => {
     return async (dispatch) => {
         try {
             const result = await getAuth();
+            console.log("----> check auth getIsAuth: ", result);
             dispatch(setIsAuth(result.isAuth));
         } catch (error) {
             if (error.response) {

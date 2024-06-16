@@ -35,9 +35,7 @@ class Description extends Component {
     }
 
     render() {
-        // const { specification, desc } = this.props;
         const { detail, desc } = this.props;
-        // console.log("Check desc to Detail: ", detail);
         const { isHideDesc, isShowSeeMore } = this.state;
 
         return (

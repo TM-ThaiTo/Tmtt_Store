@@ -30,12 +30,12 @@ class Login_User extends Component {
             this.setState({ isSubmitting: false });
             message.success('Đăng nhập thành công');
 
-            localStorage.setItem(constants.REFRESH_TOKEN, data.refreshToken);
-            this.props.setIsAuth(true); // Dispatch action setIsAuth with true
-            this.props.getUser(); // gọi redux lấy thông tin người dùng
+            localStorage.setItem(constants.REFRESH_TOKEN_KEY, data.refreshToken);
+            this.props.setIsAuth(true);
+            this.props.getUser();
 
-            if (process.env.NODE_ENV === 'production')
-                localStorage.setItem(constants.ACCESS_TOKEN_KEY, data.accessToken);
+            // if (process.env.NODE_ENV === 'production')
+            localStorage.setItem(constants.ACCESS_TOKEN_KEY, data.accessToken);
 
             setTimeout(() => {
                 this.props.history.goBack();

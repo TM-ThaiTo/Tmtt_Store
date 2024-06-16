@@ -168,6 +168,7 @@ class PaymentPage extends Component {
             const paymentDetail = {
                 paymentMethod: "Tiền mặt",
                 paymentStatus: 'Chưa thanh toán',
+                codeMethod: "",
                 totalAmount: this.state.totalAmount,
                 paidAmount: this.state.paidAmount,
             }
@@ -201,19 +202,19 @@ class PaymentPage extends Component {
             });
 
             // gán vào detailOrderProduct
-            const detailOderProducts = productList;
+            const itemsOrders = productList;
 
             // thêm thông tin đặt hàng
-            const orderStatusDetail = "Đặt hàng";
+            const status = "Đặt hàng";
 
             // data gửi api
             const data = {
                 orderDate: orderDate,
-                orderStatusDetail,
-                numOfProd: numOfProd.toString(),
+                status,
+                numOfProd: numOfProd,
                 note: note,
                 customerOrder: customerOrder,
-                detailOderProducts: detailOderProducts,
+                itemsOrders: itemsOrders,
                 deliveryAddressesOrder: deliveryAddressesOrder,
                 paymentDetail: paymentDetail
             };

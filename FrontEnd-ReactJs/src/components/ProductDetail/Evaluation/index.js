@@ -67,11 +67,12 @@ class EvaluationView extends Component {
         const { cmtListState, cmt, isAuth } = this.state;
         // Tính trung bình số sao
         let starAvg;
-        if (rates === null) {
-            starAvg = 5;
-        } else {
-            starAvg = rates.toFixed(1);
-        }
+        console.log("check rates", rates);
+        // if (rates === null) {
+        //     starAvg = 5;
+        // } else {
+        //     starAvg = rates.toFixed(1);
+        // }
         const rateTotals = totalComment;
         return (
             <Row className="Evaluation-View bg-white p-16" style={{ borderRadius: 8 }}>

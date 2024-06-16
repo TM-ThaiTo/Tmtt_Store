@@ -1,8 +1,16 @@
 import axios from '../axios';
 
+const endpoint = "/api/v1"
+
 // api: lấy sản phẩm theo id
 const getProductById = (id) => {
-    return axios.get(`product/one?id=${id}`);
+    return axios.get(endpoint + "/product/one",
+        {
+            params: {
+                id: id,
+            }
+        }
+    );
 };
 
 // api: GET lấy tất cả sản phẩm
@@ -21,22 +29,22 @@ const getAPIProductList = () => {
 //     });
 // }
 
-const getProductAndPage = () => {
-    return axios.get("/product/page", {
+const getProductAndPage = (PageNumber = 1, PageSize = 8) => {
+    return axios.get(endpoint + "/product/page", {
         params: {
-            page: 1,
-            size: 1
+            page: PageNumber,
+            size: PageSize
         }
     });
 }
 
 // api lấy sản phẩm theo loại (vd: laptop, ...)
 const getProductType = (type, id) => {
-    return axios.get("/apis/products/list/related", {
+    return axios.get(endpoint + "/product/type", {
         params:
         {
-            type: type,
-            id: id,
+            idType: type,
+            quantity: id,
         }
     });
 }

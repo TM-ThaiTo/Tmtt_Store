@@ -1,6 +1,7 @@
 package com.trinhminhthaito.backend_springboot.controller;
 
 import com.trinhminhthaito.backend_springboot.dtos.request.InfoUserRequest;
+import com.trinhminhthaito.backend_springboot.dtos.response.MessageDataResponse;
 import com.trinhminhthaito.backend_springboot.dtos.response.MessageResponse;
 import com.trinhminhthaito.backend_springboot.services.UserServices;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +24,17 @@ public class UserController {
 	@Transactional
 	@GetMapping("/update")
 	@PreAuthorize("hasAuthority('SCOPE_USER')")
-	public ResponseEntity<MessageResponse> updateUser(@RequestBody InfoUserRequest dto){
+	public ResponseEntity<MessageResponse> updateUser(@RequestBody InfoUserRequest dto) {
 		MessageResponse messageResponse = userServices.updateUser(dto);
 		return ResponseEntity.ok(messageResponse);
 	}
 
 	// api: get user
-
+	@Transactional
+	@GetMapping
+	@PreAuthorize("hasAuthority('SCOPE_USER')")
+	public ResponseEntity<?> getUserById(@RequestHeader("Authorization") String token) {
+		MessageDataResponse messageDataResponse = userServices.getUser(token);
+		return ResponseEntity.ok(messageDataResponse);
+	}
 }

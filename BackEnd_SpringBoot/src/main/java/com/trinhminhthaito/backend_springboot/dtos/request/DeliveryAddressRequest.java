@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class DeliveryAddressRequest {
-	private String accountId;
+	private int id;
+	private String userId;
 	private String name;
 	private String phone;
 	private String province;
@@ -17,4 +18,5 @@ public class DeliveryAddressRequest {
 	private String street;
 	private String details;
 	private String note;
+	private String address;
 }

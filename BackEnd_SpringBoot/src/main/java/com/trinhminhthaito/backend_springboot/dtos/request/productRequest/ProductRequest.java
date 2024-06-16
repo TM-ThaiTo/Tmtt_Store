@@ -17,5 +17,8 @@ public class ProductRequest {
 	private Number price;
 	private String brand;
 	private int stock;
+	private int sold;
+	private Number discount;
 	private String avt;
+	private Number rates;
 }

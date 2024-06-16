@@ -27,4 +27,7 @@ public class UserController {
 		MessageResponse messageResponse = userServices.updateUser(dto);
 		return ResponseEntity.ok(messageResponse);
 	}
+
+	// api: get user
+
 }

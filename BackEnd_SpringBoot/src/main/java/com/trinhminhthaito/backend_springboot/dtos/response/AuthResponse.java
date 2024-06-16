@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class LoginResponse {
+public class AuthResponse {
 	private int code;
-	private String message;
-	private String accessToken;
-	private String refreshToken;
+	private Boolean isAuth;
 }

@@ -139,6 +139,7 @@ public class ProductServicesImp implements ProductServices {
 
 		ProductRequest productRequest = new ProductRequest();
 		productRequest.setId(product.getId());
+		productRequest.setRates(product.getRates());
 		productRequest.setName(product.getName());
 		productRequest.setCode(product.getCode());
 		productRequest.setType((int)product.getType());
@@ -201,28 +202,49 @@ public class ProductServicesImp implements ProductServices {
 			return messageDataResponse;
 		}
 
+		List<ProductRequest> productRequests = productToType.stream()
+				.map(product -> new ProductRequest(
+						product.getId(),
+						product.getName(),
+						product.getCode(),
+						product.getType(),
+						product.getPrice(),
+						product.getBrand(),
+						product.getStock(),
+						product.getSold(),
+						product.getDiscount(),
+						product.getAvt(),
+						product.getRates()
+				))
+				.collect(Collectors.toList());
+
+		int count = productRequests.size();
 		messageDataResponse.setCode(0);
-		messageDataResponse.setMessage("Product found");
-		messageDataResponse.setData(productToType);
+		messageDataResponse.setMessage("Success");
+		messageDataResponse.setData(productRequests);
+		messageDataResponse.setCount(count);
 		return messageDataResponse;
 	}
 
 	// fn: get product and page
 	@Override
-	public MessageDataResponse getProductByPage(int page, int size){
+	public MessageDataResponse getProductByPage(int page, int size) {
 		MessageDataResponse messageDataResponse = new MessageDataResponse();
 		Pageable pageable = PageRequest.of(page, size);
 		Page<Product> productPage = productRepository.findAll(pageable);
+		long count = productRepository.count();
 
 		if (productPage.isEmpty()) {
 			messageDataResponse.setCode(1);
-			messageDataResponse.setMessage("Product not found");
+			messageDataResponse.setMessage("Product not found for the requested page and size.");
+			messageDataResponse.setCount(count);
 			return messageDataResponse;
 		}
 
 		messageDataResponse.setCode(0);
 		messageDataResponse.setMessage("Products found");
 		messageDataResponse.setData(productPage.getContent());
+		messageDataResponse.setCount(count);
 		return messageDataResponse;
 	}
 

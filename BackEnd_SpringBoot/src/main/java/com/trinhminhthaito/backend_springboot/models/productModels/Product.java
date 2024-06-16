@@ -24,11 +24,11 @@ public class Product {
 	private String code;
 	private String name;
 	private Number price = 0;
-	private Number type;
+	private int type;
 	private String brand;
 	private String avt;
-	private Number stock = 0;
-	private Number sold = 0;
+	private int stock = 0;
+	private int sold = 0;
 	private Number discount = 0;
 	private Number rates = 0;
 	private List<OtherInfo> otherInfo = new ArrayList<>();

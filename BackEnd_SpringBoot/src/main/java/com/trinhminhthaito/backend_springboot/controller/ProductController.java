@@ -36,15 +36,15 @@ public class ProductController {
 
 	// api: get product to type
 	@GetMapping("/type")
-	public ResponseEntity<?> getProducts(@RequestParam int type, @RequestParam int quantity) {
-		MessageDataResponse messageResponse = productServices.getProductToType(type, quantity);
+	public ResponseEntity<?> getProducts(@RequestParam int idType, @RequestParam int quantity) {
+		MessageDataResponse messageResponse = productServices.getProductToType(idType, quantity);
 		if (messageResponse.getCode() != 0 || messageResponse.getData() == null) {
 			return ResponseEntity.badRequest().body(messageResponse);
 		}
 		return ResponseEntity.ok(messageResponse);
 	}
 
-	// api: get product và phân trang
+	// api: get product và phân
 	@GetMapping("/page")
 	public ResponseEntity<?> getProductsByPage(@RequestParam int page, @RequestParam int size) {
 		MessageDataResponse messageResponse = productServices.getProductByPage(page, size);

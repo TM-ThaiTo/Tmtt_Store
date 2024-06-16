@@ -11,4 +11,5 @@ public class MessageDataResponse {
 	int code;
 	String message;
 	Object data;
+	private Number count;
 }

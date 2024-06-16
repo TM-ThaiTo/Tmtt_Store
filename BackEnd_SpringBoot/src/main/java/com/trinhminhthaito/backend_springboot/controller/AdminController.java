@@ -5,6 +5,7 @@ import com.trinhminhthaito.backend_springboot.dtos.request.productRequest.Produc
 import com.trinhminhthaito.backend_springboot.dtos.response.MessageDataResponse;
 import com.trinhminhthaito.backend_springboot.dtos.response.MessageResponse;
 import com.trinhminhthaito.backend_springboot.models.accountModels.Account;
+import com.trinhminhthaito.backend_springboot.models.productModels.Product;
 import com.trinhminhthaito.backend_springboot.repository.accountRepository.AccountRepository;
 import com.trinhminhthaito.backend_springboot.repository.ProductRepository;
 import com.trinhminhthaito.backend_springboot.services.AccountServices;
@@ -51,7 +52,14 @@ public class AdminController {
 	@GetMapping("/product/all")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<?> getAllProducts() {
-		return ResponseEntity.ok(productRepository.findAll());
+		MessageDataResponse messageDataResponse = new MessageDataResponse();
+		List<Product> products = productRepository.findAll();
+		int count = products.size();
+		messageDataResponse.setCode(0);
+		messageDataResponse.setMessage("Success");
+		messageDataResponse.setData(products);
+		messageDataResponse.setCount(count);
+		return ResponseEntity.ok(messageDataResponse);
 	}
 
 	// api: delete one product + detail + desc

@@ -27,7 +27,8 @@ public class AccountController {
 	private final MailServices mailServices;
 
 	@Autowired
-	public AccountController(AccountServices accountServices , MailServices mailServices) {
+	public AccountController(AccountServices accountServices,
+							 MailServices mailServices) {
 		this.accountServices = accountServices;
 		this.mailServices = mailServices;
 	}

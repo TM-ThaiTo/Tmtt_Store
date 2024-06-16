@@ -2,13 +2,15 @@ package com.trinhminhthaito.backend_springboot.controller;
 
 import com.trinhminhthaito.backend_springboot.config.jwt.JwtProvider;
 import com.trinhminhthaito.backend_springboot.dtos.request.LoginRequest;
-import com.trinhminhthaito.backend_springboot.dtos.request.RefreshToken;
+import com.trinhminhthaito.backend_springboot.dtos.response.AuthResponse;
 import com.trinhminhthaito.backend_springboot.dtos.response.LoginResponse;
 import com.trinhminhthaito.backend_springboot.dtos.response.MessageResponse;
 import com.trinhminhthaito.backend_springboot.models.accountModels.Account;
 import com.trinhminhthaito.backend_springboot.repository.accountRepository.AccountRepository;
 import com.trinhminhthaito.backend_springboot.services.AccountServices;
+import com.trinhminhthaito.backend_springboot.services.AuthServices;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +21,16 @@ public class TokenController {
 	private final JwtProvider jwtProvider;
 	private final AccountServices accountServices;
 	private final AccountRepository accountRepository;
+	private final AuthServices authServices;
 
 	public TokenController(JwtProvider jwtProvider,
 						   AccountRepository accountRepository,
-						   AccountServices accountServices) {
+						   AccountServices accountServices,
+						   AuthServices authServices) {
 		this.jwtProvider = jwtProvider;
 		this.accountRepository = accountRepository;
 		this.accountServices = accountServices;
+		this.authServices = authServices;
 	}
 
 	// api: login
@@ -52,36 +57,32 @@ public class TokenController {
 		account1.setRefreshToken(jwt_RefreshToken);
 		accountRepository.save(account1);
 
-		return ResponseEntity.ok(new LoginResponse(0, "success", jwt_AccessToken));
+		return ResponseEntity.ok(new LoginResponse(0, "success", jwt_AccessToken, jwt_RefreshToken));
 	}
 
-	// api: refresh token
+
+	// api: auth user
 	@Transactional
-	@PostMapping("/refresh")
-	public ResponseEntity<?> refreshToke(@RequestBody RefreshToken token) {
-		String accessToken = token.accessToken();
-		String refreshToken = token.refreshToken();
+	@GetMapping("/auth")
+	@PreAuthorize("hasAuthority('SCOPE_USER')")
+	public ResponseEntity<?> auth(@RequestHeader("Authorization") String token) {
+		AuthResponse messageResponse = authServices.checkAuth(token);
+		return ResponseEntity.ok(messageResponse);
+	}
 
-		if(accessToken == null || refreshToken == null) {
-			return ResponseEntity.badRequest().body(new MessageResponse(1, "Invalid access token"));
-		} // kiểm tra null
+	@Transactional
+	@GetMapping("/refresh_token")
+	@PreAuthorize("hasAuthority('SCOPE_USER')")
+	public ResponseEntity<?> refresh_token(@RequestHeader("Authorization") String token) {
+		LoginResponse messageResponse = authServices.refresh_token(token);
+		return ResponseEntity.ok(messageResponse);
+	}
 
-		// code = 1, yeu cau dang nhap lai
-		if(!jwtProvider.validateRefreshToken(refreshToken)) {
-			return ResponseEntity.ok(new MessageResponse(1, "Expired refresh token"));
-		}
-
-		if(!jwtProvider.validateAccessToken(accessToken) && !jwtProvider.validateRefreshToken(refreshToken)) {
-			return ResponseEntity.ok(new MessageResponse(1, "Expired refresh token"));
-		}
-
-		if(!jwtProvider.validateAccessToken(accessToken)) {
-			if(!jwtProvider.existRefreshToken(refreshToken)) {
-				return ResponseEntity.ok(new MessageResponse(1, "Khong ton tai refresh token"));
-			}
-		}
-
-		String access = jwtProvider.createTokenToRefresh(token.refreshToken());
-		return ResponseEntity.ok(new LoginResponse(0, "success", access));
+	// api: logout
+	@Transactional
+	@PostMapping("/logout")
+	public ResponseEntity<?> logout(@RequestBody String token) {
+		MessageResponse messageResponse = authServices.logout(token);
+		return ResponseEntity.ok(messageResponse);
 	}
 }

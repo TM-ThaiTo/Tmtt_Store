@@ -1,18 +1,26 @@
 import axios from '../axios';
+import constants from '../constants';
 
 const endpoint = "/api/v1/order";
+const authToken = localStorage.getItem(constants.ACCESS_TOKEN_KEY);
 
 // api: Tạo đơn hàng
 const postCreateOrder = (data) => {
-    return axios.post(endpoint, data);
+    return axios.post(endpoint, data, {
+        headers: {
+            Authorization: `Bearer ${authToken}`
+        },
+    });
 };
 
 // api: Lấy danh sách đơn hàng
 const getListOrderApi = (idUser) => {
-    return axios.get('/apis/orders/list', {
+    return axios.get(endpoint, {
         params: {
             id: idUser
-        }
+        }, headers: {
+            Authorization: `Bearer ${authToken}`
+        },
     })
 }
 

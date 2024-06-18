@@ -100,9 +100,9 @@ class PaymentPage extends Component {
     // fn: Lấy danh sách địa chỉ nhận hàng của user
     async getUserDeliveryAdd(userId, index = 0) {
         try {
-            const response = await getDeliveryAddress(userId, 1);
+            const response = await getDeliveryAddress(userId);
             if (response.code === 0) {
-                return response.data.list[index];
+                return response.data[index];
             }
             return null;
         } catch (err) {
@@ -137,10 +137,11 @@ class PaymentPage extends Component {
         const { carts, user } = this.props;
         await this.calculatePrice(carts);
         const { addressIndex, transportString, note } = this.state;
+
         try {
             this.setState({ isLoading: true });
             // lấy id người dùng theo redux user
-            const owner = user.id_account;
+            const owner = user.id;
 
             // xác nhận người dùng đã chọn địa chỉ giao hàng
             if (addressIndex === -1) {
@@ -190,25 +191,28 @@ class PaymentPage extends Component {
 
             // list giỏ hàng
             const productList = carts.map((item, index) => {
-                const { amount, name, price, discount, id_product } = item;
+                const { amount, name, price, discount, id } = item;
                 numOfProd += amount;
                 return {
                     stock: amount,
-                    productId: id_product,
+                    productId: id,
                     name: name,
                     price: price,
                     discount: discount,
                 };
             });
 
+            console.log("check cart: ", carts);
+
             // gán vào detailOrderProduct
             const itemsOrders = productList;
 
             // thêm thông tin đặt hàng
-            const status = "Đặt hàng";
+            const status = 1;
 
             // data gửi api
             const data = {
+                orderCode: "",
                 orderDate: orderDate,
                 status,
                 numOfProd: numOfProd,
@@ -219,7 +223,9 @@ class PaymentPage extends Component {
                 paymentDetail: paymentDetail
             };
 
+            console.log("-> check data form: ", data);
             const response = await postCreateOrder(data);
+
             if (response.code === 0) {
                 message.success("Đặt hàng thành công", 2);
                 this.props.resetCart();
@@ -233,8 +239,9 @@ class PaymentPage extends Component {
             }
         }
         catch (error) {
-            message.error('Đặt hàng thất bại, thử lại', 3);
+            message.error('Đặt hàng thất bại, thử lại error', 3);
             this.setState({ isLoading: false });
+            console.error("error: ", error);
         }
     }
     //#endregion
@@ -439,11 +446,11 @@ class PaymentPage extends Component {
 
                     // list giỏ hàng
                     const productList = carts.map((item, index) => {
-                        const { amount, name, price, discount, id_product } = item;
+                        const { amount, name, price, discount, id } = item;
                         numOfProd += amount;
                         return {
                             stock: amount,
-                            productId: id_product,
+                            productId: id,
                             name: name,
                             price: price,
                             discount: discount,
@@ -652,9 +659,7 @@ class PaymentPage extends Component {
                                     />
                                     <div className="t-center p-b-16">
                                         <span
-                                            style={{
-                                                color: '#ff5000',
-                                            }}>{`(Xin vui lòng kiểm tra lại đơn hàng trước khi đặt mua)`}</span>
+                                            style={{ color: '#ff5000', }}>{`(Xin vui lòng kiểm tra lại đơn hàng trước khi đặt mua)`}</span>
                                     </div>
                                 </div>
                             </Col>

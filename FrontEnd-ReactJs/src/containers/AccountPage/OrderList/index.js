@@ -31,7 +31,7 @@ class OrderList extends Component {
         try {
             this.setState({ isLoading: true });
             const user = this.props.user;
-            const response = await getListOrderApi(user.id_account);
+            const response = await getListOrderApi(user.id);
             if (response) {
                 const list = response.data;
                 this.setState({
@@ -50,6 +50,7 @@ class OrderList extends Component {
     // fn: Render
     render() {
         const { isLoading, orderList, orderDetails } = this.state;
+
         const orderColumns = [
             {
                 title: 'Mã đơn hàng',
@@ -84,17 +85,17 @@ class OrderList extends Component {
             }, // ngày mua
             {
                 title: 'Tổng tiền',
-                dataIndex: 'paidAmount',
-                key: 'paidAmount',
+                dataIndex: ['paymentDetail', 'paidAmount'],
+                key: 'paymentDetail.paidAmount',
                 render: (paidAmount) => (
                     <b>{helpers.formatProductPrice(paidAmount)}</b>
                 ),
             },// tổng tiền
             {
                 title: 'Trạng thái đơn hàng',
-                dataIndex: 'orderStatusDetail',
-                key: 'orderStatusDetail',
-                render: (orderStatusDetail) => <b>{orderStatusDetail}</b>
+                dataIndex: 'status',
+                key: 'status',
+                render: (status) => <b>{helpers.convertOrderStatus(status)}</b>
             },// trạng thái đơn hàng
         ];
 

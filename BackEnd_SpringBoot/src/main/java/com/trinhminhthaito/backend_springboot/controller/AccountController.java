@@ -8,7 +8,7 @@ import com.trinhminhthaito.backend_springboot.services.AccountServices;
 import com.trinhminhthaito.backend_springboot.services.MailServices;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.slf4j.Slf4j;
+// import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/account")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Validated
-@Slf4j
+// @Slf4j
 @Tag(name = "Account Controller")
 public class AccountController {
 
@@ -28,7 +28,7 @@ public class AccountController {
 
 	@Autowired
 	public AccountController(AccountServices accountServices,
-							 MailServices mailServices) {
+			MailServices mailServices) {
 		this.accountServices = accountServices;
 		this.mailServices = mailServices;
 	}
@@ -38,8 +38,8 @@ public class AccountController {
 	@Operation(summary = "Send OTP to mail", description = "API create OTP")
 	@Transactional
 	@PostMapping("/sendmail")
-	public ResponseEntity<?> sendMail(@RequestBody SendMailRequest sendMailRequest){
-		MessageResponse response =  mailServices.sendMail(sendMailRequest);
+	public ResponseEntity<?> sendMail(@RequestBody SendMailRequest sendMailRequest) {
+		MessageResponse response = mailServices.sendMail(sendMailRequest);
 		return ResponseEntity.ok(response);
 	}
 

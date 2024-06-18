@@ -31,6 +31,7 @@ public class AddressController {
 	// ==> input: none
 	// ===> output: list Province
 	@GetMapping("/provinces")
+//	@PreAuthorize("hasAuthority('SCOPE_USER')")
 	public ResponseEntity<?> getProvinces() throws IOException {
 		List<DataAddress.Province> data = addressServices.getDataJsonAddress().getProvince();
 		MessageDataResponse messageDataResponse = new MessageDataResponse();
@@ -44,6 +45,7 @@ public class AddressController {
 	// ==> input: id của tỉnh
 	// ===> output: list huyện
 	@GetMapping("/districts")
+//	@PreAuthorize("hasAuthority('SCOPE_USER')")
 	public ResponseEntity<?> getDistricts(@RequestParam String provinceId) throws IOException {
 		List<DataAddress.District> data = addressServices.getDistrictsByProvinceId(provinceId);
 		MessageDataResponse messageDataResponse = new MessageDataResponse();
@@ -57,6 +59,7 @@ public class AddressController {
 	// ==> input: id của huyện
 	// ===> output: list phường Commune
 	@GetMapping("/communes")
+//	@PreAuthorize("hasAuthority('SCOPE_USER')")
 	public ResponseEntity<?> getCommunesByDistrictId(@RequestParam String districtId) throws IOException {
 		List<DataAddress.Commune> data = addressServices.getCommunesByDistrictId(districtId);
 		MessageDataResponse messageDataResponse = new MessageDataResponse();

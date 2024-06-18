@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class ItemsOrder {
 	private String idProduct; // id
 	private String name; // tên sản phẩm
-	private String stock; // số lượng
-	private String discount; // giảm giá lúc mua
-	private String price; // giá gốc
+	private Number stock; // số lượng
+	private Number discount; // giảm giá lúc mua
+	private Number price; // giá gốc
 }

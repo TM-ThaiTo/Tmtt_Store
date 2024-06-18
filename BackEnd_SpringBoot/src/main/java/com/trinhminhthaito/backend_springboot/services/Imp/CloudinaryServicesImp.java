@@ -66,9 +66,7 @@ public class CloudinaryServicesImp implements CloudinaryServices {
 						String[] parts = avtBase64.split(",");
 						String base64Content = parts[1];
 
-						Map<String, Object> uploadParams = ObjectUtils.asMap(
-								"folder", folderPath
-						);
+						Map<String, Object> uploadParams = ObjectUtils.asMap("folder", folderPath);
 
 						byte[] decodedBytes = Base64.getDecoder().decode(base64Content);
 						Map<String, Object> uploadResult = cloudinary.uploader().upload(decodedBytes, uploadParams);
@@ -102,8 +100,7 @@ public class CloudinaryServicesImp implements CloudinaryServices {
 				String folderPath = "products/" + code + "/desc";
 
 				Map<String, Object> uploadParams = ObjectUtils.asMap(
-						"folder", folderPath
-				);
+						"folder", folderPath);
 
 				byte[] decodedBytes = Base64.getDecoder().decode(base64Content);
 				Map<String, Object> uploadResult = cloudinary.uploader().upload(decodedBytes, uploadParams);
@@ -121,10 +118,11 @@ public class CloudinaryServicesImp implements CloudinaryServices {
 	// Xóa thư mục và tất cả các hình ảnh và thư mục con trong đó từ Cloudinary
 	@Override
 	public MessageResponse deleteFolder(String folderPath) {
-		MessageResponse messageResponse =new MessageResponse();
+		MessageResponse messageResponse = new MessageResponse();
 		try {
 			// Thực hiện xóa thư mục và tất cả các tài nguyên con từ Cloudinary
-			Map<String, String> deleteResult = cloudinary.api().deleteResourcesByPrefix(folderPath, ObjectUtils.emptyMap());
+			Map<String, String> deleteResult = cloudinary.api().deleteResourcesByPrefix(folderPath,
+					ObjectUtils.emptyMap());
 
 			// Trả về kết quả xóa
 			messageResponse.setCode(0);

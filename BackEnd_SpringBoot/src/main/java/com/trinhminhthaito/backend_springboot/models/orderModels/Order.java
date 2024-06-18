@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Document(collection = "orders")
 public class Order {
+	private String orderCode;
 	private CustomerOrder customerOrder;
 	private DeliveryAddressesOrder deliveryAddressesOrder;
 	private List<ItemsOrder> itemsOrders = new ArrayList<>();
@@ -22,6 +23,5 @@ public class Order {
 	private String note; // ghi chú
 	private Date orderDate; // ngày đặt
 	private Number status; // trạng thái đơn hàng
-
 	private Date dateOfPayment; // ngày thanh toán
 }

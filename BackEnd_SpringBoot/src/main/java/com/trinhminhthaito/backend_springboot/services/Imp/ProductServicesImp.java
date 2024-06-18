@@ -33,8 +33,8 @@ public class ProductServicesImp implements ProductServices {
 
 	@Autowired
 	private ProductServicesImp(DetailProductHelper detailProductHelper,
-							   CloudinaryServices cloudinaryServices,
-							   ProductRepository productRepository) {
+			CloudinaryServices cloudinaryServices,
+			ProductRepository productRepository) {
 		this.detailProductHelper = detailProductHelper;
 		this.cloudinaryServices = cloudinaryServices;
 		this.productRepository = productRepository;
@@ -46,7 +46,8 @@ public class ProductServicesImp implements ProductServices {
 	}
 
 	// fn: thêm thông tin product
-	private void addProduct(ProductRequest productRequest, ProductDetailRequest detailRequest, DescRequest descRequest) {
+	private void addProduct(ProductRequest productRequest, ProductDetailRequest detailRequest,
+			DescRequest descRequest) {
 		Product product = new Product();
 		product.setCode(productRequest.getCode());
 		product.setName(productRequest.getName());
@@ -94,24 +95,24 @@ public class ProductServicesImp implements ProductServices {
 	public MessageResponse addProduct(AddProductRequest product) {
 		MessageResponse messageResponse = new MessageResponse();
 
-		if(product.getProduct().getType() == 0){
+		if (product.getProduct().getType() == 0) {
 			messageResponse.setCode(3);
 			messageResponse.setMessage("Missing type adding product");
 			return messageResponse;
 		}
 
-		try{
+		try {
 			ProductRequest newProduct = product.getProduct();
 			ProductDetailRequest detailProduct = product.getDetails();
 			DescRequest descProduct = product.getDesc();
 
-			if(detailProduct == null || descProduct == null) {
+			if (detailProduct == null || descProduct == null) {
 				messageResponse.setCode(1);
 				messageResponse.setMessage("Missing product information");
 				return messageResponse;
 			}
 
-			if(check(newProduct)) {
+			if (check(newProduct)) {
 				messageResponse.setCode(2);
 				messageResponse.setMessage("Sản phẩm đã tồn tại");
 				return messageResponse;
@@ -142,14 +143,15 @@ public class ProductServicesImp implements ProductServices {
 		productRequest.setRates(product.getRates());
 		productRequest.setName(product.getName());
 		productRequest.setCode(product.getCode());
-		productRequest.setType((int)product.getType());
+		productRequest.setType((int) product.getType());
+		productRequest.setDiscount((int) product.getDiscount());
 		productRequest.setPrice(product.getPrice());
 		productRequest.setBrand(product.getBrand());
-		productRequest.setStock((int)product.getStock());
+		productRequest.setStock((int) product.getStock());
 		productRequest.setAvt(product.getAvt());
 
 		DescProduct descProduct = product.getDesc();
-		Object detailProduct = detailProductHelper.findDetailByType((int)product.getType(), product);
+		Object detailProduct = detailProductHelper.findDetailByType((int) product.getType(), product);
 
 		productResponse.setProduct(productRequest); // get product
 		productResponse.setDesc(descProduct); // get desc
@@ -161,9 +163,9 @@ public class ProductServicesImp implements ProductServices {
 	@Override
 	public MessageResponse deleteProductById(String id) {
 		MessageResponse messageResponse = new MessageResponse();
-		try{
+		try {
 			Product product = productRepository.findById(id).orElse(null);
-			if(product == null) {
+			if (product == null) {
 				messageResponse.setCode(1);
 				messageResponse.setMessage("Product not found");
 				return messageResponse;
@@ -171,7 +173,7 @@ public class ProductServicesImp implements ProductServices {
 			String code = product.getCode();
 			String folderPath = "products/" + code;
 			messageResponse = cloudinaryServices.deleteFolder(folderPath);
-			if(messageResponse.getCode() != 0) {
+			if (messageResponse.getCode() != 0) {
 				messageResponse.setCode(messageResponse.getCode());
 				messageResponse.setMessage(messageResponse.getMessage());
 				return messageResponse;
@@ -180,8 +182,7 @@ public class ProductServicesImp implements ProductServices {
 			productRepository.deleteById(id); // xoá product
 			messageResponse.setCode(0);
 			messageResponse.setMessage("Product deleted successfully");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			messageResponse.setCode(-1);
 			messageResponse.setMessage("Error deleting product" + e.getMessage());
 		}
@@ -214,8 +215,7 @@ public class ProductServicesImp implements ProductServices {
 						product.getSold(),
 						product.getDiscount(),
 						product.getAvt(),
-						product.getRates()
-				))
+						product.getRates()))
 				.collect(Collectors.toList());
 
 		int count = productRequests.size();

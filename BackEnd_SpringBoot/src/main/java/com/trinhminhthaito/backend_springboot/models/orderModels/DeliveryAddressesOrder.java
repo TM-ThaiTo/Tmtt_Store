@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class DeliveryAddressesOrder {
-	private String name;
-	private String phone;
-	private String email;
-	private String address;
+	private String nameReceiver;
+	private String phoneReceiver;
+	// private String email;
+	private String shippingAddress;
 	private String note;
+	private String shippingMethod;
+	private String transportFee;
 }

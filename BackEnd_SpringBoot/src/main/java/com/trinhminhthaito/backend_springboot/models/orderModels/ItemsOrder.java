@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ItemsOrder {
-	private String idProduct; // id
+	private String productId; // id
 	private String name; // tên sản phẩm
 	private Number stock; // số lượng
 	private Number discount; // giảm giá lúc mua

@@ -8,7 +8,6 @@ import com.trinhminhthaito.backend_springboot.services.AccountServices;
 import com.trinhminhthaito.backend_springboot.services.MailServices;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-// import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/account")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Validated
-// @Slf4j
 @Tag(name = "Account Controller")
 public class AccountController {
 

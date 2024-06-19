@@ -27,11 +27,35 @@ public class OrderController {
 		return ResponseEntity.ok(messageResponse);
 	}
 
-	// api: get danh sách order
+	// api: get danh sách order theo user
 	@GetMapping
 	@PreAuthorize("hasAuthority('SCOPE_USER')")
 	public ResponseEntity<?> getOrderById(@RequestParam String id) {
 		MessageDataResponse message = orderServices.getOrderById(id);
 		return ResponseEntity.ok(message);
+	}
+
+	// api: update đơn hàng thành công VNPay
+	@GetMapping("/updateVnpay")
+	@PreAuthorize("hasAuthority('SCOPE_USER')")
+	public ResponseEntity<?> updatePaymentStatus(@RequestParam String id) {
+		MessageResponse messageResponse = orderServices.updatePaymentStatusVnpay(id);
+		return ResponseEntity.ok(messageResponse);
+	}
+
+	// api: delete đơn hàng không thành công VNPay
+	@GetMapping("/deleteVnpay")
+	@PreAuthorize("hasAuthority('SCOPE_USER')")
+	public ResponseEntity<?> deleteOrderVNPay(@RequestParam String id) {
+		MessageResponse messageResponse = orderServices.deleteOrderVnpay(id);
+		return ResponseEntity.ok(messageResponse);
+	}
+
+	// api: get chi tiết đơn hàng
+	@GetMapping("/ordercode")
+	@PreAuthorize("hasAuthority('SCOPE_USER')")
+	public ResponseEntity<?> getDetailOrder(@RequestParam String id) {
+		MessageDataResponse messageResponse = orderServices.getOrderDetail(id);
+		return ResponseEntity.ok(messageResponse);
 	}
 }

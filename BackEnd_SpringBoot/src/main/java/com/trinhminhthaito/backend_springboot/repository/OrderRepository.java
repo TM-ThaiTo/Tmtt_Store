@@ -9,5 +9,9 @@ import java.util.*;
 public interface OrderRepository extends MongoRepository<Order, String> {
     List<Order> findByCustomerOrderCustomerId(String customerId);
 
+    Order findByOrderCode(String id);
+
     Boolean existsByOrderCode(String orderCode);
+
+    Order findByPaymentDetailCodeMethod(String id);
 }

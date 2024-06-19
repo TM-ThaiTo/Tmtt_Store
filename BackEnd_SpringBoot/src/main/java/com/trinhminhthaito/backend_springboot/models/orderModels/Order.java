@@ -3,6 +3,8 @@ package com.trinhminhthaito.backend_springboot.models.orderModels;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 @Document(collection = "orders")
 public class Order {
+	@Id
+	private String id;
 	private String orderCode;
 	private CustomerOrder customerOrder;
 	private DeliveryAddressesOrder deliveryAddressesOrder;

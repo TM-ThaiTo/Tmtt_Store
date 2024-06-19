@@ -8,4 +8,10 @@ public interface OrderServices {
 	MessageResponse createOrder(Order order);
 
 	MessageDataResponse getOrderById(String id);
+
+	MessageResponse updatePaymentStatusVnpay(String id);
+
+	MessageResponse deleteOrderVnpay(String id);
+
+	MessageDataResponse getOrderDetail(String id);
 }

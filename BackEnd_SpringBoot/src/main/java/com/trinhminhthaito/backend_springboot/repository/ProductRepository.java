@@ -12,7 +12,11 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends MongoRepository<Product, String> {
 	Optional<Product> findByCode(String code);
+
 	List<Product> findByType(Number type, Pageable pageable);
+
+	List<Product> findByType(Number type);
+
 	@NonNull
 	Page<Product> findAll(@NonNull Pageable pageable);
 }

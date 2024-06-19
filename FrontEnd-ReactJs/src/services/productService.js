@@ -81,7 +81,7 @@ const getFilterProductApi = (
         page,
         perPage,
     }
-    return axios.get("apis/products/filter", {
+    return axios.get(endpoint + "/product/filter", {
         params
     });
 }

@@ -53,4 +53,12 @@ public class ProductController {
 		}
 		return ResponseEntity.ok(messageResponse);
 	}
+
+	// api: filter product
+	@GetMapping("/filter")
+	public ResponseEntity<?> getFilterProduct(@RequestParam int type, @RequestParam int page,
+			@RequestParam int perPage) {
+		MessageDataResponse messageDataResponse = productServices.getFilterProductServices(type, page, perPage);
+		return ResponseEntity.ok(messageDataResponse);
+	}
 }

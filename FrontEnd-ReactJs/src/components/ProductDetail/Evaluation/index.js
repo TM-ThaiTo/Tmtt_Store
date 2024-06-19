@@ -34,15 +34,16 @@ class EvaluationView extends Component {
     onComment = async () => {
         try {
             // const { avt, fullName } = this.state.user;
-            const { fullName } = this.state.user;
+            const { fullName, id } = this.props.user;
             const content = this.state.cmt.trim();
             if (content === '' && this.state.star === 0) {
                 message.warning('Hãy nhập nhận xét của bạn');
                 return;
             }
             let data = {
+                idAuthor: id,
                 author: fullName,
-                productId: this.props.productId,
+                idProduct: this.props.productId,
                 content,
                 rate: this.state.star,
             };
@@ -67,7 +68,9 @@ class EvaluationView extends Component {
         const { cmtListState, cmt, isAuth } = this.state;
         // Tính trung bình số sao
         let starAvg;
-        console.log("check rates", rates);
+
+        console.log("check user render: ", this.state.user);
+        // console.log("check rates", rates);
         // if (rates === null) {
         //     starAvg = 5;
         // } else {

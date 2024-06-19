@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, message, Row, Col } from 'antd';
-import { postLoginAdmin } from "../../../services/adminService";
+import { post_loginuser } from "../../../services/loginServices";
+
 import './index.scss';
 
 class Login extends Component {
     onFinish = async (account) => {
         try {
-            const response = await postLoginAdmin(account);
-            console.log("Check code: ", response.code);
+            const response = await post_loginuser(account);
             if (response && response.code === 0) {
                 message.success('Đăng nhập thành công', 2);
                 this.props.onLoginAdmin(true, response.data.fullName);

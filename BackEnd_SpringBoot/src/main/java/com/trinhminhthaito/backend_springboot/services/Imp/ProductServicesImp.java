@@ -72,7 +72,7 @@ public class ProductServicesImp implements ProductServices {
 	}
 
 	// fn: thêm thông tin desc
-	public void addDesc(DescRequest descRequest, Product product, String codeProduct) {
+	private void addDesc(DescRequest descRequest, Product product, String codeProduct) {
 		DescProduct descProduct = new DescProduct();
 		descProduct.setTitle(descRequest.getTitle());
 
@@ -117,9 +117,7 @@ public class ProductServicesImp implements ProductServices {
 				messageResponse.setMessage("Sản phẩm đã tồn tại");
 				return messageResponse;
 			}
-
 			addProduct(newProduct, detailProduct, descProduct);
-
 			messageResponse.setCode(0);
 			messageResponse.setMessage("Product added successfully");
 		} catch (Exception e) {
@@ -270,5 +268,27 @@ public class ProductServicesImp implements ProductServices {
 		messageResponse.setCode(0);
 		messageResponse.setMessage("Product updated successfully");
 		return messageResponse;
+	}
+
+	// fn: filter product
+	public MessageDataResponse getFilterProductServices(int type, int page, int perPage) {
+		MessageDataResponse messageDataResponse = new MessageDataResponse();
+		try {
+			Pageable pageable = PageRequest.of(page, perPage);
+			List<Product> products = productRepository.findByType(type);
+
+			messageDataResponse.setCode(0);
+			messageDataResponse.setMessage("suscces");
+			messageDataResponse.setData(products);
+			messageDataResponse.setCount(products.size());
+			// messageDataResponse.setPage(page);
+			// messageDataResponse.setPerPage(perPage);
+			// messageDataResponse.setTotal(productRepository.countByType(type)); //
+			// Optional: total count for pagination
+		} catch (Exception ex) {
+			messageDataResponse.setCode(-1);
+			messageDataResponse.setMessage("Lỗi server: " + ex.getMessage());
+		}
+		return messageDataResponse;
 	}
 }

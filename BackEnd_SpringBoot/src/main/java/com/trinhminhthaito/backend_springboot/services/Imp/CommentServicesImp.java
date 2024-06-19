@@ -1,7 +1,7 @@
 package com.trinhminhthaito.backend_springboot.services.Imp;
 
 import com.trinhminhthaito.backend_springboot.dtos.request.CommentRequest;
-import com.trinhminhthaito.backend_springboot.dtos.response.MessageDataResponse;
+import com.trinhminhthaito.backend_springboot.dtos.response.CommentResponse;
 import com.trinhminhthaito.backend_springboot.dtos.response.MessageResponse;
 import com.trinhminhthaito.backend_springboot.models.productModels.Comment;
 import com.trinhminhthaito.backend_springboot.models.productModels.Product;
@@ -10,6 +10,7 @@ import com.trinhminhthaito.backend_springboot.services.CommentServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class CommentServicesImp implements CommentServices {
 	private final ProductRepository productRepository;
 
 	@Autowired
-	public CommentServicesImp(ProductRepository productRepository){
+	public CommentServicesImp(ProductRepository productRepository) {
 		this.productRepository = productRepository;
 	}
 
@@ -47,19 +48,20 @@ public class CommentServicesImp implements CommentServices {
 		return product;
 	}
 
+	// fn: tạo comment
 	@Override
-	public MessageResponse createComment(CommentRequest commentRequest){
+	public MessageResponse createComment(CommentRequest commentRequest) {
 		MessageResponse messageResponse = new MessageResponse();
-		try{
+		try {
 			Product product = productRepository.findById(commentRequest.getIdProduct()).orElse(null);
-			if(product == null){
+			if (product == null) {
 				messageResponse.setCode(1);
 				messageResponse.setMessage("Product not found");
 				return messageResponse;
 			}
 
 			List<Comment> listComment = product.getComment();
-			if(checkAuthorComment(listComment, commentRequest.getIdAuthor())){
+			if (checkAuthorComment(listComment, commentRequest.getIdAuthor())) {
 				messageResponse.setCode(2);
 				messageResponse.setMessage("Đã bình luận không được bình luận tiếp");
 				return messageResponse;
@@ -81,33 +83,58 @@ public class CommentServicesImp implements CommentServices {
 
 			messageResponse.setCode(0);
 			messageResponse.setMessage("success");
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			messageResponse.setCode(-1);
 			messageResponse.setMessage("Lỗi Server: " + ex.getMessage());
 		}
 		return messageResponse;
 	}
 
+	// fn: get comment
 	@Override
-	public MessageDataResponse getComment(String id){
-		MessageDataResponse messageDataResponse = new MessageDataResponse();
-		try{
+	public CommentResponse getComment(String id) {
+		CommentResponse messageDataResponse = new CommentResponse();
+		try {
 			Product product = productRepository.findById(id).orElse(null);
-			if(product == null){
+			if (product == null) {
 				messageDataResponse.setCode(1);
 				messageDataResponse.setMessage("Product not found");
 				return messageDataResponse;
 			}
+
+			List<Comment> comments = product.getComment();
+
+			if (comments == null) {
+				messageDataResponse.setCode(2);
+				messageDataResponse.setMessage("Không có comment");
+				return messageDataResponse;
+			}
+			List<Integer> rateLists = new ArrayList<>();
+			int[] rateCounts = new int[6];
+			int total = comments.size();
+			for (Comment item : comments) {
+
+				rateLists.add(item.getRate());
+
+				if (item.getRate() >= 1 && item.getRate() <= 5) {
+					rateCounts[item.getRate()]++;
+				}
+			}
+
 			messageDataResponse.setCode(0);
-			messageDataResponse.setMessage("success");
-			messageDataResponse.setData(product.getComment());
-		}catch (Exception exception){
+			messageDataResponse.setMessage("Susccess");
+			messageDataResponse.setData(comments);
+			messageDataResponse.setRateList(rateLists);
+			messageDataResponse.setTotalComent(total);
+			messageDataResponse.setRateCounts(rateCounts);
+		} catch (Exception exception) {
 			messageDataResponse.setCode(-1);
-			messageDataResponse.setMessage("Error server: "+ exception.getMessage());
+			messageDataResponse.setMessage("Error server: " + exception.getMessage());
 		}
 		return messageDataResponse;
 	}
 
+	// fn: xoá comment
 	@Override
 	public MessageResponse deleteComment(String idProduct, int idComment) {
 		MessageResponse messageResponse = new MessageResponse();

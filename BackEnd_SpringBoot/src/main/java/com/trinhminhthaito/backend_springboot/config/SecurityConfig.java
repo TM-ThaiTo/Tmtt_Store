@@ -61,6 +61,7 @@ public class SecurityConfig {
 			"/api/v1/product/one",
 			"/api/v1/product/type",
 			"/api/v1/product/page",
+			"/api/v1/product/filter",
 
 			// address
 			"/api/v1/address/all",

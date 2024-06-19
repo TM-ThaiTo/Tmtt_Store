@@ -35,7 +35,7 @@ class RelatedProduct extends Component {
         this.isSubscribed = true;
         const { id, type } = this.props;
         try {
-            const response = await getProductType(type, id); // BE mặc định chỉ đưa 10 sản phẩm lên
+            const response = await getProductType(type, 10); // BE mặc định chỉ đưa 10 sản phẩm lên
             if (response && this.isSubscribed) {
                 this.setState({ productList: response.data });
             } else {

@@ -63,7 +63,7 @@ class FilterResult extends Component {
         //     stringType, price, brand, buses, sizes, capacities, types, displaySizes, series, connectionStds, chipSetes,
         //     sizeStdes, socketTypes, capaities, manufactureres, isLeds, colores, ledColores, bgPlates, resolutions, frequencies,
         //     brandWidth, strongs, wattages, connectionPort, page, perPage, url } = this.state;
-        const { stringType, page, perPage } = this.state;
+        const { stringType, page, perPage, type } = this.state;
         // if (type === null) return;
         // const data = {
         //     type: stringType,
@@ -106,7 +106,7 @@ class FilterResult extends Component {
             // }
             this.setState({ isLoading: true });
             const productList = await getFilterProductApi(
-                stringType,
+                type,
                 page,
                 perPage,
             );

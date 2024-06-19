@@ -26,25 +26,37 @@ const getListOrderApi = (idUser) => {
 
 // api: Lấy chi tiết đơn hàng
 const getDetailOrder = (idOrder) => {
-    return axios.get('/apis/orders', {
+    return axios.get(endpoint + '/ordercode', {
         params: {
             id: idOrder,
-        }
+        }, headers: {
+            Authorization: `Bearer ${authToken}`
+        },
     })
 }
 
 // api: xác nhận thanh toán VNPay
-const postUpdateVnpayApi = (data) => {
-    return axios.post('/apis/orders/updatevnpay', data);
+const postUpdateVnpayApi = (id) => {
+    return axios.get(endpoint + '/updateVnpay', {
+        params: {
+            id: id
+        },
+        headers: {
+            Authorization: `Bearer ${authToken}`
+        }
+    });
 }
 
 // api: xoá đơn hàng khi thanh toán không thành công
 const delOrderVnpayApi = (id) => {
-    return axios.delete('/apis/orders/deletevnpay', {
+    return axios.get(endpoint + '/deleteVnpay', {
         params: {
-            IdCodeMenthod: id,
+            id: id
+        },
+        headers: {
+            Authorization: `Bearer ${authToken}`
         }
-    })
+    });
 }
 
 // api: tìm kiếm order

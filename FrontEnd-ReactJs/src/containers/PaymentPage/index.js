@@ -102,7 +102,7 @@ class PaymentPage extends Component {
         try {
             const response = await getDeliveryAddress(userId);
             if (response.code === 0) {
-                return response.data[index];
+                return response.data[index - 1];
             }
             return null;
         } catch (err) {
@@ -193,6 +193,7 @@ class PaymentPage extends Component {
             const productList = carts.map((item, index) => {
                 const { amount, name, price, discount, id } = item;
                 numOfProd += amount;
+                console.log("check item ", item);
                 return {
                     stock: amount,
                     productId: id,
@@ -201,8 +202,6 @@ class PaymentPage extends Component {
                     discount: discount,
                 };
             });
-
-            console.log("check cart: ", carts);
 
             // gán vào detailOrderProduct
             const itemsOrders = productList;
@@ -223,7 +222,6 @@ class PaymentPage extends Component {
                 paymentDetail: paymentDetail
             };
 
-            console.log("-> check data form: ", data);
             const response = await postCreateOrder(data);
 
             if (response.code === 0) {
@@ -394,10 +392,13 @@ class PaymentPage extends Component {
                 title: 'Xác nhận thanh toán',
                 content: 'Bạn có chắc chắn muốn thanh toán bằng VNPay không?',
                 onOk: async () => {
+
                     this.setState({ isLoading: true });
                     await this.redirectVNPAYPayment();
 
-                    const owner = user.id_account;
+                    // lấy id người dùng theo redux user
+                    const owner = user.id;
+
                     // xác nhận người dùng đã chọn địa chỉ giao hàng
                     if (addressIndex === -1) {
                         message.error('Vui lòng chọn địa chỉ giao hàng', 3);
@@ -420,11 +421,11 @@ class PaymentPage extends Component {
                         transportFee: this.calculateTransportFee().toString(),
                     }
 
-                    // tạo Json paymentDetail
+                    // tạo Json paymentDetail thông tin thanh toán
                     const paymentDetail = {
-                        paymentMethod: 'VNPay',
+                        paymentMethod: "VNPay",
                         paymentStatus: 'Chưa thanh toán',
-                        idCodeMethod: this.state.vnp_TxnRef,
+                        codeMethod: this.state.vnp_TxnRef,
                         totalAmount: this.state.totalAmount,
                         paidAmount: this.state.paidAmount,
                     }
@@ -432,7 +433,7 @@ class PaymentPage extends Component {
                     // tạo thời gian đặt hàng
                     const orderDate = new Date();
 
-                    // tạo người dùng => với tài khoản tạo order
+                    // tạo người dùng đặt hàng => với tài khoản tạo order
                     const customerOrder = {
                         customerId: owner,
                         customerName: user.fullName,
@@ -458,19 +459,20 @@ class PaymentPage extends Component {
                     });
 
                     // gán vào detailOrderProduct
-                    const detailOderProducts = productList;
+                    const itemsOrders = productList;
 
                     // thêm thông tin đặt hàng
-                    const orderStatusDetail = "Đặt hàng";
+                    const status = 1;
 
                     // data gửi api
                     const data = {
+                        orderCode: "",
                         orderDate: orderDate,
-                        orderStatusDetail,
-                        numOfProd: numOfProd.toString(),
+                        status,
+                        numOfProd: numOfProd,
                         note: note,
                         customerOrder: customerOrder,
-                        detailOderProducts: detailOderProducts,
+                        itemsOrders: itemsOrders,
                         deliveryAddressesOrder: deliveryAddressesOrder,
                         paymentDetail: paymentDetail
                     };
@@ -486,7 +488,6 @@ class PaymentPage extends Component {
                     }
                 },
                 onCancel: () => {
-                    // console.log('Hủy thanh toán');
                     message.error("Đã huỷ thanh toán", 3);
                 },
             });
@@ -499,7 +500,6 @@ class PaymentPage extends Component {
     // fn: render
     render() {
         const { carts, isAuth } = this.props;
-        // const { isLoading, isOrderSuccess } = this.state;
         const { isLoading, isOrderSuccess, length } = this.state;
 
         if (isOrderSuccess) {

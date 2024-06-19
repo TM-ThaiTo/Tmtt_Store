@@ -55,10 +55,10 @@ class RelatedProductList extends Component {
     showProductList = (list) => {
         const listSliced = this.paginate(list);
         return listSliced.map((product, index) => {
-            const { name, avt, price, discount, stock, id_product } = product;
+            const { name, avt, price, discount, stock, id } = product;
             return (
                 <Col key={index} {...this.props.span}>
-                    <Link to={`/product/${id_product}`}>
+                    <Link to={`/product/${id}`}>
                         <ProductView
                             className={this.state.isMdDevice ? 'm-auto' : ''}
                             name={name}

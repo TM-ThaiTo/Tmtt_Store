@@ -69,7 +69,7 @@ class ProductOverview extends Component {
 
     // fn: Thêm vào giỏ hàng
     addCart = () => {
-        const { code, name, price, avt, id_product, discount, stock } = this.props.dataProduct.product;
+        const { code, name, price, avt, id, discount, stock } = this.props.dataProduct.product;
         const { numOfProduct } = this.state;
         let product = {
             code,
@@ -79,7 +79,7 @@ class ProductOverview extends Component {
             avt,
             discount,
             stock,
-            id_product,
+            id,
         };
         this.setState({ numOfProduct: 1 });
         this.props.addToCart(product);
@@ -113,7 +113,7 @@ class ProductOverview extends Component {
         const { dataProduct } = this.props;
         const { avtIndex } = this.state;
         const {
-            // id_product,
+            // id,
             avt,
             name,
             brand,

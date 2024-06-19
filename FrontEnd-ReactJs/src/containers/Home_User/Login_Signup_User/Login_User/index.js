@@ -96,112 +96,114 @@ class Login_User extends Component {
 
         //render
         return (
-            <div className='form-login'>
-                <div className="Login container">
-                    <div className='Login-title'>
-                        <h1 className='m-b-20 m-t-20 underline-title'>
-                            <h1>Đăng nhập</h1>
-                        </h1>
-                    </div>
-                    <div className='Login-content'>
-                        <Formik
-                            initialValues={initialValue}
-                            validationSchema={validationSchema}
-                            onSubmit={this.onLogin}>
-                            {(formikProps) => {
-                                return (
-                                    <Form className="bg-form">
-                                        <Row
-                                            className="input-border"
-                                            gutter={[40, 24]}
-                                            justify="center"
-                                            style={{ margin: 0 }}>
-                                            {/* Form thông tin đăng nhập */}
+            <>
+                <div className='form-login'>
+                    <div className="Login container">
+                        <div className='Login-title'>
+                            <h1 className='m-b-20 m-t-20 underline-title'>
+                                <h1>Đăng nhập</h1>
+                            </h1>
+                        </div>
+                        <div className='Login-content'>
+                            <Formik
+                                initialValues={initialValue}
+                                validationSchema={validationSchema}
+                                onSubmit={this.onLogin}>
+                                {(formikProps) => {
+                                    return (
+                                        <Form className="bg-form">
+                                            <Row
+                                                className="input-border"
+                                                gutter={[40, 24]}
+                                                justify="center"
+                                                style={{ margin: 0 }}>
+                                                {/* Form thông tin đăng nhập */}
 
-                                            {/* email */}
-                                            <Col span={24} className="m-t-20">
-                                                <FastField
-                                                    name="email"
-                                                    component={InputField}
-                                                    className="input-form-common"
-                                                    placeholder="Email *"
-                                                    size="large"
-                                                    suffix={
-                                                        <Tooltip title="Email của bạn">
-                                                            <InfoCircleOutlined
-                                                                style={{
-                                                                    color: suffixColor,
-                                                                }}
-                                                            />
-                                                        </Tooltip>
-                                                    }
-                                                />
-                                            </Col>
+                                                {/* email */}
+                                                <Col span={24} className="m-t-20">
+                                                    <FastField
+                                                        name="email"
+                                                        component={InputField}
+                                                        className="input-form-common"
+                                                        placeholder="Email *"
+                                                        size="large"
+                                                        suffix={
+                                                            <Tooltip title="Email của bạn">
+                                                                <InfoCircleOutlined
+                                                                    style={{
+                                                                        color: suffixColor,
+                                                                    }}
+                                                                />
+                                                            </Tooltip>
+                                                        }
+                                                    />
+                                                </Col>
 
-                                            {/* password */}
-                                            <Col span={24}>
-                                                <FastField
-                                                    name="password"
-                                                    component={InputField}
-                                                    className="input-form-common"
-                                                    type="password"
-                                                    placeholder="Mật khẩu *"
-                                                    size="large"
-                                                    autoComplete="on"
-                                                    iconRender={(visible) =>
-                                                        visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                                                    }
-                                                />
-                                            </Col>
+                                                {/* password */}
+                                                <Col span={24}>
+                                                    <FastField
+                                                        name="password"
+                                                        component={InputField}
+                                                        className="input-form-common"
+                                                        type="password"
+                                                        placeholder="Mật khẩu *"
+                                                        size="large"
+                                                        autoComplete="on"
+                                                        iconRender={(visible) =>
+                                                            visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                                                        }
+                                                    />
+                                                </Col>
 
-                                            {/* duy trì đăng Nhập */}
-                                            <Col span={24}>
-                                                <div className="d-flex justify-content-between">
-                                                    <FastField name="keepLogin" component={CheckboxField}>
-                                                        <b>Duy trì đăng nhập</b>
-                                                    </FastField>
-                                                    <Link
-                                                        to="/login/forgot"
-                                                        style={{ color: '#50aaff' }}>
-                                                        <b>Quên mật khẩu ?</b>
-                                                    </Link>
-                                                </div>
-                                            </Col>
+                                                {/* duy trì đăng Nhập */}
+                                                <Col span={24}>
+                                                    <div className="d-flex justify-content-between">
+                                                        <FastField name="keepLogin" component={CheckboxField}>
+                                                            <b>Duy trì đăng nhập</b>
+                                                        </FastField>
+                                                        <Link
+                                                            to="/login/forgot"
+                                                            style={{ color: '#50aaff' }}>
+                                                            <b>Quên mật khẩu ?</b>
+                                                        </Link>
+                                                    </div>
+                                                </Col>
 
-                                            {/* Button submit */}
-                                            <Col className="p-t-8 p-b-0 t-center" span={24}>
-                                                <Button
-                                                    className="Login-submit-btn w-100"
-                                                    size="large"
-                                                    type="primary"
-                                                    htmlType="submit"
-                                                    disabled={this.state.isDisableLogin}
-                                                    loading={this.state.isSubmitting}>
-                                                    Đăng nhập
-                                                </Button>
-                                            </Col>
-                                            {/* đăng kí bằng google */}
-                                            <GoogleOAuthProvider clientId={"651429717215-3h2h1m8vmja2f54susr8t97qms6hkc82.apps.googleusercontent.com"}>
-                                                <LoginGoogle />
-                                            </GoogleOAuthProvider>
-                                            {/* quên mật khẩu hoặc tạo tài khoản */}
-                                            <Col span={24} className="btn-dangki">
-                                                <div className="or-option" style={{ color: '#acacac' }}>
-                                                    HOẶC
-                                                </div>
-                                                <div className="m-t-20 m-b-20 font-weight-500">
-                                                    Bạn chưa đã có tài khoản ?
-                                                    <Link to="/signup-user">&nbsp;Đăng ký</Link>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </Form>
-                                );
-                            }}
-                        </Formik>
+                                                {/* Button submit */}
+                                                <Col className="p-t-8 p-b-0 t-center" span={24}>
+                                                    <Button
+                                                        className="Login-submit-btn w-100"
+                                                        size="large"
+                                                        type="primary"
+                                                        htmlType="submit"
+                                                        disabled={this.state.isDisableLogin}
+                                                        loading={this.state.isSubmitting}>
+                                                        Đăng nhập
+                                                    </Button>
+                                                </Col>
+                                                {/* đăng kí bằng google */}
+                                                <GoogleOAuthProvider clientId={"651429717215-3h2h1m8vmja2f54susr8t97qms6hkc82.apps.googleusercontent.com"}>
+                                                    <LoginGoogle />
+                                                </GoogleOAuthProvider>
+                                                {/* quên mật khẩu hoặc tạo tài khoản */}
+                                                <Col span={24} className="btn-dangki">
+                                                    <div className="or-option" style={{ color: '#acacac' }}>
+                                                        HOẶC
+                                                    </div>
+                                                    <div className="m-t-20 m-b-20 font-weight-500">
+                                                        Bạn chưa đã có tài khoản ?
+                                                        <Link to="/signup-user">&nbsp;Đăng ký</Link>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        </Form>
+                                    );
+                                }}
+                            </Formik>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
 }

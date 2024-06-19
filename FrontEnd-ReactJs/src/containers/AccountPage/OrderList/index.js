@@ -14,6 +14,7 @@ class OrderList extends Component {
             orderDetails: {
                 isOpen: false,
                 orderId: '',
+                order: [],
             },
             updateModalVisible: false,
             selectedOrderId: '',
@@ -63,7 +64,7 @@ class OrderList extends Component {
                             this.setState({
                                 orderDetails: {
                                     isOpen: true,
-                                    orderId: record.id
+                                    orderId: record.orderCode,
                                 }
                             })
                         }
@@ -85,8 +86,8 @@ class OrderList extends Component {
             }, // ngày mua
             {
                 title: 'Tổng tiền',
-                dataIndex: ['paymentDetail', 'paidAmount'],
-                key: 'paymentDetail.paidAmount',
+                dataIndex: "paidAmount",
+                key: 'paidAmount',
                 render: (paidAmount) => (
                     <b>{helpers.formatProductPrice(paidAmount)}</b>
                 ),
@@ -130,6 +131,7 @@ class OrderList extends Component {
                 {orderDetails.isOpen && (
                     <OrderDetail
                         orderId={orderDetails.orderId}
+                        orderD={orderDetails.order}
                         onClose={() =>
                             this.setState({ orderDetails: { ...orderDetails, isOpen: false } })
                         }

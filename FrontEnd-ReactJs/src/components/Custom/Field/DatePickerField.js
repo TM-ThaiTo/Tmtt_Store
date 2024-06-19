@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DatePicker } from 'antd';
+import moment from 'moment';
 
 class DatePickerField extends Component {
     static propTypes = {
@@ -14,7 +15,9 @@ class DatePickerField extends Component {
     componentDidMount() {
         const { field } = this.props;
         const { value } = field;
-        this.handleOnChange(new Date(), value);
+        if (value) {
+            this.handleOnChange(moment(value), moment(value).format('DD/MM/YYYY'));
+        }
     }
 
     handleOnChange = (date, dateString) => {
@@ -25,20 +28,20 @@ class DatePickerField extends Component {
 
     render() {
         const { field, className, placeholder, size, form } = this.props;
-        // const { name, value } = field;
-        const { name } = field;
+        const { name, value } = field;
         const { errors, touched } = form;
         const showError = errors[name] && touched[name];
 
         return (
             <>
                 <DatePicker
-                    className={showError ? className + ' error-input' : className}
+                    className={showError ? `${className} error-input` : className}
                     name={name}
                     placeholder={placeholder}
                     onChange={this.handleOnChange}
                     size={size}
-                // value={value ? moment(value, 'YYYY-MM-DD') : null}
+                    format="DD/MM/YYYY"
+                    value={value ? moment(value, 'DD/MM/YYYY') : null}
                 />
                 {showError && <div className="show-error-input">{errors[name]}</div>}
             </>

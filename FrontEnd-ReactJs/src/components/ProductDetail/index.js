@@ -15,7 +15,7 @@ class ProductDetail extends Component {
     render() {
         const { dataProduct } = this.props;
         const { product } = dataProduct;
-        const { name, brand, type, id_product, rate, totalComment } = product;
+        const { name, brand, type, id, rate, totalComment } = product;
         return (
             <div className="Product-Detail-View container m-t-20">
                 <Row gutter={[16, 32]}>
@@ -51,7 +51,7 @@ class ProductDetail extends Component {
                         <Evaluation
                             rates={rate}
                             totalComment={totalComment}
-                            productId={id_product}
+                            productId={id}
                         />
                     </Col>
 
@@ -61,7 +61,7 @@ class ProductDetail extends Component {
                             title="Sản phẩm tương tự"
                             type={type}
                             brand={brand}
-                            id={id_product}
+                            id={id}
                         />
                     </Col>
                 </Row>

@@ -25,7 +25,7 @@ class UpdateAccountForm extends Component {
 
         // chuẩn bị data
         const data = {
-            Id_account: user.id_account,
+            Id_account: user.id,
             email: value.email,
             fullName: value.fullName,
             address: value.address,
@@ -60,13 +60,13 @@ class UpdateAccountForm extends Component {
     render() {
         const { isSubmitting } = this.state;
         const { user } = this.state;
-        const bd = helpers.formatOrderDate(user.birthday, 1);
+        const bd = helpers.formatOrderDate(user.birthDay, 0);
         // giá trọ khởi tạo cho formik
         const initialValue = {
             email: user.email,
             fullName: user.fullName,
             address: user.address,
-            gender: user.gender,
+            gender: helpers.renderGender(user.gender),
             birthday: bd,
         };
         return (

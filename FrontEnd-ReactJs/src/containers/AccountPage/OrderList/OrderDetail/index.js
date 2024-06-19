@@ -21,9 +21,6 @@ class OrderDetail extends Component {
         this.getOrderDetails();
     }
 
-    componentWillUnmount() {
-    }
-
     // fn: Hàm gọi api và lấy chi tiết order
     async getOrderDetails() {
         try {
@@ -51,11 +48,11 @@ class OrderDetail extends Component {
                 title: 'Sản phẩm',
                 dataIndex: 'prod',
                 key: 'prod',
-                render: (v, record) => (
+                render: (v, data) => (
                     <>
-                        {record.detailOderProducts.map(product => (
-                            <div key={product.productID}>
-                                <Link to={`/product/${product.productID}`}>
+                        {data.itemsOrders.map(product => (
+                            <div key={product.productId}>
+                                <Link to={`/product/${product.productId}`}>
                                     <Tooltip title={product.name}>
                                         {helpers.reduceProductName(product.name, 40)}
                                     </Tooltip>
@@ -71,8 +68,8 @@ class OrderDetail extends Component {
                 key: 'prod',
                 render: (v, record) => (
                     <>
-                        {record.detailOderProducts.map(product => (
-                            <div key={product.productID}>
+                        {record.itemsOrders.map(product => (
+                            <div key={product.productId}>
                                 {helpers.formatProductPrice(product.price)}
                             </div>
                         ))}
@@ -85,8 +82,8 @@ class OrderDetail extends Component {
                 key: 'numOfProd',
                 render: (v, record) => (
                     <>
-                        {record.detailOderProducts.map(product => (
-                            <div key={product.productID}>
+                        {record.itemsOrders.map(product => (
+                            <div key={product.productId}>
                                 {product.stock}
                             </div>
                         ))}
@@ -99,8 +96,8 @@ class OrderDetail extends Component {
                 key: 'discount',
                 render: (v, record) => (
                     <>
-                        {record.detailOderProducts.map(product => (
-                            <div key={product.productID}>
+                        {record.itemsOrders.map(product => (
+                            <div key={product.productId}>
                                 {product.discount} %
                             </div>
                         ))}
@@ -113,8 +110,8 @@ class OrderDetail extends Component {
                 key: 'totalMoney',
                 render: (v, record) => (
                     <>
-                        {record.detailOderProducts.map(product => (
-                            <div key={product.productID}>
+                        {record.itemsOrders.map(product => (
+                            <div key={product.productId}>
                                 {helpers.formatProductPrice(
                                     (product.price * product.stock - (product.price * product.stock * product.discount) / 100)
                                 )}

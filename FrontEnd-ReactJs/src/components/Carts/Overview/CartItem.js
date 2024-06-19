@@ -10,7 +10,7 @@ class CartItem extends Component {
         super(props);
 
         this.state = {
-            id_product: props.id_product,
+            id: props.id,
             name: props.name,
             code: props.code,
             avt: props.avt,
@@ -62,7 +62,7 @@ class CartItem extends Component {
     //fn: rendering
     render() {
         const {
-            id_product,
+            id,
             name,
             code,
             avt,
@@ -83,7 +83,7 @@ class CartItem extends Component {
                 <div className="d-flex flex-grow-1">
                     <Avatar src={avt} alt="Photo" shape="square" size={64} />
                     <div className="d-flex flex-direction-column p-10 ">
-                        <Link to={`/product/${id_product}`} className="font-size-16px">
+                        <Link to={`/product/${id}`} className="font-size-16px">
                             <Tooltip title={name}>
                                 {helpers.reduceProductName(name, 20)}
                             </Tooltip>

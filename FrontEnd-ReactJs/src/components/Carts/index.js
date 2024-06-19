@@ -33,10 +33,8 @@ class Cart extends Component {
         if (queryParams != null) {
             // kiểm tra trạng thái thanh toán
             if (queryParams.vnp_TransactionStatus === "00") {
-                const data = {
-                    idCodeMenthod: queryParams.vnp_TxnRef,
-                }
-                const response = await postUpdateVnpayApi(data);
+                const idCodeMenthod = queryParams.vnp_TxnRef;
+                const response = await postUpdateVnpayApi(idCodeMenthod);
                 if (response && response.code === 0) {
                     message.success("Đặt hàng thành công vui lòng kiểm tra đơn hàng");
                     this.onDelAllCarts();

@@ -13,7 +13,7 @@ class SeeProduct extends Component {
         super(props);
         this.state = {
             editModal: { visible: false, product: null },
-            modalDel: { visible: false, id_product: '' },
+            modalDel: { visible: false, id: '' },
             isLoading: false,
             setIsLoading: false,
             list: [],
@@ -45,7 +45,7 @@ class SeeProduct extends Component {
             key: 'code',
             dataIndex: 'code',
             render: (code, data) => (
-                <a target="blank" href={`/product/${data.id_product}`}>
+                <a target="blank" href={`/product/${data.id}`}>
                     {code}
                 </a>
             ),
@@ -118,7 +118,7 @@ class SeeProduct extends Component {
                 <>
                     {/* xoá sản phẩm */}
                     <DeleteOutlined
-                        onClick={() => this.showDeleteConfirmation(text.id_product)}
+                        onClick={() => this.showDeleteConfirmation(text.id)}
                         className="m-r-8 action-btn-product"
                         style={{ color: 'red' }}
                     />
@@ -135,7 +135,7 @@ class SeeProduct extends Component {
 
                     {/* xem chi tiết */}
                     <Tooltip title="Xem chi tiết" placement="left">
-                        <a target="blank" href={`/product/${text.id_product}`}>
+                        <a target="blank" href={`/product/${text.id}`}>
                             <EyeOutlined
                                 className="action-btn-product"
                                 style={{ color: '#444' }}
@@ -194,7 +194,7 @@ class SeeProduct extends Component {
                 const data = response.data;
                 const newList = data.map((item) => {
                     return {
-                        id_product: item.id_product,
+                        id: item.id,
                         code: item.code,
                         name: item.name,
                         type: item.type,
@@ -249,7 +249,7 @@ class SeeProduct extends Component {
     // Event: close edit modal
     onCloseEditModal = (newProduct) => {
         const newList = this.state.list.map((item) =>
-            item.id_product !== newProduct.id_product ? item : { ...item, ...newProduct },
+            item.id !== newProduct.id ? item : { ...item, ...newProduct },
         );
         this.setState({
             list: newList,
@@ -308,7 +308,7 @@ class SeeProduct extends Component {
                 const data = response.data;
                 const newList = data.map((item) => {
                     return {
-                        id_product: item.id_product,
+                        id: item.id,
                         code: item.code,
                         name: item.name,
                         type: item.type,
@@ -344,7 +344,7 @@ class SeeProduct extends Component {
                 if (data && data.length > 0) {
                     const newList = data.map((item) => {
                         return {
-                            id_product: item.id_product,
+                            id: item.id,
                             code: item.code,
                             name: item.name,
                             type: item.type,

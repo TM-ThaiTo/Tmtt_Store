@@ -67,9 +67,9 @@ class EditProductModal extends Component {
 
     render() {// JSX
         const { visible, onClose, product } = this.props;
-        const { id_product, code, name, brand, discount, price, stock, type } =
+        const { id, code, name, brand, discount, price, stock, type } =
             product || {};
-        const initValues = { id_product, code, name, brand, discount, price, stock, type };
+        const initValues = { id, code, name, brand, discount, price, stock, type };
         return (
             <Modal
                 className="edit-product-modal"
@@ -92,7 +92,7 @@ class EditProductModal extends Component {
                         {/* Id */}
                         <Col span={12}>
                             <p>ID</p>
-                            <Form.Item name="id_product">
+                            <Form.Item name="id">
                                 <Input disabled size="large" placeholder="ID" />
                             </Form.Item>
                         </Col>

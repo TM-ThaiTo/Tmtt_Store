@@ -22,10 +22,10 @@ class ResultSearch extends Component {
     showProducts = (list) => {
         list = list ? list : [];
         return list.map((product, index) => {
-            const { avt, name, discount, price, stock, id_product } = product;
+            const { avt, name, discount, price, stock, id } = product;
             return (
                 <Col key={index} span={24} sm={12} lg={8} xl={6} xxl={4}>
-                    <Link to={`/product/${id_product}`}>
+                    <Link to={`/product/${id}`}>
                         <ProductView
                             name={name}
                             price={price}

@@ -834,6 +834,16 @@ const changeTypeIntToString = (type) => {
     }
 }
 
+// fn: hàm render String gender
+const renderGender = (type) => {
+    switch (type) {
+        case 1: return "Nam";
+        case 2: return "Nữ";
+        case 3: return "Khác";
+        default: return "Không xác định";
+    }
+}
+
 const helpers = {
     replaceMongoKeyword,
     formatQueryString,
@@ -855,7 +865,8 @@ const helpers = {
     convertOrderStatus,
     convertPaymentMethod,
     calTotalOrderFee,
-    changeTypeIntToString
+    changeTypeIntToString,
+    renderGender
 };
 
 export default helpers;

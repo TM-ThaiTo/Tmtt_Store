@@ -12,6 +12,7 @@ class MonthlyRevenue extends Component {
         super(props);
         this.state = {
             data: { thisYear: [], lastYear: [] },
+            data: [],
             isLoading: true,
         };
     }
@@ -33,7 +34,7 @@ class MonthlyRevenue extends Component {
                 this.setState({ data: { thisYear, lastYear }, isLoading: false });
             }
         } catch (error) {
-            this.setState({ data: { thisYear: [], lastYear: [] }, isLoading: false });
+            this.setState({ isLoading: false });
         }
     }
 

@@ -1,10 +1,18 @@
 import axios from '../axios';
+import constants from '../constants';
+
+const endpoint = "/api/v1/admin"
+const token = localStorage.getItem(constants.REFRESH_TOKEN_KEY);
+
 
 // api: GET lấy doanh thu theo tháng trong năm
 const getMonthlyRevenue = (year = new Date().getFullYear()) => {
-    return axios.get("/apis/statistic/monthly-revenue", {
+    return axios.get(endpoint + "/statistic/monthly", {
         params:
-            { year: year }
+            { year: year },
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
     });
 }
 
@@ -13,18 +21,25 @@ const getStaAnnualRevenueApi = (
     startYear = new Date().getFullYear(),
     endYear = new Date().getFullYear(),
 ) => {
-    return axios.get("/apis/statistic/annual-revenue", {
+    return axios.get(endpoint + "/statistic/annual", {
         params:
         {
-            StartYear: startYear,
-            EndYear: endYear,
+            startYear: startYear,
+            endYear: endYear,
+        },
+        headers: {
+            Authorization: `Bearer ${token}`
         }
     });
 }
 
 // api: lấy doanh thu ngày hiện tại
 const getCard = () => {
-    return axios.get('/apis/statistic/card');
+    return axios.get(endpoint + '/statistic/card', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
 }
 
 export {

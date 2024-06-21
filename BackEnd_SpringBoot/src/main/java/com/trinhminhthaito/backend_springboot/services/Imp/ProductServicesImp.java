@@ -271,24 +271,81 @@ public class ProductServicesImp implements ProductServices {
 	}
 
 	// fn: filter product
+	@Override
 	public MessageDataResponse getFilterProductServices(int type, int page, int perPage) {
 		MessageDataResponse messageDataResponse = new MessageDataResponse();
 		try {
-			Pageable pageable = PageRequest.of(page, perPage);
 			List<Product> products = productRepository.findByType(type);
 
 			messageDataResponse.setCode(0);
 			messageDataResponse.setMessage("suscces");
 			messageDataResponse.setData(products);
 			messageDataResponse.setCount(products.size());
-			// messageDataResponse.setPage(page);
-			// messageDataResponse.setPerPage(perPage);
-			// messageDataResponse.setTotal(productRepository.countByType(type)); //
-			// Optional: total count for pagination
 		} catch (Exception ex) {
 			messageDataResponse.setCode(-1);
 			messageDataResponse.setMessage("Lỗi server: " + ex.getMessage());
 		}
 		return messageDataResponse;
 	}
+
+	// fn: search product
+	// private List<Product> searchProducts(String codeP, String nameP, Integer
+	// typeP) {
+	// Query query = new Query();
+
+	// if (codeP != null && !codeP.isEmpty()) {
+	// query.addCriteria(Criteria.where("code").is(codeP));
+	// }
+	// if (nameP != null && !nameP.isEmpty()) {
+	// query.addCriteria(Criteria.where("name").regex(".*" + nameP + ".*", "i"));
+	// }
+	// if (typeP != null) {
+	// query.addCriteria(Criteria.where("type").is(typeP));
+	// }
+
+	// return mongoTemplate.find(query, Product.class);
+	// }
+
+	@Override
+	public MessageDataResponse getSearchProduct(String nameP, String codeP, Number typeP) {
+		MessageDataResponse messageDataResponse = new MessageDataResponse();
+		try {
+			// Fetch all products initially
+			// List<Product> products = productRepository.findAll();
+
+			// // Filter by code if codeP is not null and not empty
+			// if (codeP != null && !codeP.isEmpty()) {
+			// products = products.stream()
+			// .filter(p -> p.getCode().toLowerCase().contains(codeP.toLowerCase()))
+			// .collect(Collectors.toList());
+			// }
+
+			// // Filter by name if nameP is not null and not empty
+			// if (nameP != null && !nameP.isEmpty()) {
+			// products = products.stream()
+			// .filter(p -> p.getName().toLowerCase().contains(nameP.toLowerCase()))
+			// .collect(Collectors.toList());
+			// }
+
+			// // Filter by type if typeP is not null
+			// if (typeP != null) {
+			// int typeValue = typeP.intValue();
+			// products = products.stream()
+			// .filter(p -> p.getType() == typeValue)
+			// .collect(Collectors.toList());
+			// }
+			List<Product> products = productRepository.searchProducts(codeP, nameP, typeP);
+
+			// Set the response data
+			messageDataResponse.setCode(0);
+			messageDataResponse.setMessage("Success");
+			messageDataResponse.setData(products);
+			messageDataResponse.setCount(products.size());
+		} catch (Exception ex) {
+			messageDataResponse.setCode(-1);
+			messageDataResponse.setMessage("Lỗi server: " + ex.getMessage());
+		}
+		return messageDataResponse;
+	}
+
 }

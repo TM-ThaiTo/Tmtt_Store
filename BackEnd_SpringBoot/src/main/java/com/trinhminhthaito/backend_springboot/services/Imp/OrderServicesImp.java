@@ -11,11 +11,10 @@ import com.trinhminhthaito.backend_springboot.repository.OrderRepository;
 import com.trinhminhthaito.backend_springboot.repository.ProductRepository;
 import com.trinhminhthaito.backend_springboot.services.OrderServices;
 
-import jakarta.mail.FetchProfile.Item;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServicesImp implements OrderServices {
@@ -216,5 +215,111 @@ public class OrderServicesImp implements OrderServices {
 			messageDataResponse.setMessage("Lỗi server: " + ex.getMessage());
 		}
 		return messageDataResponse;
+	}
+
+	// fn: get all order
+	@Override
+	public MessageDataResponse getAllOrder() {
+		MessageDataResponse messageDataResponse = new MessageDataResponse();
+		try {
+			List<Order> listOrders = orderRepository.findAll();
+
+			if (listOrders == null) {
+				messageDataResponse.setCode(1);
+				messageDataResponse.setMessage("Order not found");
+			} else {
+				messageDataResponse.setCode(0);
+				messageDataResponse.setMessage("Susscess");
+				messageDataResponse.setData(listOrders);
+				messageDataResponse.setCount(listOrders.size());
+			}
+		} catch (Exception exception) {
+			messageDataResponse.setCode(-1);
+			messageDataResponse.setMessage("Lỗi server: " + exception.getMessage());
+		}
+		return messageDataResponse;
+	}
+
+	// fn: update status order
+	@Override
+	public MessageResponse putUpdateStatus(String idOrder, Number status) {
+		MessageResponse messageResponse = new MessageResponse();
+		try {
+			Optional<Order> orderOptional = orderRepository.findById(idOrder);
+			if (orderOptional == null) {
+				messageResponse.setCode(-1);
+				messageResponse.setMessage("Order not found");
+			}
+
+			Order order = orderOptional.get();
+
+			order.setStatus(status);
+			orderRepository.save(order);
+
+			messageResponse.setCode(0);
+			messageResponse.setMessage("Success");
+		} catch (Exception ex) {
+			messageResponse.setCode(-1);
+			messageResponse.setMessage("Lỗi server: " + ex.getMessage());
+		}
+		return messageResponse;
+	}
+
+	// fn: search order
+	@Override
+	public MessageDataResponse getSearchOrder(String codeOrder, String paymentOrder, Number status) {
+		MessageDataResponse messageDataResponse = new MessageDataResponse();
+		try {
+			List<Order> orders = orderRepository.findAll();
+
+			// Create query conditionally
+			if (codeOrder != null && !codeOrder.isEmpty()) {
+				orders = orders.stream()
+						.filter(p -> p.getOrderCode().equalsIgnoreCase(codeOrder))
+						.collect(Collectors.toList());
+			}
+			if (paymentOrder != null && !paymentOrder.isEmpty() && paymentOrder != "Tất cả") {
+				orders = orders.stream()
+						.filter(p -> p.getPaymentDetail().getPaymentMethod().toLowerCase()
+								.contains(paymentOrder.toLowerCase()))
+						.collect(Collectors.toList());
+			}
+			if (status != null && status.intValue() != 0) {
+				orders = orders.stream()
+						.filter(o -> o.getStatus().intValue() == status.intValue())
+						.collect(Collectors.toList());
+			}
+
+			messageDataResponse.setCode(0);
+			messageDataResponse.setMessage("Success");
+			messageDataResponse.setData(orders);
+			messageDataResponse.setCount(orders.size());
+		} catch (Exception exception) {
+			messageDataResponse.setCode(-1);
+			messageDataResponse.setMessage("Lỗi server, " + exception.getMessage());
+		}
+		return messageDataResponse;
+	}
+
+	// fn: delete order
+	@Override
+	public MessageResponse deleteOrder(String id) {
+		MessageResponse messageResponse = new MessageResponse();
+		try {
+			Optional<Order> orderOptional = orderRepository.findById(id);
+			if (orderOptional == null) {
+				messageResponse.setCode(1);
+				messageResponse.setMessage("Order not found");
+			} else {
+				Order order = orderOptional.get();
+				orderRepository.delete(order);
+				messageResponse.setCode(0);
+				messageResponse.setMessage("Success");
+			}
+		} catch (Exception exception) {
+			messageResponse.setCode(-1);
+			messageResponse.setMessage("Lỗi server: " + exception.getMessage());
+		}
+		return messageResponse;
 	}
 }

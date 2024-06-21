@@ -16,7 +16,7 @@ public class AdminConfig implements CommandLineRunner {
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	public AdminConfig(AccountRepository accountRepository,
-					   BCryptPasswordEncoder passwordEncoder) {
+			BCryptPasswordEncoder passwordEncoder) {
 		this.accountRepository = accountRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
@@ -28,7 +28,6 @@ public class AdminConfig implements CommandLineRunner {
 		roles.add(Role.ADMIN.name());
 
 		if (accountRepository.findByUsername("admin").isPresent()) {
-			System.out.println("admin already exists");
 		} else {
 			Account newAdmin = new Account();
 			newAdmin.setUsername("admin");

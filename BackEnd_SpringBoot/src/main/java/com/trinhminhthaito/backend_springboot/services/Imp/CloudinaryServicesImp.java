@@ -99,8 +99,7 @@ public class CloudinaryServicesImp implements CloudinaryServices {
 
 				String folderPath = "products/" + code + "/desc";
 
-				Map<String, Object> uploadParams = ObjectUtils.asMap(
-						"folder", folderPath);
+				Map<String, Object> uploadParams = ObjectUtils.asMap("folder", folderPath);
 
 				byte[] decodedBytes = Base64.getDecoder().decode(base64Content);
 				Map<String, Object> uploadResult = cloudinary.uploader().upload(decodedBytes, uploadParams);

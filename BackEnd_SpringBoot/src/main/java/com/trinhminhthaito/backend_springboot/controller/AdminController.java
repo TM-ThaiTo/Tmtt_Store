@@ -4,12 +4,13 @@ import com.trinhminhthaito.backend_springboot.dtos.request.productRequest.AddPro
 import com.trinhminhthaito.backend_springboot.dtos.request.productRequest.ProductRequest;
 import com.trinhminhthaito.backend_springboot.dtos.response.MessageDataResponse;
 import com.trinhminhthaito.backend_springboot.dtos.response.MessageResponse;
-import com.trinhminhthaito.backend_springboot.models.accountModels.Account;
 import com.trinhminhthaito.backend_springboot.models.productModels.Product;
-import com.trinhminhthaito.backend_springboot.repository.accountRepository.AccountRepository;
 import com.trinhminhthaito.backend_springboot.repository.ProductRepository;
 import com.trinhminhthaito.backend_springboot.services.AccountServices;
+import com.trinhminhthaito.backend_springboot.services.OrderServices;
 import com.trinhminhthaito.backend_springboot.services.ProductServices;
+import com.trinhminhthaito.backend_springboot.services.UserServices;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,22 +23,26 @@ import java.util.List;
 @RequestMapping("/api/v1/admin")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AdminController {
-	private final AccountRepository accountRepository;
 	private final AccountServices accountServices;
 	private final ProductRepository productRepository;
 	private final ProductServices productServices;
+	private final UserServices userServices;
+	private final OrderServices orderServices;
 
 	@Autowired
-	public AdminController(AccountRepository accountRepository,
-						   AccountServices accountServices,
-						   ProductRepository productRepository,
-						   ProductServices productServices) {
+	public AdminController(AccountServices accountServices,
+			ProductRepository productRepository,
+			ProductServices productServices,
+			UserServices userServices,
+			OrderServices orderServices) {
 		this.productRepository = productRepository;
 		this.accountServices = accountServices;
-		this.accountRepository = accountRepository;
 		this.productServices = productServices;
+		this.userServices = userServices;
+		this.orderServices = orderServices;
 	}
 
+	// #region Product
 	// api: add new product
 	@Transactional
 	@PostMapping("/product/add")
@@ -77,30 +82,29 @@ public class AdminController {
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<?> updateProduct(@RequestBody ProductRequest product) {
 		MessageResponse messageResponse = productServices.updateProductById(product);
-		if(messageResponse.getCode() != 0){
+		if (messageResponse.getCode() != 0) {
 			return ResponseEntity.badRequest().body(messageResponse);
 		}
 		return ResponseEntity.ok(messageResponse);
 	}
 
+	// api: Get search product
+	@GetMapping("/product/search")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+	public ResponseEntity<?> getSearchProduct(@RequestParam String nameP, @RequestParam String codeP,
+			@RequestParam Number typeP) {
+		MessageDataResponse messageDataResponse = productServices.getSearchProduct(nameP, codeP, typeP);
+		return ResponseEntity.ok(messageDataResponse);
+	}
+	// #endregion
+
+	// #region User
 	// api: get all user
 	@Transactional
 	@GetMapping("/user/all")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<?> getAllUsers() {
-		MessageResponse messageResponse = new MessageResponse();
-		MessageDataResponse messageDataResponse = new MessageDataResponse();
-		List<Account> accounts = accountRepository.findAllByUsernameNotContainingPassword();
-
-		if(accounts == null){
-			messageResponse.setCode(1);
-			messageDataResponse.setMessage("Account not found");
-			return ResponseEntity.ok(messageResponse);
-		}
-
-		messageDataResponse.setCode(0);
-		messageDataResponse.setMessage("Success");
-		messageDataResponse.setData(accounts);
+		MessageDataResponse messageDataResponse = userServices.getAllUser();
 		return ResponseEntity.ok(messageDataResponse);
 	}
 
@@ -110,9 +114,45 @@ public class AdminController {
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<?> deleteUser(@RequestParam String id) {
 		MessageResponse messageResponse = accountServices.deleteAccountById(id);
-		if(messageResponse.getCode() != 0){
+		if (messageResponse.getCode() != 0) {
 			return ResponseEntity.badRequest().body(messageResponse);
 		}
 		return ResponseEntity.ok(messageResponse);
 	}
+	// #endregion
+
+	// #region Order
+	// api: get all order
+	@GetMapping("/order/all")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+	public ResponseEntity<?> getALLOrder() {
+		MessageDataResponse messageDataResponse = orderServices.getAllOrder();
+		return ResponseEntity.ok(messageDataResponse);
+	}
+
+	// api: search order
+	@GetMapping("/order/search")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+	public ResponseEntity<?> getSearchOrder(@RequestParam String codeOrder, @RequestParam String paymentOrder,
+			@RequestParam Number status) {
+		MessageDataResponse messageDataResponse = orderServices.getSearchOrder(codeOrder, paymentOrder, status);
+		return ResponseEntity.ok(messageDataResponse);
+	}
+
+	// api: update status order
+	@PutMapping("/order/update")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+	public ResponseEntity<?> putUpdateOrder(@RequestParam String idOrder, @RequestParam Number status) {
+		MessageResponse messageResponse = orderServices.putUpdateStatus(idOrder, status);
+		return ResponseEntity.ok(messageResponse);
+	}
+
+	// api: delete order
+	@DeleteMapping("/order/delete")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+	public ResponseEntity<?> deleteOrder(@RequestParam String id) {
+		MessageResponse messageResponse = orderServices.deleteOrder(id);
+		return ResponseEntity.ok(messageResponse);
+	}
+	// #endregion
 }

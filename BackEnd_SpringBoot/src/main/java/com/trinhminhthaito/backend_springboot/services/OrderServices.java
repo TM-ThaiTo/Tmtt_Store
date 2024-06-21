@@ -14,4 +14,12 @@ public interface OrderServices {
 	MessageResponse deleteOrderVnpay(String id);
 
 	MessageDataResponse getOrderDetail(String id);
+
+	MessageDataResponse getAllOrder();
+
+	MessageDataResponse getSearchOrder(String codeOrder, String paymentOrder, Number statusOrder);
+
+	MessageResponse putUpdateStatus(String idOrder, Number status);
+
+	MessageResponse deleteOrder(String id);
 }

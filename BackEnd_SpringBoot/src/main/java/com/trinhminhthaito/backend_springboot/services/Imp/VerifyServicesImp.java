@@ -15,21 +15,20 @@ public class VerifyServicesImp implements VerifyServices {
 
 	private final VerifyRepository verifyRepository;
 	private static final SecureRandom secureRandom = new SecureRandom();
-	private static final int OTP_LENGTH = 6;
 
 	public VerifyServicesImp(VerifyRepository verifyRepository) {
 		this.verifyRepository = verifyRepository;
 	}
 
 	// fn: handle create OTP
-	private String createOTP(){
+	private String createOTP() {
 		int otp = secureRandom.nextInt(1000000);
 		return String.format("%06d", otp);
 	}
 
 	// fn: handle save OTP to verify
 	// => save verify -> database
-	private void saveOTP(String mail, String otp){
+	private void saveOTP(String mail, String otp) {
 		Verify verify = new Verify();
 		verify.setEmail(mail);
 		verify.setCode(otp);
@@ -48,7 +47,7 @@ public class VerifyServicesImp implements VerifyServices {
 	// fn: delete verify
 	// xoa khi thuc hien thanh cong
 	@Override
-	public void deleteVerify(String email){
+	public void deleteVerify(String email) {
 		verifyRepository.deleteByEmail(email);
 	}
 

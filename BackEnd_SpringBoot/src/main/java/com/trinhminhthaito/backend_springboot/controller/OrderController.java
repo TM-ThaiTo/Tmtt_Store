@@ -53,7 +53,7 @@ public class OrderController {
 
 	// api: get chi tiết đơn hàng
 	@GetMapping("/ordercode")
-	@PreAuthorize("hasAuthority('SCOPE_USER')")
+	// @PreAuthorize("hasAuthority('SCOPE_USER')")
 	public ResponseEntity<?> getDetailOrder(@RequestParam String id) {
 		MessageDataResponse messageResponse = orderServices.getOrderDetail(id);
 		return ResponseEntity.ok(messageResponse);

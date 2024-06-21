@@ -1,18 +1,13 @@
 package com.trinhminhthaito.backend_springboot.services.Imp;
 
 import com.trinhminhthaito.backend_springboot.config.jwt.JwtProvider;
-import com.trinhminhthaito.backend_springboot.dtos.request.LoginRequest;
 import com.trinhminhthaito.backend_springboot.dtos.response.AuthResponse;
 import com.trinhminhthaito.backend_springboot.dtos.response.LoginResponse;
 import com.trinhminhthaito.backend_springboot.dtos.response.MessageResponse;
 import com.trinhminhthaito.backend_springboot.models.accountModels.Account;
 import com.trinhminhthaito.backend_springboot.repository.accountRepository.AccountRepository;
-import com.trinhminhthaito.backend_springboot.repository.accountRepository.UserRepository;
 import com.trinhminhthaito.backend_springboot.services.AuthServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,7 +19,7 @@ public class AuthServicesImp implements AuthServices {
 
 	@Autowired
 	public AuthServicesImp(AccountRepository accountRepository,
-						   JwtProvider jwtProvider) {
+			JwtProvider jwtProvider) {
 		this.accountRepository = accountRepository;
 		this.jwtProvider = jwtProvider;
 	}
@@ -32,10 +27,10 @@ public class AuthServicesImp implements AuthServices {
 	@Override
 	public AuthResponse checkAuth(String tokenB) {
 		AuthResponse messageResponse = new AuthResponse();
-		String token =  jwtProvider.extractTokenFromHeader(tokenB);
+		String token = jwtProvider.extractTokenFromHeader(tokenB);
 		String username = jwtProvider.getUsernameFromToken(token);
 		try {
-			if(!jwtProvider.validateTokenToRefresh(username)){
+			if (!jwtProvider.validateTokenToRefresh(username)) {
 				messageResponse.setCode(2);
 				messageResponse.setIsAuth(false);
 				return messageResponse;
@@ -62,12 +57,12 @@ public class AuthServicesImp implements AuthServices {
 	}
 
 	@Override
-	public LoginResponse refresh_token(String tokenB){
+	public LoginResponse refresh_token(String tokenB) {
 		LoginResponse refreshToken = new LoginResponse();
-		String token =  jwtProvider.extractTokenFromHeader(tokenB);
+		String token = jwtProvider.extractTokenFromHeader(tokenB);
 		String username = jwtProvider.getUsernameFromToken(token);
-		try{
-			if(!jwtProvider.validateTokenToRefresh(username)){
+		try {
+			if (!jwtProvider.validateTokenToRefresh(username)) {
 				refreshToken.setCode(2);
 				refreshToken.setMessage("Refresh token expired");
 				return refreshToken;
@@ -76,12 +71,11 @@ public class AuthServicesImp implements AuthServices {
 			refreshToken.setCode(0);
 			refreshToken.setMessage("success");
 			refreshToken.setAccessToken(token1);
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			refreshToken.setCode(-1);
 			refreshToken.setMessage("Lỗi " + e.getMessage());
 		}
-		return  refreshToken;
+		return refreshToken;
 	}
 
 	@Override

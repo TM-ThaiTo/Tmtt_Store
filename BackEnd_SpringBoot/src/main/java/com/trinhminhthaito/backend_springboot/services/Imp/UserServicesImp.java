@@ -10,10 +10,9 @@ import com.trinhminhthaito.backend_springboot.models.accountModels.User;
 import com.trinhminhthaito.backend_springboot.repository.accountRepository.AccountRepository;
 import com.trinhminhthaito.backend_springboot.repository.accountRepository.UserRepository;
 import com.trinhminhthaito.backend_springboot.services.UserServices;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServicesImp implements UserServices {
@@ -23,8 +22,8 @@ public class UserServicesImp implements UserServices {
 	private final AccountRepository accountRepository;
 
 	public UserServicesImp(UserRepository userRepository,
-						   JwtProvider jwtProvider,
-						   AccountRepository accountRepository) {
+			JwtProvider jwtProvider,
+			AccountRepository accountRepository) {
 		this.userRepository = userRepository;
 		this.jwtProvider = jwtProvider;
 		this.accountRepository = accountRepository;
@@ -32,15 +31,15 @@ public class UserServicesImp implements UserServices {
 
 	// fn: update user
 	@Override
-	public MessageResponse updateUser(InfoUserRequest dto){
+	public MessageResponse updateUser(InfoUserRequest dto) {
 		MessageResponse response = new MessageResponse();
 		User updateUser = userRepository.findByAccountId(dto.accountId());
-		if(updateUser == null){
+		if (updateUser == null) {
 			response.setCode(1);
 			response.setMessage("User Not Found");
 			return response;
 		}
-		try{
+		try {
 			updateUser.setGender(dto.gender());
 			updateUser.setFullName(dto.fullName());
 			updateUser.setDateOfBirth(dto.birthday());
@@ -48,19 +47,18 @@ public class UserServicesImp implements UserServices {
 			userRepository.save(updateUser);
 			response.setCode(0);
 			response.setMessage("Success");
-		}
-		catch(Exception e){
+		} catch (Exception e) {
 			response.setCode(-1);
 			response.setMessage(e.toString());
 		}
 		return response;
 	}
 
-	// fn: get user
+	// fn: get 1 user
 	@Override
-	public MessageDataResponse getUser(String tokenB){
+	public MessageDataResponse getUser(String tokenB) {
 		MessageDataResponse messageResponse = new MessageDataResponse();
-		try{
+		try {
 			String token = jwtProvider.extractTokenFromHeader(tokenB);
 			String username = jwtProvider.getUsernameFromToken(token);
 			Optional<Account> optionalAccount = accountRepository.findByUsername(username);
@@ -90,11 +88,52 @@ public class UserServicesImp implements UserServices {
 			messageResponse.setCode(0);
 			messageResponse.setMessage("Success");
 			messageResponse.setData(userDto);
-		}
-		catch(Exception e){
+		} catch (Exception e) {
 			messageResponse.setCode(-1);
 			messageResponse.setMessage(e.toString());
 		}
 		return messageResponse;
+	}
+
+	// fn: get all user
+	@Override
+	public MessageDataResponse getAllUser() {
+		MessageDataResponse messageDataResponse = new MessageDataResponse();
+		try {
+			List<Account> listAccounts = accountRepository.findAll();
+
+			if (listAccounts == null || listAccounts.isEmpty()) {
+				messageDataResponse.setCode(1);
+				messageDataResponse.setMessage("Account not found");
+			} else {
+				List<UserDto> lDtos = new ArrayList<>();
+				for (Account item : listAccounts) {
+					String role = item.getRoles().iterator().next();
+					UserDto userDto = new UserDto();
+					if ("USER".equals(role)) {
+						User user = userRepository.findByAccountId(item.getId());
+						if (user == null) {
+							continue;
+						}
+						userDto.setId(item.getId());
+						userDto.setEmail(item.getUsername());
+						userDto.setFullName(user.getFullName());
+						userDto.setBirthDay(user.getDateOfBirth());
+						userDto.setGender(user.getGender());
+						userDto.setAddress(user.getAddress());
+						userDto.setAuthType(item.getAuthType());
+						lDtos.add(userDto);
+					}
+				}
+				messageDataResponse.setCode(0);
+				messageDataResponse.setMessage("Success");
+				messageDataResponse.setData(lDtos);
+				messageDataResponse.setCount(lDtos.size());
+			}
+		} catch (Exception ex) {
+			messageDataResponse.setCode(-1);
+			messageDataResponse.setMessage("Server error: " + ex.getMessage());
+		}
+		return messageDataResponse;
 	}
 }

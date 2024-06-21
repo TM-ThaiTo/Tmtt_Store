@@ -20,13 +20,8 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-// import javax.crypto.spec.SecretKeySpec;
-// import java.nio.file.Files;
-// import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-// import java.security.spec.PKCS8EncodedKeySpec;
-// import java.security.spec.X509EncodedKeySpec;
 
 @Configuration
 @EnableWebSecurity
@@ -38,9 +33,6 @@ public class SecurityConfig {
 
 	@Value("${key_private}")
 	private RSAPrivateKey privateKey;
-
-	// @Value("${jwt.signerKey}")
-	// private String signerKey;
 
 	public static final String[] PUBLIC_ENDPOINTS = {
 			// swagger
@@ -111,66 +103,4 @@ public class SecurityConfig {
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
-	// private RSAPublicKey getPublicKey() throws Exception {
-	// Resource resource = new ClassPathResource(publicKey);
-	// byte[] keyBytes = Files.readAllBytes(resource.getFile().toPath());
-	// X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
-	// KeyFactory kf = KeyFactory.getInstance("RSA");
-	// return (RSAPublicKey) kf.generatePublic(spec);
-	// }
-	//
-	// private RSAPrivateKey getPrivateKey() throws Exception {
-	// Resource resource = new ClassPathResource(privateKeyPath);
-	// byte[] keyBytes = Files.readAllBytes(resource.getFile().toPath());
-	// PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
-	// KeyFactory kf = KeyFactory.getInstance("RSA");
-	// return (RSAPrivateKey) kf.generatePrivate(spec);
-	// }
 }
-// @Bean
-// public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws
-// Exception {
-// httpSecurity.authorizeHttpRequests(request ->
-// request
-// .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-// .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
-// .anyRequest().authenticated());
-//
-// httpSecurity.oauth2ResourceServer(oauth2 ->
-// oauth2.jwt(jwtConfigurer ->
-// jwtConfigurer.decoder(jwtDecoder())
-//// .jwtAuthenticationConverter(jwtAuthenticationConverter())
-// )
-// );
-// httpSecurity.csrf(AbstractHttpConfigurer::disable);
-//
-// return httpSecurity.build();
-// }
-// @Bean
-// JwtAuthenticationConverter jwtAuthenticationConverter(){
-// JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new
-// JwtGrantedAuthoritiesConverter();
-// jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-//
-// JwtAuthenticationConverter jwtAuthenticationConverter = new
-// JwtAuthenticationConverter();
-// jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-//
-// return jwtAuthenticationConverter;
-// }
-//
-// @Bean
-// JwtDecoder jwtDecoder(){
-// SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(),
-// "HS512");
-// return NimbusJwtDecoder
-// .withSecretKey(secretKeySpec)
-// .macAlgorithm(MacAlgorithm.HS512)
-// .build();
-// }
-//
-// @Bean
-// PasswordEncoder passwordEncoder(){
-// return new BCryptPasswordEncoder(10);
-// }

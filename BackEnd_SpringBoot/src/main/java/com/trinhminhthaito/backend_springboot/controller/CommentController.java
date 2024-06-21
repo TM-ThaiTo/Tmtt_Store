@@ -2,7 +2,6 @@ package com.trinhminhthaito.backend_springboot.controller;
 
 import com.trinhminhthaito.backend_springboot.dtos.request.CommentRequest;
 import com.trinhminhthaito.backend_springboot.dtos.response.CommentResponse;
-import com.trinhminhthaito.backend_springboot.dtos.response.MessageDataResponse;
 import com.trinhminhthaito.backend_springboot.dtos.response.MessageResponse;
 import com.trinhminhthaito.backend_springboot.services.CommentServices;
 import org.springframework.beans.factory.annotation.Autowired;

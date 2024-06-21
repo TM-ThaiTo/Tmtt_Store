@@ -2,7 +2,6 @@ package com.trinhminhthaito.backend_springboot.config.jwt;
 
 import com.trinhminhthaito.backend_springboot.models.accountModels.Account;
 import com.trinhminhthaito.backend_springboot.repository.accountRepository.AccountRepository;
-import com.trinhminhthaito.backend_springboot.services.AccountServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
@@ -15,19 +14,17 @@ public class JwtProvider {
 
 	private final JwtEncoder jwtEncoder;
 	private final JwtDecoder jwtDecoder;
-	private final AccountServices accountServices;
 	private final AccountRepository accountRepository;
 
 	@Autowired
 	public JwtProvider(JwtEncoder jwtEncoder,
-					   JwtDecoder jwtDecoder,
-					   AccountServices accountServices,
-					   AccountRepository accountRepository) {
+			JwtDecoder jwtDecoder,
+			AccountRepository accountRepository) {
 		this.jwtEncoder = jwtEncoder;
 		this.jwtDecoder = jwtDecoder;
-		this.accountServices = accountServices;
 		this.accountRepository = accountRepository;
 	}
+
 	// fn: create new AccessToken
 	public String createAccessToken(String role, String username) {
 		Instant now = Instant.now();
@@ -63,7 +60,9 @@ public class JwtProvider {
 	public Boolean validateToken(String token) {
 		try {
 			Jwt jwt = jwtDecoder.decode(token);
-			if (jwt == null || jwt.getExpiresAt() == null) { return false; }
+			if (jwt == null || jwt.getExpiresAt() == null) {
+				return false;
+			}
 			return !jwt.getExpiresAt().isBefore(Instant.now());
 		} catch (JwtException e) {
 			return false;

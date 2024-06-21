@@ -38,7 +38,8 @@ class Login_User extends Component {
             localStorage.setItem(constants.ACCESS_TOKEN_KEY, data.accessToken);
 
             setTimeout(() => {
-                this.props.history.goBack();
+                this.props.history.push('/');
+                window.location.reload();
             }, constants.DELAY_TIME);
         } catch (error) {
             message.error('Lỗi đăng nhập.');

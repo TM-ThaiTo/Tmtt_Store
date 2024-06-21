@@ -15,6 +15,8 @@ class Login extends Component {
             localStorage.setItem(constants.REFRESH_TOKEN_KEY, data.refreshToken);
             this.props.setIsAuth(true);
             this.props.getUser();
+            // this.props.history.push('/');
+            window.location.reload();
         } catch (error) {
             message.error('Lỗi đăng nhập.');
         }

@@ -43,14 +43,11 @@ class AddressUserList extends Component {
                     isLoading: false,
                 });
             }
-            else if (response.code === 3) {
+            else {
                 this.setState({
                     list: response.data,
                     isLoading: false,
                 });
-            }
-            else {
-                message.error(response.message, 3);
             }
         } catch (error) {
             console.error("Lỗi lấy địa chỉ nhận hàng", error);
@@ -62,7 +59,6 @@ class AddressUserList extends Component {
     onDelDeliveryAdd = async (item) => {
         try {
             const { user } = this.props;
-            console.log("check item: ", item);
             const response = await delDeliveryAddress(user.id, item);
             if (response && response.code === 0) {
                 message.success('Xoá địa chỉ thành công');

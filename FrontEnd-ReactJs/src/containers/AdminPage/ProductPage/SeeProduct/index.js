@@ -107,13 +107,13 @@ class SeeProduct extends Component {
             sorter: (a, b) => a.discount - b.discount,
             render: (discount) => `${discount} %`,
         }, // giảm giá
-        // {
-        //     title: 'Đánh giá',
-        //     key: 'rates',
-        //     dataIndex: 'rates',
-        //     render: (rates) => this.calStar(rates).toFixed(1),
-        //     // render: (rates) => <>{rates}</>
-        // }, // đánh giá
+        {
+            title: 'Đánh giá',
+            key: 'rate',
+            dataIndex: 'rate',
+            // render: (rate) => this.calStar(rate).toFixed(1),
+            render: (rate) => <>{rate} <i class="fas fa-star"></i></>
+        }, // đánh giá
         {
             title: 'Hành động',
             key: 'actions',
@@ -385,7 +385,7 @@ class SeeProduct extends Component {
         return (
             <>
                 {/* chức năng */}
-                {/* <div className='search-product-admin container'>
+                <div className='search-product-admin container'>
                     <div>
                         <Input
                             className='inputValue-code'
@@ -393,12 +393,12 @@ class SeeProduct extends Component {
                             value={this.state.inputValueMaSanPham}
                             onChange={this.handleInputChangMaSP}
                         />
-                        <Input
+                        {/* <Input
                             className='inputValue-name'
                             placeholder='Nhập tên sản phẩm sản phẩm'
                             value={this.state.inputValueNameSanPham}
                             onChange={this.handleInputChangeNameSP}
-                        />
+                        /> */}
                         <Select
                             className="selectType"
                             size="large"
@@ -436,7 +436,7 @@ class SeeProduct extends Component {
                             Xuất Excel
                         </Button>
                     </div>
-                </div> */}
+                </div>
 
                 {/* Giao diện hiển thị sản phẩm */}
                 <div className="pos-relative p-8">

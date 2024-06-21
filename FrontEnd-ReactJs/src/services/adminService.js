@@ -24,7 +24,11 @@ const postAddProduct = (product) => {
 
 // api: PUT update sản phẩm
 const putUpdateProductApi = (data) => {
-    return axios.put('/apis/admin/products/update', data);
+    return axios.put(endpoint + '/product/update', data, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
 }
 
 // api: DELETE sản phẩm

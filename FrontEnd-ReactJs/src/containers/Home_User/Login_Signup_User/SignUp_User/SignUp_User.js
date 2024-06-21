@@ -30,7 +30,7 @@ class SignUp extends Component {
         const errors = {};
 
         // Kiểm tra email
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.username)) {
             errors.email = "Email không hợp lệ";
             message.error("Email không hợp lệ", 3);
             return;
@@ -72,7 +72,7 @@ class SignUp extends Component {
         }
 
         // Kiểm tra giới tính
-        if (data.gender !== "Nam" && data.gender !== "Nữ" && data.gender !== "Khác") {
+        if (data.gender !== 1 && data.gender !== 2 && data.gender !== 3) {
             errors.gender = "Giới tính không hợp lệ";
             message.error("Giới tính không hợp lệ", 3);
             return;
@@ -112,17 +112,21 @@ class SignUp extends Component {
     // fn: sự kiện gửi mã xác nhận
     onSendCode = async () => {
         try {
-            const email = this.emailRef.current;
+            const username = this.emailRef.current;
             const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
             // kiểm tra email
-            if (!regex.test(email)) {
+            if (!regex.test(username)) {
                 message.error('Email không hợp lệ !');
                 return;
             }
             this.setState({ isSending: true });
             // gọi api
-            const result = await postSendVerifyCode({ email });
+            const data = {
+                mail: username,
+                title: 1,
+            };
+            const result = await postSendVerifyCode(data);
             if (result.code === 0) {
                 message.success('Gửi thành công, kiểm tra email');
                 this.setState({ isSending: false });
@@ -184,7 +188,7 @@ class SignUp extends Component {
 
         // tạo các biến để lưu thông tin
         const initialValue = {
-            email: '',
+            username: '',
             verifyCode: '',
             password: '',
             confirmPassword: '',
@@ -192,6 +196,8 @@ class SignUp extends Component {
             address: '',
             gender: null,
         };
+
+        console.log("check account: ", initialValue);
 
         return (
             <div className="br container">
@@ -210,7 +216,7 @@ class SignUp extends Component {
                     onSubmit={this.onSignUp}
                 >
                     {(formikProps) => {
-                        this.emailRef.current = formikProps.values.email;
+                        this.emailRef.current = formikProps.values.username;
                         const suffixColor = 'rgba(0, 0, 0, 0.25)';
                         return (
                             <Form className="bg-form  SignUp">
@@ -226,7 +232,7 @@ class SignUp extends Component {
                                             {/* email */}
                                             <Col span={24}>
                                                 <FastField
-                                                    name="email"
+                                                    name="username"
                                                     component={InputField}
                                                     className="input-form-common"
                                                     placeholder="Email *"

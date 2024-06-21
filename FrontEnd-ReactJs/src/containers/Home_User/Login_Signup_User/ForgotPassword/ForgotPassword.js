@@ -3,7 +3,7 @@ import { EyeInvisibleOutlined, EyeTwoTone, InfoCircleOutlined } from '@ant-desig
 import { Button, Col, message, Row, Tooltip } from 'antd';
 import { Redirect, Link } from 'react-router-dom';
 import { FastField, Form, Formik } from 'formik';
-import { postSendCodeForgotPW, postResetPassword } from '../../../../services/accountService.js';
+import { postResetPassword, postSendVerifyCode } from '../../../../services/accountService.js';
 import InputField from '../../../../components/Custom/Field/InputField';
 import Delay from '../../../../components/Delay/index.js';
 import constants from '../../../../constants/index.js';
@@ -23,17 +23,21 @@ class ForgotPassword extends Component {
     // fn: sự kiện gữi mã
     onSendCode = async () => {
         try {
-            const email = this.emailRef.current;
+            const username = this.emailRef.current;
             const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-            if (!regex.test(email)) {
+            if (!regex.test(username)) {
                 message.error('Email không hợp lệ !');
                 return;
             }
             this.setState({ isSending: true });
-
-            const result = await postSendCodeForgotPW({ email });
+            const data = {
+                username: username,
+                title: 2
+            }
+            console.log("check data", data);
+            const result = await postSendVerifyCode(data);
             if (result.code === 0) {
-                message.success('Gửi thành công, kiểm tra email');
+                message.success('Gửi thành công, kiểm tra username');
                 this.setState({ isSending: false });
             }
             else {
@@ -61,7 +65,7 @@ class ForgotPassword extends Component {
             }
             else {
                 message.error(result.message);
-                this.setState({ isSubmitting: false, isSuccess: true });
+                this.setState({ isSubmitting: false });
             }
         } catch (error) {
             this.setState({ isSubmitting: false });
@@ -78,7 +82,7 @@ class ForgotPassword extends Component {
 
         // tạo các biến để lưu thông tin
         const initialValue = {
-            email: '',
+            username: '',
             password: '',
             verifyCode: '',
         };
@@ -101,7 +105,7 @@ class ForgotPassword extends Component {
                         // validationSchema={validationSchema}
                         onSubmit={this.onChangePassword}>
                         {(formikProps) => {
-                            this.emailRef.current = formikProps.values.email;
+                            this.emailRef.current = formikProps.values.username;
                             const suffixColor = 'rgba(0, 0, 0, 0.25)';
                             return (
                                 <Form className="bg-form">
@@ -111,10 +115,10 @@ class ForgotPassword extends Component {
                                         justify="center"
                                         style={{ margin: 0 }}>
 
-                                        {/* email */}
+                                        {/* username */}
                                         <Col span={24}>
                                             <FastField
-                                                name="email"
+                                                name="username"
                                                 component={InputField}
                                                 className="input-form-common"
                                                 placeholder="Email *"
@@ -156,7 +160,7 @@ class ForgotPassword extends Component {
                                                 placeholder="Mã xác nhận *"
                                                 size="large"
                                                 suffix={
-                                                    <Tooltip title="Click gửi mã để nhận mã qua email">
+                                                    <Tooltip title="Click gửi mã để nhận mã qua username">
                                                         <InfoCircleOutlined
                                                             style={{ color: suffixColor }}
                                                         />

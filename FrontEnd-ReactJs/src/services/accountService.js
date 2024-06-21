@@ -12,15 +12,6 @@ const postSignUp = (account) => {
     return axios.post(endpoint + "/signup", account);
 }
 
-// fn: api gửi mã quên mật khẩu
-const postSendCodeForgotPW = (email) => {
-    const data = {
-        mail: email,
-        title: 1
-    }
-    return axios.post(endpoint + "/forgot", email);
-}
-
 // fn: api đổi mật khẩu
 const postResetPassword = (account) => {
     return axios.post(endpoint + "/forgot", account);
@@ -29,6 +20,5 @@ const postResetPassword = (account) => {
 export {
     postSendVerifyCode,
     postSignUp,
-    postSendCodeForgotPW,
     postResetPassword
 }

@@ -9,6 +9,7 @@ import com.trinhminhthaito.backend_springboot.repository.ProductRepository;
 import com.trinhminhthaito.backend_springboot.services.AccountServices;
 import com.trinhminhthaito.backend_springboot.services.OrderServices;
 import com.trinhminhthaito.backend_springboot.services.ProductServices;
+import com.trinhminhthaito.backend_springboot.services.StatisticServices;
 import com.trinhminhthaito.backend_springboot.services.UserServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +29,21 @@ public class AdminController {
 	private final ProductServices productServices;
 	private final UserServices userServices;
 	private final OrderServices orderServices;
+	private final StatisticServices statisticServices;
 
 	@Autowired
 	public AdminController(AccountServices accountServices,
 			ProductRepository productRepository,
 			ProductServices productServices,
 			UserServices userServices,
-			OrderServices orderServices) {
+			OrderServices orderServices,
+			StatisticServices statisticServices) {
 		this.productRepository = productRepository;
 		this.accountServices = accountServices;
 		this.productServices = productServices;
 		this.userServices = userServices;
 		this.orderServices = orderServices;
+		this.statisticServices = statisticServices;
 	}
 
 	// #region Product
@@ -153,6 +157,32 @@ public class AdminController {
 	public ResponseEntity<?> deleteOrder(@RequestParam String id) {
 		MessageResponse messageResponse = orderServices.deleteOrder(id);
 		return ResponseEntity.ok(messageResponse);
+	}
+	// #endregion
+
+	// #region Card và thống kê doanh thu
+	// api: lấy danh sách card
+	@GetMapping("/statistic/card")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+	public ResponseEntity<?> getStatisticCard() {
+		MessageDataResponse messageDataResponse = statisticServices.getCard();
+		return ResponseEntity.ok(messageDataResponse);
+	}
+
+	// api: lấy doanh thu theo năm và năm trước đó
+	@GetMapping("/statistic/monthly")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+	public ResponseEntity<?> getStatisticMonthy(@RequestParam Number year) {
+		MessageDataResponse messageDataResponse = statisticServices.getMonthRevenue(year);
+		return ResponseEntity.ok(messageDataResponse);
+	}
+
+	// api: lấy danh thu từ năm bắt đầu tới năm kết thúc
+	@GetMapping("/statistic/annual")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+	public ResponseEntity<?> getStatisticAnnual(@RequestParam Number startYear, @RequestParam Number endYear) {
+		MessageDataResponse messageDataResponse = statisticServices.getStatisticAnnual(startYear, endYear);
+		return ResponseEntity.ok(messageDataResponse);
 	}
 	// #endregion
 }

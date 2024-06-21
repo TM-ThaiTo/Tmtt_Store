@@ -13,6 +13,8 @@ import com.trinhminhthaito.backend_springboot.services.OrderServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -122,7 +124,10 @@ public class OrderServicesImp implements OrderServices {
 				PaymentDetail detail = order.getPaymentDetail();
 				if (detail != null) {
 					detail.setPaymentStatus("Đã thanh toán");
+					LocalDate today = LocalDate.now();
+					order.setDateOfPayment(today);
 					order.setPaymentDetail(detail);
+
 					orderRepository.save(order); // Use save method to update the existing order
 					messageResponse.setCode(0);
 					messageResponse.setMessage("Cập nhật trạng thái thanh toán thành công");

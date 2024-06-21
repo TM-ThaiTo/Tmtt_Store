@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,5 +28,5 @@ public class Order {
 	private String note; // ghi chú
 	private Date orderDate; // ngày đặt
 	private Number status; // trạng thái đơn hàng
-	private Date dateOfPayment; // ngày thanh toán
+	private LocalDate dateOfPayment; // ngày thanh toán
 }

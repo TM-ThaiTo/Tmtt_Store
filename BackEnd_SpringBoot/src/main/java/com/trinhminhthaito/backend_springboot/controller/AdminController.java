@@ -112,6 +112,14 @@ public class AdminController {
 		return ResponseEntity.ok(messageDataResponse);
 	}
 
+	// api: get user admin
+	@GetMapping("/user/admin")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+	public ResponseEntity<?> getAllAdmin() {
+		MessageDataResponse messageDataResponse = userServices.getAllAdmin();
+		return ResponseEntity.ok(messageDataResponse);
+	}
+
 	// api: delete account
 	@Transactional
 	@DeleteMapping("/user/delete")

@@ -7,8 +7,7 @@ public record SignUpRequest(
 		String password,
 		String verifyCode,
 		String fullName,
-		Date birthDate,
+		String birthday,
 		int gender,
-		String address
-) {
+		String address) {
 }

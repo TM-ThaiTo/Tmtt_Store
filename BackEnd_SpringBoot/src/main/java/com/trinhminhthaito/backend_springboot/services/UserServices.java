@@ -10,4 +10,6 @@ public interface UserServices {
 	MessageDataResponse getUser(String token);
 
 	MessageDataResponse getAllUser();
+
+	MessageDataResponse getAllAdmin();
 }

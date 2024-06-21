@@ -8,6 +8,9 @@ import com.trinhminhthaito.backend_springboot.services.AccountServices;
 import com.trinhminhthaito.backend_springboot.services.MailServices;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.text.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +47,7 @@ public class AccountController {
 	// api: create account type local
 	@Transactional
 	@PostMapping("/signup")
-	public ResponseEntity<?> newAccount(@RequestBody SignUpRequest dto) {
+	public ResponseEntity<?> newAccount(@RequestBody SignUpRequest dto) throws ParseException {
 		MessageResponse response = accountServices.createAccount(dto);
 		return ResponseEntity.ok(response);
 	}

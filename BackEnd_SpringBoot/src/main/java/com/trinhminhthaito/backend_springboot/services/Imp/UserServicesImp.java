@@ -136,4 +136,12 @@ public class UserServicesImp implements UserServices {
 		}
 		return messageDataResponse;
 	}
+
+	@Override
+	public MessageDataResponse getAllAdmin() {
+		MessageDataResponse messageDataResponse = new MessageDataResponse();
+
+		return messageDataResponse;
+	}
+
 }

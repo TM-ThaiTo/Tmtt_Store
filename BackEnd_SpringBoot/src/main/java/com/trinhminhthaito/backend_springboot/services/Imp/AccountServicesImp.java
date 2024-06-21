@@ -17,7 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.trinhminhthaito.backend_springboot.enums.Role;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
+import java.text.ParseException;
 
 @Service
 public class AccountServicesImp implements AccountServices {
@@ -30,10 +33,10 @@ public class AccountServicesImp implements AccountServices {
 
 	@Autowired
 	private AccountServicesImp(AccountRepository accountRepository,
-							   BCryptPasswordEncoder bCryptPasswordEncoder,
-							   UserRepository userRepository,
-							   VerifyServices verifyServices,
-							   MailServices mailServices) {
+			BCryptPasswordEncoder bCryptPasswordEncoder,
+			UserRepository userRepository,
+			VerifyServices verifyServices,
+			MailServices mailServices) {
 		this.accountRepository = accountRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.userRepository = userRepository;
@@ -42,7 +45,7 @@ public class AccountServicesImp implements AccountServices {
 	}
 
 	// fn: add account to database
-	private void addAccount(SignUpRequest dto){
+	private void addAccount(SignUpRequest dto) throws ParseException {
 		var newAccount = new Account();
 		HashSet<String> roles = new HashSet<>();
 		roles.add(Role.USER.name());
@@ -58,13 +61,20 @@ public class AccountServicesImp implements AccountServices {
 		addUser(dto, newAccount.getId());
 	}
 
+	private Date parseDateString(String dateString) throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		return dateFormat.parse(dateString);
+	}
+
 	// fn: add user to database
-	private void addUser(SignUpRequest dto, String accountId){
+	private void addUser(SignUpRequest dto, String accountId) throws ParseException {
 		var user = new User();
 		user.setAccountId(accountId);
 		user.setFullName(dto.fullName());
 		user.setGender(dto.gender());
-		user.setDateOfBirth(dto.birthDate());
+		Date dateOfBirth = parseDateString(dto.birthday());
+
+		user.setDateOfBirth(dateOfBirth);
 		user.setAddress(dto.address());
 		userRepository.save(user);
 	}
@@ -76,10 +86,10 @@ public class AccountServicesImp implements AccountServices {
 
 	// fn: create account
 	@Override
-	public MessageResponse createAccount(SignUpRequest dto) {
+	public MessageResponse createAccount(SignUpRequest dto) throws ParseException {
 		MessageResponse response = new MessageResponse();
 
-		if(!checkOTP(dto.username(), dto.verifyCode())){
+		if (!checkOTP(dto.username(), dto.verifyCode())) {
 			response.setCode(1);
 			response.setMessage("OTP không đúng hoặc quá hạn");
 			return response;
@@ -110,13 +120,13 @@ public class AccountServicesImp implements AccountServices {
 	@Override
 	public MessageResponse forgotPassword(ForgotPasswordRequest dto) {
 		MessageResponse response = new MessageResponse();
-		try{
+		try {
 			// check otp
-			if(!checkOTP(dto.username(), dto.verifyCode())){
-				response.setCode(1);
-				response.setMessage("OTP không đúng hoặc quá hạn");
-				return response;
-			}
+			// if (!checkOTP(dto.username(), dto.verifyCode())) {
+			// response.setCode(1);
+			// response.setMessage("OTP không đúng hoặc quá hạn");
+			// return response;
+			// }
 			var userFromDb = findAccountByUserName(dto.username());
 			if (userFromDb == null) {
 				response.setCode(2);
@@ -129,8 +139,7 @@ public class AccountServicesImp implements AccountServices {
 			updateFailedLogin(dto.username());
 			response.setCode(0);
 			response.setMessage("Account successfully forgotten");
-		}
-		catch(Exception e){
+		} catch (Exception e) {
 			response.setCode(-1);
 			response.setMessage(e.getMessage());
 		}
@@ -149,14 +158,14 @@ public class AccountServicesImp implements AccountServices {
 	}
 
 	// fn: tang failed login
-	private void failedLogin(LoginRequest dto){
+	private void failedLogin(LoginRequest dto) {
 		var userFromDb = findAccountByUserName(dto.email());
 		userFromDb.setFailedLoginTimes(userFromDb.getFailedLoginTimes() + 1);
 		accountRepository.save(userFromDb);
 	}
 
 	// fn: delete failed login
-	private void updateFailedLogin(String username){
+	private void updateFailedLogin(String username) {
 		var userFromDb = findAccountByUserName(username);
 		userFromDb.setFailedLoginTimes(0);
 		accountRepository.save(userFromDb);
@@ -166,11 +175,11 @@ public class AccountServicesImp implements AccountServices {
 	@Override
 	public MessageResponse passwordCheck(LoginRequest dto) {
 		MessageResponse response = new MessageResponse();
-		try{
-			if(!checkFailedLogin(dto)){
+		try {
+			if (!checkFailedLogin(dto)) {
 				SendMailRequest sendMail = new SendMailRequest(dto.email(), 3);
 				response = mailServices.sendMail(sendMail);
-				if(response.getCode() != 0){
+				if (response.getCode() != 0) {
 					return response;
 				}
 				response.setCode(1);
@@ -178,7 +187,7 @@ public class AccountServicesImp implements AccountServices {
 				return response;
 			} // login very failed
 
-			if(!checkPassword(dto.email(), dto.password())){
+			if (!checkPassword(dto.email(), dto.password())) {
 				response.setCode(2);
 				response.setMessage("Mật khẩu sai");
 				failedLogin(dto);
@@ -187,8 +196,7 @@ public class AccountServicesImp implements AccountServices {
 			updateFailedLogin(dto.email());
 			response.setCode(0);
 			response.setMessage("success");
-		}
-		catch(Exception e){
+		} catch (Exception e) {
 			response.setCode(-1);
 			response.setMessage(e.getMessage());
 		}

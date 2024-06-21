@@ -289,52 +289,27 @@ public class ProductServicesImp implements ProductServices {
 	}
 
 	// fn: search product
-	// private List<Product> searchProducts(String codeP, String nameP, Integer
-	// typeP) {
-	// Query query = new Query();
-
-	// if (codeP != null && !codeP.isEmpty()) {
-	// query.addCriteria(Criteria.where("code").is(codeP));
-	// }
-	// if (nameP != null && !nameP.isEmpty()) {
-	// query.addCriteria(Criteria.where("name").regex(".*" + nameP + ".*", "i"));
-	// }
-	// if (typeP != null) {
-	// query.addCriteria(Criteria.where("type").is(typeP));
-	// }
-
-	// return mongoTemplate.find(query, Product.class);
-	// }
-
 	@Override
 	public MessageDataResponse getSearchProduct(String nameP, String codeP, Number typeP) {
 		MessageDataResponse messageDataResponse = new MessageDataResponse();
 		try {
 			// Fetch all products initially
-			// List<Product> products = productRepository.findAll();
+			List<Product> products = productRepository.findAll();
 
-			// // Filter by code if codeP is not null and not empty
-			// if (codeP != null && !codeP.isEmpty()) {
-			// products = products.stream()
-			// .filter(p -> p.getCode().toLowerCase().contains(codeP.toLowerCase()))
-			// .collect(Collectors.toList());
-			// }
-
-			// // Filter by name if nameP is not null and not empty
-			// if (nameP != null && !nameP.isEmpty()) {
-			// products = products.stream()
-			// .filter(p -> p.getName().toLowerCase().contains(nameP.toLowerCase()))
-			// .collect(Collectors.toList());
-			// }
+			// Filter by code if codeP is not null and not empty
+			if (codeP != null && !codeP.isEmpty()) {
+				products = products.stream()
+						.filter(p -> p.getCode().toLowerCase().contains(codeP.toLowerCase()))
+						.collect(Collectors.toList());
+			}
 
 			// // Filter by type if typeP is not null
-			// if (typeP != null) {
-			// int typeValue = typeP.intValue();
-			// products = products.stream()
-			// .filter(p -> p.getType() == typeValue)
-			// .collect(Collectors.toList());
-			// }
-			List<Product> products = productRepository.searchProducts(codeP, nameP, typeP);
+			if (typeP != null) {
+				int typeValue = typeP.intValue();
+				products = products.stream()
+						.filter(p -> p.getType() == typeValue)
+						.collect(Collectors.toList());
+			}
 
 			// Set the response data
 			messageDataResponse.setCode(0);

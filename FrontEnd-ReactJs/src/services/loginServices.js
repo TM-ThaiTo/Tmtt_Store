@@ -2,6 +2,7 @@ import axios from '../axios';
 import constants from '../constants';
 
 const endpoint = "/api/v1/account";
+const authToken = localStorage.getItem(constants.REFRESH_TOKEN);
 
 // POST:  API login bang tai khoan thong thuong
 const post_loginuser = (account) => {
@@ -9,7 +10,6 @@ const post_loginuser = (account) => {
 };
 
 const getAuth = () => {
-    const authToken = localStorage.getItem(constants.ACCESS_TOKEN_KEY);
     return axios.get(endpoint + "/auth", {
         headers: {
             Authorization: `Bearer ${authToken}`
@@ -33,8 +33,7 @@ const getRefreshToken = (refresh_token) => {
 
 // POST: Logout
 const postLogout = () => {
-    const token = localStorage.getItem(constants.REFRESH_TOKEN_KEY);
-    return axios.post(`${endpoint}/logout`, token)
+    return axios.post(`${endpoint}/logout`, authToken)
 }
 
 export {

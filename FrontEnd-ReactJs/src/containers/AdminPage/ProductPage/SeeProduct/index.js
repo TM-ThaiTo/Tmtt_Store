@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { message, Spin, Table, Tooltip, Modal, Select, Input, Button } from 'antd';
-import { getAPIProductList, getProductToPageAdmin } from "../../../../services/productService";
-import { deleteProductApi } from '../../../../services/adminService';
+import { deleteProductApi, getAllProduct, getProductToPageAdmin } from '../../../../services/adminService';
 import { exportToExcel } from '../../../../utils/exportFile';
 import constants from '../../../../constants';
 import EditProductModal from './EditProductModal';
 import './index.scss';
+import { helpers } from 'chart.js';
 
 class SeeProduct extends Component {
     constructor(props) {
@@ -23,7 +23,7 @@ class SeeProduct extends Component {
             selectedProductType: null,
             inputValueMaSanPham: '',
             inputValueNameSanPham: '',
-            typeString: '',
+            type: '',
         };
         this.isSubscribe = true;
         this.setEditModal = this.setEditModal.bind(this);
@@ -38,6 +38,9 @@ class SeeProduct extends Component {
     }
 
     //#region Danh sách sản phẩm
+    changeTypeIntToString = (type) => {
+        return constants.typeMapping[type] || "";
+    };
     // fn: Cột của bảng
     columns = [
         {
@@ -74,6 +77,7 @@ class SeeProduct extends Component {
             title: 'Loại',
             key: 'type',
             dataIndex: 'type',
+            render: (type) => this.changeTypeIntToString(type),
         }, // loại sản phẩm
         {
             title: 'Thương hiệu',
@@ -103,12 +107,13 @@ class SeeProduct extends Component {
             sorter: (a, b) => a.discount - b.discount,
             render: (discount) => `${discount} %`,
         }, // giảm giá
-        {
-            title: 'Đánh giá',
-            key: 'rate',
-            dataIndex: 'rate',
-            // render: (rate) => this.calStar(rate).toFixed(1),
-        }, // đánh giá
+        // {
+        //     title: 'Đánh giá',
+        //     key: 'rates',
+        //     dataIndex: 'rates',
+        //     render: (rates) => this.calStar(rates).toFixed(1),
+        //     // render: (rates) => <>{rates}</>
+        // }, // đánh giá
         {
             title: 'Hành động',
             key: 'actions',
@@ -175,21 +180,22 @@ class SeeProduct extends Component {
     };
 
     // fn: tính tỉ lệ sao của sản phẩm [1,2,3,4,5]
-    calStar = (rates) => {
-        const total = rates.reduce((a, b) => a + b, 0);
-        if (total === 0) return 0;
-        let rateTotal = 0;
-        for (let i = 0; i < 5; ++i) {
-            rateTotal += rates[i] * (i + 1);
-        }
-        return rateTotal / total;
-    };
+    // calStar = (rates) => {
+    //     // const total = rates.reduce((a, b) => a + b, 0);
+    //     // if (total === 0) return 0;
+    //     // let rateTotal = 0;
+    //     // for (let i = 0; i < 5; ++i) {
+    //     //     rateTotal += rates[i] * (i + 1);
+    //     // }
+    //     // return rateTotal / total;
+    //     return rates;
+    // };
 
     // fn: Lấy danh sách Product
     getProductList = async () => {
         try {
             this.setState({ isLoading: true });
-            const response = await getAPIProductList();
+            const response = await getAllProduct();
             if (response && response.data && response.code === 0) {
                 const data = response.data;
                 const newList = data.map((item) => {
@@ -202,7 +208,7 @@ class SeeProduct extends Component {
                         brand: item.brand,
                         stock: item.stock,
                         discount: item.discount,
-                        rate: item.rate,
+                        rate: item.rates,
                     };
                 });
                 this.setState({ list: newList, isLoading: false });
@@ -267,7 +273,7 @@ class SeeProduct extends Component {
                 this.setState({ isTypeSelected: true });
             }
             this.setState({
-                typeString: selectedProduct.typeString,
+                typeNumber: selectedProduct.type,
             });
         }
     };
@@ -291,19 +297,19 @@ class SeeProduct extends Component {
         this.setState({
             inputValueMaSanPham: '',
             inputValueNameSanPham: '',
-            typeString: null,
+            typeNumber: 1,
         });
         this.getProductList();
     }
 
     // event: xác nhận tìm kiếm
     onSubmitSearch = async () => {
-        const { inputValueMaSanPham, inputValueNameSanPham, typeString } = this.state;
-        if (!inputValueMaSanPham && !inputValueNameSanPham && !typeString) return;
+        const { inputValueMaSanPham, inputValueNameSanPham, typeNumber } = this.state;
+        if (!inputValueMaSanPham && !inputValueNameSanPham && !typeNumber) return;
 
         this.setState({ isLoading: true });
         try {
-            const response = await getProductToPageAdmin(inputValueMaSanPham, inputValueNameSanPham, typeString);
+            const response = await getProductToPageAdmin(inputValueMaSanPham, inputValueNameSanPham, typeNumber);
             if (response && response.data && response.code === 0) {
                 const data = response.data;
                 const newList = data.map((item) => {
@@ -338,7 +344,7 @@ class SeeProduct extends Component {
     // fn: Xuất dữ liệu ra file excel
     exportToExcel = async () => {
         try {
-            const response = await getAPIProductList();
+            const response = await getAllProduct();
             if (response && response.data && response.code === 0) {
                 const data = response.data;
                 if (data && data.length > 0) {
@@ -379,7 +385,7 @@ class SeeProduct extends Component {
         return (
             <>
                 {/* chức năng */}
-                <div className='search-product-admin container'>
+                {/* <div className='search-product-admin container'>
                     <div>
                         <Input
                             className='inputValue-code'
@@ -430,7 +436,7 @@ class SeeProduct extends Component {
                             Xuất Excel
                         </Button>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Giao diện hiển thị sản phẩm */}
                 <div className="pos-relative p-8">

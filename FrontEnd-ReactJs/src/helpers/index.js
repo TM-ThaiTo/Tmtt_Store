@@ -773,6 +773,8 @@ const convertOrderStatus = (orderStatus) => {
             return 'Đang vận chuyển';
         case 6:
             return 'Giao hàng thành công';
+        case 7:
+            return 'Huỷ đơn';
         default:
             return 'Đặt hàng thành công';
     }
@@ -830,9 +832,10 @@ const changeTypeIntToString = (type) => {
         case 3:
             return "mainboard";
         default:
-            return "ram";
+            return "";
     }
 }
+
 
 // fn: hàm render String gender
 const renderGender = (type) => {
@@ -866,7 +869,7 @@ const helpers = {
     convertPaymentMethod,
     calTotalOrderFee,
     changeTypeIntToString,
-    renderGender
+    renderGender,
 };
 
 export default helpers;

@@ -226,10 +226,8 @@ class FilterResult extends Component {
             }
             return true;
         });
-        const typeString = helpers.changeTypeIntToString(type);
         this.setState({
             type: type,
-            stringType: typeString,
         }, () => {
             this.getData();
         });

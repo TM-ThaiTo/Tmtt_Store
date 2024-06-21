@@ -91,17 +91,7 @@ const getFilterProductApi_v2 = (data) => {
     return axios.post("apis/products/filter_v2", data);
 }
 
-// api: tìm kiếm sản phẩm cho trang SeeProduct
-const getProductToPageAdmin = (codeP, nameP, typeP) => {
-    const params = {
-        codeP: codeP,
-        nameP: nameP,
-        typeP: typeP
-    }
-    return axios.get("apis/products/admin-search", {
-        params
-    })
-}
+
 
 // api: lấy sản phẩm nỗi bật
 const getProductOutstandong = () => {
@@ -115,7 +105,6 @@ export {
     getProductPurchased,
     getProductType,
     getSearchProductsApi,
-    getProductToPageAdmin,
     getProductOutstandong,
     getFilterProductApi,
     getFilterProductApi_v2

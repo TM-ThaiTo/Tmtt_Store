@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Button, message, Modal, Radio, Spin, Table, Input, Select } from 'antd';
-import { getOrderListApi, postUpdateStatusOrderApi } from '../../../services/adminService.js';
+import { getOrderListApi, putUpdateStatusOrderApi, getSearchOrderApi, deleteOrderApi } from '../../../services/adminService.js';
 import { exportToExcel } from '../../../utils/exportFile.js';
-import { getSearchOrderApi } from '../../../services/orderService.js'
 import helpers from '../../../helpers/index.js';
 import constants from '../../../constants/index.js';
 import OrderDetail from '../../AccountPage/OrderList/OrderDetail/index.js';
@@ -28,7 +27,7 @@ class OrderList extends Component {
             selectedOrderStatus: '',
 
             valueInputCode: '',
-            valueOrderStatus: '',
+            valueOrderStatus: 0,
             valuePayment: '',
         };
     }
@@ -47,13 +46,13 @@ class OrderList extends Component {
                 const list = response.data;
                 const newData = list.map((item, index) => ({
                     key: index,
-                    owner: item.customerName,
+                    owner: item.customerOrder.customerName,
                     orderCode: item.orderCode,
                     orderDate: helpers.formatOrderDate(item.orderDate),
-                    totalMoney: item.paidAmount,
-                    paymentMethod: item.paymentMethod,
-                    orderStatus: item.paymentStatus,
-                    orderStatusDetail: item.orderStatusDetail,
+                    totalMoney: item.paymentDetail.paidAmount,
+                    paymentMethod: item.paymentDetail.paymentMethod,
+                    orderStatus: item.paymentDetail.paymentStatus,
+                    orderStatusDetail: helpers.convertOrderStatus(item.status),
                     orderId: item.id,
                 }));
                 this.setState({ data: newData, isLoading: false });
@@ -76,12 +75,8 @@ class OrderList extends Component {
     // fn: Xử lý khi người dùng nhấn đổi trạng thái đơn hàng
     handleUpdateOrderStatus = async () => {
         const { selectedOrderId, selectedOrderStatus } = this.state;
-        const data = {
-            idOrder: selectedOrderId,
-            orderStatusDetail: selectedOrderStatus
-        };
         try {
-            const response = await postUpdateStatusOrderApi(data);
+            const response = await putUpdateStatusOrderApi(selectedOrderId, selectedOrderStatus);
             if (response.code === 0) {
                 message.success(response.message);
                 this.setState({ updateModalVisible: false }); // Hide the modal
@@ -95,6 +90,40 @@ class OrderList extends Component {
             message.error('Failed to update order status');
         }
     };
+
+    // fn: Xoá đơn hàng
+    handleDeleteOrder = async (idOrder) => {
+        try {
+            this.setState({ isLoading: true });
+            const response = await deleteOrderApi(idOrder);
+            if (response && response.code === 0) {
+                message.success("Xoá thành công", 0);
+                this.getOrderList();
+                this.setState({ isLoading: false });
+            } else {
+                message.error(response.message);
+                this.setState({ isLoading: false });
+            }
+        } catch (error) {
+            console.error('handleDeleteOrder' + error);
+            this.setState({ isLoading: false });
+        }
+    }
+    showDeleteConfirm = (idOrder) => {
+        Modal.confirm({
+            title: 'Bạn chắc chắn muốn xoá đơn hàng?',
+            content: 'Điều này sẽ không thể hoàn tát!!',
+            okText: 'Xoá',
+            okType: 'danger',
+            cancelText: 'Thoát',
+            onOk: () => {
+                this.handleDeleteOrder(idOrder);
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    };
     //#endregion
 
     //#region xuất excel
@@ -106,15 +135,15 @@ class OrderList extends Component {
                 const list = response.data;
                 if (list && list.length > 0) {
                     const newData = list.map((item, index) => ({
-                        orderId: item.id,
                         key: index,
-                        owner: item.customerName,
+                        owner: item.customerOrder.customerName,
                         orderCode: item.orderCode,
                         orderDate: helpers.formatOrderDate(item.orderDate),
-                        totalMoney: item.paidAmount,
-                        paymentMethod: item.paymentMethod,
-                        orderStatus: item.paymentStatus,
-                        orderStatusDetail: item.orderStatusDetail,
+                        totalMoney: item.paymentDetail.paidAmount,
+                        paymentMethod: item.paymentDetail.paymentMethod,
+                        orderStatus: item.paymentDetail.paymentStatus,
+                        orderStatusDetail: helpers.convertOrderStatus(item.status),
+                        orderId: item.id,
                     }));
                     const ete = await exportToExcel(newData, "Danh sách đơn hàng", "ListOrders");
                     if (ete !== "ok") {
@@ -138,7 +167,7 @@ class OrderList extends Component {
         const statusOrder = constants.ORDER_STATUS.find(item => item.type === value);
         if (statusOrder) {
             this.setState({
-                valueOrderStatus: statusOrder.label,
+                valueOrderStatus: statusOrder.type,
             });
         }
     }
@@ -164,8 +193,8 @@ class OrderList extends Component {
     handleResetSearch = () => {
         this.setState({
             valueInputCode: '',
-            valueOrderStatus: '',
             valuePayment: '',
+            valueOrderStatus: 0,
         });
         this.getOrderList();
     }
@@ -176,18 +205,18 @@ class OrderList extends Component {
         if (!valueInputCode && !valueOrderStatus && !valuePayment) return;
         this.setState({ isLoading: true });
         try {
-            const response = await getSearchOrderApi(valueInputCode, valueOrderStatus, valuePayment);
+            const response = await getSearchOrderApi(valueInputCode, valuePayment, valueOrderStatus);
             if (response && response.code === 0) {
                 const list = response.data;
                 const newData = list.map((item, index) => ({
                     key: index,
-                    owner: item.customerName,
+                    owner: item.customerOrder.customerName,
                     orderCode: item.orderCode,
                     orderDate: helpers.formatOrderDate(item.orderDate),
-                    totalMoney: item.paidAmount,
-                    paymentMethod: item.paymentMethod,
-                    orderStatus: item.paymentStatus,
-                    orderStatusDetail: item.orderStatusDetail,
+                    totalMoney: item.paymentDetail.paidAmount,
+                    paymentMethod: item.paymentDetail.paymentMethod,
+                    orderStatus: item.paymentDetail.paymentStatus,
+                    orderStatusDetail: helpers.convertOrderStatus(item.status),
                     orderId: item.id,
                 }));
                 this.setState({ data: newData, isLoading: false });
@@ -209,6 +238,7 @@ class OrderList extends Component {
     // fn: render
     render() {
         const { data, isLoading, orderDetails, updateModalVisible, selectedOrderStatus, VATDetails } = this.state;
+
         const columns = [
             {
                 title: 'Khách hàng',
@@ -227,7 +257,7 @@ class OrderList extends Component {
                             this.setState({
                                 orderDetails: {
                                     isOpen: true,
-                                    orderId: record.orderId
+                                    orderId: record.orderCode
                                 }
                             })
                         }
@@ -285,27 +315,14 @@ class OrderList extends Component {
                         >
                             Cập nhật
                         </Button>
-                        {/* 
-                        <Button
-                            type="primary"
-                            className='btn-cn'
-                            onClick={() => this.setState({
-                                VATDetails: {
-                                    isOpen: true,
-                                    orderId: record.orderId
-                                }
-                            })}
-                        >
-                            Xuất VAT
-                        </Button>
                         <Button
                             type="primary"
                             className='btn-cn'
                             style={{ backgroundColor: 'red', borderColor: 'red' }}
+                            onClick={() => this.showDeleteConfirm(record.orderId)}
                         >
                             Xoá
                         </Button>
-                         */}
                     </>
                 ),
             }, // chức năng
@@ -434,11 +451,13 @@ class OrderList extends Component {
                             value={selectedOrderStatus}
                             onChange={e => this.setState({ selectedOrderStatus: e.target.value })}
                         >
-                            <Radio value={"Đã tiếp nhận"}>Đã tiếp nhận</Radio>
-                            <Radio value={"Đóng gói xong"}>Đóng gói xong</Radio>
-                            <Radio value={"Đang vận chuyển"}>Đang vận chuyển</Radio>
-                            <Radio value={"Giao hàng thành công"}>Giao hàng thành công</Radio>
-                            <Radio value={"Đã huỷ"}>Huỷ đơn</Radio>
+                            <Radio value={1}>Đã tiếp nhận</Radio>
+                            <Radio value={2}>Đang lấy hàng</Radio>
+                            <Radio value={3}>Đóng gói xong</Radio>
+                            <Radio value={4}>Đang giao vận chuyển</Radio>
+                            <Radio value={5}>Đang vận chuyển</Radio>
+                            <Radio value={6}>Giao hàng thành công</Radio>
+                            <Radio value={7}>Huỷ đơn</Radio>
                         </Radio.Group>
                     </Modal>
                 </>

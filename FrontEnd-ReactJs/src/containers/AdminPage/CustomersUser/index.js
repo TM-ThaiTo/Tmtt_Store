@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Button, message, Popconfirm, Spin, Table } from 'antd';
 import { getUserApi, delCustomerApi } from '../../../services/adminService';
 import { exportToExcel } from '../../../utils/exportFile';
+import constants from '../../../constants';
+import helpers from '../../../helpers';
 import './index.scss'
 
 class CustomerUser extends Component {
@@ -17,8 +19,8 @@ class CustomerUser extends Component {
     columns = [
         {
             title: 'ID',
-            key: 'id_account',
-            dataIndex: 'id_account',
+            key: 'id',
+            dataIndex: 'id',
             render: (v) => <span>{v}</span>,
         }, // ID tài khoản
         {
@@ -46,11 +48,13 @@ class CustomerUser extends Component {
             title: 'Ngày sinh',
             key: 'birthDay',
             dataIndex: 'birthDay',
+            render: (birthDay) => helpers.formatOrderDate(birthDay, 0)
         }, // ngày sinh 
         {
             title: 'Giới tính',
             key: 'gender',
             dataIndex: 'gender',
+            render: (gender) => this.renderGender(gender)
         }, // Giới tính
         {
             title: '',
@@ -60,7 +64,7 @@ class CustomerUser extends Component {
                     placement="left"
                     cancelText="Huỷ bỏ"
                     okText="Xoá"
-                    onConfirm={() => this.onDelCustomer(records.id_account)}>
+                    onConfirm={() => this.onDelCustomer(records.id)}>
                     <Button danger>Xoá</Button>
                 </Popconfirm>
             ),
@@ -80,8 +84,8 @@ class CustomerUser extends Component {
                 const userList = response.data;
                 const newList = userList.map((item) => {
                     return {
-                        key: item.id_account,
-                        id_account: item.id_account,
+                        key: item.id,
+                        id: item.id,
                         email: item.email,
                         emailId: item.emailId,
                         authType: item.authType,
@@ -112,7 +116,7 @@ class CustomerUser extends Component {
             if (response && response.code === 0) {
                 message.success('Xoá tài khoản thành công');
                 this.setState({
-                    data: this.state.data.filter((item) => item.id_account !== id),
+                    data: this.state.data.filter((item) => item.id !== id),
                 });
             } else {
                 message.error('Xoá tài khoản thất bại');
@@ -121,6 +125,11 @@ class CustomerUser extends Component {
             message.error('Xoá tài khoản thất bại');
         }
     };
+
+    // fn: render giới tính
+    renderGender = (type) => {
+        return constants.genderType[type] || 'Không xác định';
+    }
 
     // fn: Hàm chạy đầu tiên khi vào 
     componentDidMount() {
@@ -136,8 +145,8 @@ class CustomerUser extends Component {
                 if (userList && userList.length > 0) {
                     const newList = userList.map((item) => {
                         return {
-                            key: item.id_account,
-                            id_account: item.id_account,
+                            key: item.id,
+                            id: item.id,
                             email: item.email,
                             emailId: item.emailId,
                             authType: item.authType,

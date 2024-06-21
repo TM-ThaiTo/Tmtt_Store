@@ -2,17 +2,32 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, message, Row, Col } from 'antd';
 import { post_loginuser } from "../../../services/loginServices";
-
+import constants from '../../../constants';
 import './index.scss';
 
 class Login extends Component {
+
+    // fn: xử lý khi đăng nhập thành công
+    onLoginSuccess = async (data) => {
+        try {
+            this.setState({ isSubmitting: false });
+            message.success('Đăng nhập thành công');
+            localStorage.setItem(constants.REFRESH_TOKEN_KEY, data.refreshToken);
+            this.props.setIsAuth(true);
+            this.props.getUser();
+        } catch (error) {
+            message.error('Lỗi đăng nhập.');
+        }
+    };
+
+    // fn: login admin
     onFinish = async (account) => {
         try {
             const response = await post_loginuser(account);
             if (response && response.code === 0) {
-                message.success('Đăng nhập thành công', 2);
-                this.props.onLoginAdmin(true, response.data.fullName);
-                console.log("check name: ", response.data.fullName);
+                // lưu thông tin token admin 
+                this.onLoginSuccess(response)
+                this.props.onLoginAdmin(true, "Super Admin");
             }
             else {
                 message.error('Tài khoản không tồn tại hoặc sai mật khẩu');

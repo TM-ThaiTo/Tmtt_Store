@@ -49,28 +49,29 @@ class ProductAddForm extends Component {
 
     // render giao diện thêm chi tiết sản phẩm
     onRenderProduct = (value) => {
+        console.log("check value onRenderProduct: ", value);
         switch (value) {
-            case 0:
-                return <Ram />;
-            case 1:
-                return <Disk />;
-            case 2:
-                return <Laptop />;
-            case 3:
-                return <Display />;
-            case 4:
-                return <MainBoard />;
-            case 5:
-                return <Headphone />;
-            case 6:
-                return <Keyboard />;
             case 7:
-                return <Monitor />;
-            case 8:
-                return <Mouse />;
-            case 9:
-                return <Router />;
+                return <Ram />;
+            case 3:
+                return <Disk />;
+            case 5:
+                return <Laptop />;
+            case 4:
+                return <Display />;
+            case 6:
+                return <MainBoard />;
             case 10:
+                return <Headphone />;
+            case 11:
+                return <Keyboard />;
+            case 12:
+                return <Monitor />;
+            case 13:
+                return <Mouse />;
+            case 14:
+                return <Router />;
+            case 15:
                 return <Speaker />;
             default:
                 break;
@@ -199,19 +200,20 @@ class ProductAddForm extends Component {
                 otherInfo,
                 ...rest // tổng hợp prvDetails
             } = data;
-            const discountAsString = discount.toString();
 
             // tổng hợp product
             const product = {
-                type: this.state.typeString,
-                discount: discountAsString,
+                type: this.state.typeSelected,
+                discount: discount,
                 code,
                 name,
                 price,
                 brand,
                 stock,
+                sold: 0,
+                rate: 0,
                 otherInfo,
-                avtBase64: this.state.avtBase64,
+                avt: this.state.avtBase64,
             };
 
             // Move this declaration before using it in the details object
@@ -223,34 +225,36 @@ class ProductAddForm extends Component {
                 ...prvDetailsWithoutWarranty } = rest;
 
             const details = {
-                shareDetails: {
-                    catalogs: catalogs,
-                    warranty: warranty.toString(),
-                },
-                prvDetails: {
-                    [this.state.infoDetail]: {
-                        // disk
-                        ...(capacity && { capacity: capacity.toString() }),
-                        //laptop
-                        ...(processorCount && { processorCount: processorCount.toString() }),
-                        ...(weight && { weight: weight.toString() }),
-                        // màn hinh
-                        ...(frequency && { frequency: frequency.toString() }),
-                        // speaker
-                        ...(wattage && { wattage: wattage.toString() }),
-                        // router wifi
-                        ...(strong && { strong: strong.toString() }),
+                // shareDetails: {
+                catalogs: catalogs,
+                warranty: warranty.toString(),
+                // },
+                // prvDetails: {
+                [this.state.infoDetail]: {
+                    // disk
+                    ...(capacity && { capacity: capacity.toString() }),
+                    //laptop
+                    ...(processorCount && { processorCount: processorCount.toString() }),
+                    ...(weight && { weight: weight.toString() }),
+                    // màn hinh
+                    ...(frequency && { frequency: frequency.toString() }),
+                    // speaker
+                    ...(wattage && { wattage: wattage.toString() }),
+                    // router wifi
+                    ...(strong && { strong: strong.toString() }),
 
-                        ...prvDetailsWithoutWarranty,
-                    }
-                },
+                    ...prvDetailsWithoutWarranty,
+                }
+                // },
             };
             const dataSend = { product, details, desc: this.state.productDecs };
 
+            console.log("check data gủi: ", dataSend);
             // gửi api
             const response = await postAddProduct(dataSend);
             if (response.code === 0) {
                 this.setState({ isSubmitting: false });
+                this.onResetForm();
                 message.success('Thêm sản phẩm thành công');
             }
             else {
@@ -272,7 +276,7 @@ class ProductAddForm extends Component {
     render() {
         // const { isTypeSelected, avtFileList, fileList, isSubmitting, infoDetail } = this.state;
         const { isTypeSelected, avtFileList, fileList, isSubmitting } = this.state;
-
+        console.log("check type: ", this.state.typeSelected)
         return (
             <div className="Admin-Product-Page">
                 <h1 className="t-center p-t-20">
@@ -447,8 +451,8 @@ class ProductAddForm extends Component {
                                 {/* ... (other form items) ... */}
                                 <Col span={24}>
                                     <h2 className="m-b-10">
-                                        Thông tin chi tiết cho&nbsp;
-                                        <b>{constants.PRODUCT_TYPES[this.state.typeSelected].label}</b>
+                                        Thông tin chi tiết&nbsp;
+                                        {/* <b>{constants.PRODUCT_TYPES[this.state.typeSelected].label}</b> */}
                                     </h2>
                                     {this.onRenderProduct(this.state.typeSelected)}
                                 </Col>

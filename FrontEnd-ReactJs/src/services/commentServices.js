@@ -2,7 +2,7 @@ import axios from '../axios';
 import constants from '../constants';
 
 const endpoint = "/api/v1/comment"
-const token = localStorage.getItem(constants.ACCESS_TOKEN_KEY);
+const token = localStorage.getItem(constants.REFRESH_TOKEN);
 
 // api: Lấy danh sách comment
 const getCommentList = (id) => {

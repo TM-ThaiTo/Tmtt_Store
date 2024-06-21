@@ -13,17 +13,18 @@ const TRANSPORT_METHOD_OPTIONS = [
 ];
 
 const PRODUCT_TYPES = [
-    { type: 0, label: 'RAM', info: "infoRam", typeString: "ram" },
-    { type: 1, label: 'Ổ cứng', info: "infoDisk", typeString: "disk" },
-    { type: 2, label: 'Laptop', info: "infoLaptop", typeString: "laptop" },
-    { type: 3, label: 'Card màn hình', info: "infoDisplay", typeString: "display" },
-    { type: 4, label: 'Main board', info: "infoMainboard", typeString: "mainboard" },
-    { type: 5, label: 'Tai nghe', info: "infoHeadphone", typeString: "headphone" },
-    { type: 6, label: 'Bàn phím', info: "infoKeyboard", typeString: "keyboard" },
-    { type: 7, label: 'Màn hình', info: "infoMonitor", typeString: "monitor" },
-    { type: 8, label: 'Chuột', info: "infoMouse", typeString: "mouse" },
-    { type: 9, label: 'Router Wifi', info: "infoRouter", typeString: "router" },
-    { type: 10, label: 'Loa', info: "infoSpeaker", typeString: "speaker" },
+    { type: 0, label: 'Tất cả' },
+    { type: 7, label: 'RAM', info: "infoRam", typeString: "ram" },
+    { type: 3, label: 'Ổ cứng', info: "infoDisk", typeString: "disk" },
+    { type: 5, label: 'Laptop', info: "infoLaptop", typeString: "laptop" },
+    { type: 4, label: 'Card màn hình', info: "infoDisplay", typeString: "display" },
+    { type: 6, label: 'Main board', info: "infoMainboard", typeString: "mainboard" },
+    { type: 10, label: 'Tai nghe', info: "infoHeadphone", typeString: "headphone" },
+    { type: 11, label: 'Bàn phím', info: "infoKeyboard", typeString: "keyboard" },
+    { type: 12, label: 'Màn hình', info: "infoMonitor", typeString: "monitor" },
+    { type: 13, label: 'Chuột', info: "infoMouse", typeString: "mouse" },
+    { type: 14, label: 'Router Wifi', info: "infoRouter", typeString: "router" },
+    { type: 15, label: 'Loa', info: "infoSpeaker", typeString: "speaker" },
 ];
 
 const PAYMENTS = [
@@ -34,12 +35,13 @@ const PAYMENTS = [
 
 const ORDER_STATUS = [
     { type: 0, label: 'Tất cả', info: 'Tất cả' },
-    { type: 1, label: 'Đặt hàng', info: 'Đặt hàng' },
-    { type: 2, label: 'Đã tiếp nhân', info: 'Đã tiếp nhận' },
+    { type: 1, label: 'Đã tiếp nhận', info: 'Đặt hàng' },
+    { type: 2, label: 'Đang lấy hàng', info: 'Đang lấy hàng' },
     { type: 3, label: 'Đóng gói xong', info: 'Đóng gói xong' },
-    { type: 4, label: 'Đang vận chuyển', info: 'Đang vận chuyển' },
-    { type: 5, label: 'Giao hàng thành công', info: 'Giao hàng thành công' },
-    { type: 6, label: 'Đã huỷ', info: 'Đã huỷ' },
+    { type: 4, label: 'Đang giao vận chuyển', info: 'Đang giao vận chuyển' },
+    { type: 5, label: 'Đang vận chuyển', info: 'Đang vận chuyển' },
+    { type: 6, label: 'Giao hàng thành công', info: 'Giao hàng thành công' },
+    { type: 7, label: 'Đã huỷ', info: 'Đã huỷ' },
 ]
 
 const ROUTES = {
@@ -1713,6 +1715,28 @@ const LIST_QUESTION_CHATBOT = [
     // }
 ]
 
+const genderType = {
+    1: "Nam",
+    2: "Nữ",
+    3: "Không xác định"
+}
+
+const typeMapping = {
+    5: "laptop",
+    3: "disk",
+    4: "display",
+    6: "mainboard",
+    7: "ram",
+    9: "phone",
+    10: "headphone",
+    11: "keyboard",
+    12: "monitor",
+    13: "mouse",
+    14: "router",
+    15: "speaker",
+    1: "camera"
+};
+
 const constants = {
     REFRESH_TOKEN_KEY: 'refresh_token',
     ACCESS_TOKEN_KEY: 'ttb_atk',
@@ -1798,6 +1822,9 @@ const constants = {
     ORDER_STATUS,
 
     LIST_QUESTION_CHATBOT,
+
+    typeMapping,
+    genderType
 };
 
 export default constants;

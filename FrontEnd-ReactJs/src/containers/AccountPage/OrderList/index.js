@@ -131,7 +131,6 @@ class OrderList extends Component {
                 {orderDetails.isOpen && (
                     <OrderDetail
                         orderId={orderDetails.orderId}
-                        orderD={orderDetails.order}
                         onClose={() =>
                             this.setState({ orderDetails: { ...orderDetails, isOpen: false } })
                         }

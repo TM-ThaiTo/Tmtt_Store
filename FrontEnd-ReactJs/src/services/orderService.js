@@ -2,7 +2,7 @@ import axios from '../axios';
 import constants from '../constants';
 
 const endpoint = "/api/v1/order";
-const authToken = localStorage.getItem(constants.ACCESS_TOKEN_KEY);
+const authToken = localStorage.getItem(constants.REFRESH_TOKEN);
 
 // api: Tạo đơn hàng
 const postCreateOrder = (data) => {
@@ -29,7 +29,8 @@ const getDetailOrder = (idOrder) => {
     return axios.get(endpoint + '/ordercode', {
         params: {
             id: idOrder,
-        }, headers: {
+        }
+        , headers: {
             Authorization: `Bearer ${authToken}`
         },
     })
@@ -59,17 +60,6 @@ const delOrderVnpayApi = (id) => {
     });
 }
 
-// api: tìm kiếm order
-const getSearchOrderApi = (orderCode, orderStatus, orderPayment) => {
-    const params = {
-        codeOrder: orderCode,
-        paymentOrder: orderPayment,
-        statusOrder: orderStatus,
-    }
-    return axios.get('/apis/orders/search-order', {
-        params: params
-    })
-}
 
 export {
     postCreateOrder,
@@ -77,5 +67,4 @@ export {
     getDetailOrder,
     postUpdateVnpayApi,
     delOrderVnpayApi,
-    getSearchOrderApi
 }

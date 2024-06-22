@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { message, Spin, Table, Button } from 'antd';
-import { getAllAdmin } from '../../../services/adminService';
+import { message, Spin, Table, Button, Popconfirm } from 'antd';
+import { getAllAdmin, delCustomerApi } from '../../../services/adminService';
 import { exportToExcel } from '../../../utils/exportFile';
-
+import helpers from '../../../helpers';
+import constants from '../../../constants';
 class AdminUser extends Component {
 
     constructor(props) {
@@ -15,48 +16,108 @@ class AdminUser extends Component {
     }
 
     // cột
+    // columns = [
+    //     {
+    //         title: 'User Name',
+    //         key: 'userName',
+    //         dataIndex: 'userName',
+    //     },
+    //     {
+    //         title: 'Họ tên',
+    //         key: 'fullName',
+    //         dataIndex: 'fullName',
+    //     },
+    //     {
+    //         title: 'Email',
+    //         key: 'email',
+    //         dataIndex: 'email',
+    //     },
+    //     {
+    //         title: 'Quê quán',
+    //         key: 'address',
+    //         dataIndex: 'address',
+    //     },
+    //     {
+    //         title: 'Tuổi',
+    //         key: 'age',
+    //         dataIndex: 'age',
+    //     },
+    //     {
+    //         title: 'Số điện thoại',
+    //         key: 'phone',
+    //         dataIndex: 'phone',
+    //     },
+    //     {
+    //         title: 'Facebook',
+    //         key: 'fb',
+    //         dataIndex: 'fb',
+    //         render: (fb) => (
+    //             <a href={fb} target="blank" rel="noopener noreferrer">
+    //                 Link Facebook
+    //             </a>
+    //         ),
+    //     },
+    // ];
     columns = [
         {
-            title: 'User Name',
-            key: 'userName',
-            dataIndex: 'userName',
-        },
-        {
-            title: 'Họ tên',
-            key: 'fullName',
-            dataIndex: 'fullName',
-        },
+            title: 'ID',
+            key: 'id',
+            dataIndex: 'id',
+            render: (v) => <span>{v}</span>,
+        }, // ID tài khoản
         {
             title: 'Email',
             key: 'email',
             dataIndex: 'email',
-        },
+        }, // Email
+        {
+            title: 'Họ tên',
+            key: 'fullName',
+            dataIndex: 'fullName',
+        }, // Họ tên
         {
             title: 'Quê quán',
             key: 'address',
             dataIndex: 'address',
-        },
+        }, // Quên quán
         {
-            title: 'Tuổi',
-            key: 'age',
-            dataIndex: 'age',
-        },
+            title: 'Ngày sinh',
+            key: 'birthDay',
+            dataIndex: 'birthDay',
+            render: (birthDay) => helpers.formatOrderDate(birthDay, 0)
+        }, // ngày sinh 
         {
-            title: 'Số điện thoại',
-            key: 'phone',
-            dataIndex: 'phone',
-        },
+            title: 'Giới tính',
+            key: 'gender',
+            dataIndex: 'gender',
+            render: (gender) => this.renderGender(gender)
+        }, // Giới tính
         {
             title: 'Facebook',
             key: 'fb',
             dataIndex: 'fb',
-            render: (fb) => (
-                <a href={fb} target="blank" rel="noopener noreferrer">
-                    Link Facebook
-                </a>
+            render: () => (
+                <a href='https://www.facebook.com/to.trinh.520900/' target='blank' rel="noopener noreferrer">Link Facebook</a>
             ),
         },
+        {
+            title: '',
+            render: (_v, records) => (
+                <Popconfirm
+                    title="Bạn có chắc muốn xoá ?"
+                    placement="left"
+                    cancelText="Huỷ bỏ"
+                    okText="Xoá"
+                    onConfirm={() => this.onDelCustomer(records.id)}>
+                    <Button danger>Xoá</Button>
+                </Popconfirm>
+            ),
+        }, // tác vụ
     ];
+    // fn: render giới tính
+    renderGender = (type) => {
+        return constants.genderType[type] || 'Không xác định';
+    }
 
     // event: Khởi tạo đầu tiên
     componentDidMount() {
@@ -108,6 +169,25 @@ class AdminUser extends Component {
         }
     }
 
+    // fn: Xoá người dùng
+    onDelCustomer = async (id) => {
+        try {
+            // Gọi API hoặc service để xoá người dùng theo ID
+            const response = await delCustomerApi(id);
+
+            // Cập nhật UI nếu xoá thành công
+            if (response && response.code === 0) {
+                message.success('Xoá tài khoản thành công');
+                this.setState({
+                    data: this.state.data.filter((item) => item.id !== id),
+                });
+            } else {
+                message.error('Xoá tài khoản thất bại');
+            }
+        } catch (error) {
+            message.error('Xoá tài khoản thất bại');
+        }
+    };
     render() {
         return (
             <>

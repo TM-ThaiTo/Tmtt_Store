@@ -22,9 +22,10 @@ class ResultSearch extends Component {
     showProducts = (list) => {
         list = list ? list : [];
         return list.map((product, index) => {
-            const { avt, name, discount, price, stock, id } = product;
+            const { avt, name, discount, price, stock, id, rates } = product;
             return (
-                <Col key={index} span={24} sm={12} lg={8} xl={6} xxl={4}>
+                // <Col key={index} span={24} sm={12} lg={8} xl={6} xxl={4}>
+                <Col key={index} span={24} sm={12} lg={8} xl={6}>
                     <Link to={`/product/${id}`}>
                         <ProductView
                             name={name}
@@ -32,6 +33,7 @@ class ResultSearch extends Component {
                             stock={stock}
                             avtUrl={avt}
                             discount={parseFloat(discount)}
+                            rate={rates}
                             height={400}
                         />
                     </Link>
@@ -69,7 +71,8 @@ class ResultSearch extends Component {
                     break;
                 // Best-rated
                 case 4:
-                    newList = list.sort((a, b) => helpers.calStar(b.rate) - helpers.calStar(a.rate));
+                    // newList = list.sort((a, b) => helpers.calStar(b.rate) - helpers.calStar(a.rate));
+                    newList = list.sort((a, b) => b.rates - a.rates);
                     break;
                 // Best discount
                 case 5:

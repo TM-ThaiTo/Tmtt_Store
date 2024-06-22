@@ -52,7 +52,7 @@ const getProductPurchased = () => {
 
 // api: tìm kiếm sản phẩm
 const getSearchProductsApi = (value = '', page = 1, perPage = 8) => {
-    return axios.get("/apis/products/search", {
+    return axios.get(endpoint + "/search", {
         params: {
             value: value,
             page: page,

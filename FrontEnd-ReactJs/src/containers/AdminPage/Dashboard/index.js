@@ -27,17 +27,6 @@ class Dashboard extends Component {
                         </div>
                     </Col>
                     {/* 
-                    <Col span={24} xl={12}>
-                        <div className="table-doanhthu">
-                            <AnnualRevenue />
-                        </div>
-                    </Col>
-                    <Col span={24} xl={12}>
-                        <div className="table-doanhthu">
-                            <AnnualRevenue />
-                        </div>
-                    </Col> */}
-
                     {/* Đơn hàng ở tỉnh nào nhiều nhất
                 <Col span={24} xl={12}>
                     <div className="bg-white p-12 bor-rad-8 box-sha-home">

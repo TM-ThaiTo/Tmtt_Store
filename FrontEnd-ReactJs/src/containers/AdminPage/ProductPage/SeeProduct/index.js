@@ -112,7 +112,7 @@ class SeeProduct extends Component {
             key: 'rate',
             dataIndex: 'rate',
             // render: (rate) => this.calStar(rate).toFixed(1),
-            render: (rate) => <>{rate} <i class="fas fa-star"></i></>
+            render: (rate) => <>{rate} <i className="fas fa-star"></i></>
         }, // đánh giá
         {
             title: 'Hành động',

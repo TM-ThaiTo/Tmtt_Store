@@ -65,9 +65,7 @@ class CardDashboard extends Component {
                         <div className='card-title'>
                             <span>Dashboard</span>
                         </div>
-
                         <div className='card-cards'>
-
                             {/* Doanh thu Today */}
                             <div className='card'>
                                 <div className='card-inner'>

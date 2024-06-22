@@ -61,7 +61,7 @@ const getProductToPageAdmin = (codeP = "", nameP = "", typeP = 0) => {
 
 // api: get lấy danh sách admin
 const getAllAdmin = () => {
-    return axios.get(endpoint + "/user/all", {
+    return axios.get(endpoint + "/user/alladmin", {
         headers: {
             Authorization: `Bearer ${token}`
         }

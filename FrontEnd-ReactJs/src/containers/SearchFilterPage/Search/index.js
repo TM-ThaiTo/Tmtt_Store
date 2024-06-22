@@ -5,7 +5,7 @@ import { getSearchProductsApi } from '../../../services/productService.js';
 import ResultSearch from '../../../components/ResultSearch/index.js';
 import helpers from '../../../helpers/index.js';
 import ProductCarousel from '../ProductCarousel/index.js';
-import './index.scss'
+import './index.scss';
 
 class SearchResult extends Component {
     constructor(props) {
@@ -18,59 +18,55 @@ class SearchResult extends Component {
         };
     }
 
+    componentDidMount() {
+        this.fetchData();
+    }
+
     componentDidUpdate(prevProps) {
         if (this.props.location.pathname !== prevProps.location.pathname) {
             this.fetchData();
         }
     }
 
-    // Function to get query parameters from URL
-    getQuery = () => {
-        const search = this.props.location.search;
-        return helpers.queryString(search);
-    };
+    componentWillUnmount() {
+        this.isSubscribed = false;
+    }
 
-    getSearchProducts = async (currentPage, isSubscribe) => {
+    fetchData() {
+        const { page } = this.state;
+        this.setState({ isLoading: true, page: 1 });
+        this.getSearchProducts(1);
+    }
+
+    async getSearchProducts(currentPage) {
         try {
             const query = this.getQuery();
             const keyword = query.find(item => item.hasOwnProperty('keyword'));
             const keywordValue = keyword ? decodeURI(keyword.keyword.replace(/[+]/gi, ' ')) : '';
 
             const result = await getSearchProductsApi(keywordValue, currentPage, 12);
-            if (result && isSubscribe) {
+            if (result) {
                 const data = result.data;
                 const total = result.count;
                 this.setState({ list: data, total: total, isLoading: false });
             }
         } catch (error) {
+            console.error('Error fetching search products:', error);
             this.setState({ list: [], total: 0, isLoading: false });
         }
-    };
-
-    componentDidMount() {
-        this.fetchData();
-    }
-
-    componentWillUnmount() {
-        this.isSubscribe = false;
-    }
-
-    fetchData() {
-        let isSubscribe = true;
-        this.setState({ isLoading: true });
-        const { page } = this.state;
-        if (page !== 1) this.setState({ page: 1 });
-        this.getSearchProducts(1, isSubscribe);
     }
 
     handlePageChange = page => {
-        let isSubscribe = true;
         this.setState({ isLoading: true, page });
-        this.getSearchProducts(page, isSubscribe);
+        this.getSearchProducts(page);
+    };
+
+    getQuery = () => {
+        const search = this.props.location.search;
+        return helpers.queryString(search);
     };
 
     render() {
-        // Lấy dữ liệu từ state
         const { list, page, total, isLoading } = this.state;
         const query = this.getQuery();
         const keyword = query.find(item => item.hasOwnProperty('keyword'));
@@ -98,25 +94,26 @@ class SearchResult extends Component {
                         size="large"
                     />
                 ) : (
-                    <>
-                        {/* Search result */}
-                        <div className='locsanpham'>
+                    /* Search result */
+                    <div className='locsanpham'>
+                        {list === null ? (
+                            <ResultSearch initList={[]} />
+                        ) : (
                             <ResultSearch initList={list} />
-                        </div>
-
-                        {/* Pagination */}
-                        {total > 0 && (
-                            <div className='pagination'>
-                                <Pagination
-                                    total={total}
-                                    current={page}
-                                    showSizeChanger={false}
-                                    pageSize={12}
-                                    onChange={this.handlePageChange}
-                                />
-                            </div>
                         )}
-                    </>
+                    </div>
+                )}
+
+                {/* Pagination */}
+                {!isLoading && list && list.length > 0 && (
+                    <div className='pagination'>
+                        <Pagination
+                            total={total}
+                            current={page}
+                            pageSize={12}
+                            onChange={this.handlePageChange}
+                        />
+                    </div>
                 )}
             </div>
         );

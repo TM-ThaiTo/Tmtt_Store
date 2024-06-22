@@ -1,7 +1,5 @@
 package com.trinhminhthaito.backend_springboot.dtos.request;
 
-import java.util.Date;
-
 public record SignUpRequest(
 		String username,
 		String password,

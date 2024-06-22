@@ -36,8 +36,12 @@ public class CloudinaryServicesImp implements CloudinaryServices {
 				String[] parts = avtBase64.split(",");
 				String base64Content = parts[1];
 				String folderPath = "products/" + code;
+
+				@SuppressWarnings("unchecked")
 				Map<String, Object> uploadParams = ObjectUtils.asMap("folder", folderPath);
 				byte[] decodedBytes = Base64.getDecoder().decode(base64Content);
+
+				@SuppressWarnings("unchecked")
 				Map<String, Object> uploadResult = cloudinary.uploader().upload(decodedBytes, uploadParams);
 				return (String) uploadResult.get("secure_url");
 			} else {
@@ -66,9 +70,12 @@ public class CloudinaryServicesImp implements CloudinaryServices {
 						String[] parts = avtBase64.split(",");
 						String base64Content = parts[1];
 
+						@SuppressWarnings("unchecked")
 						Map<String, Object> uploadParams = ObjectUtils.asMap("folder", folderPath);
 
 						byte[] decodedBytes = Base64.getDecoder().decode(base64Content);
+
+						@SuppressWarnings("unchecked")
 						Map<String, Object> uploadResult = cloudinary.uploader().upload(decodedBytes, uploadParams);
 
 						imageUrls.add((String) uploadResult.get("secure_url"));
@@ -99,9 +106,12 @@ public class CloudinaryServicesImp implements CloudinaryServices {
 
 				String folderPath = "products/" + code + "/desc";
 
+				@SuppressWarnings("unchecked")
 				Map<String, Object> uploadParams = ObjectUtils.asMap("folder", folderPath);
 
 				byte[] decodedBytes = Base64.getDecoder().decode(base64Content);
+
+				@SuppressWarnings("unchecked")
 				Map<String, Object> uploadResult = cloudinary.uploader().upload(decodedBytes, uploadParams);
 
 				return (String) uploadResult.get("secure_url");
@@ -120,6 +130,7 @@ public class CloudinaryServicesImp implements CloudinaryServices {
 		MessageResponse messageResponse = new MessageResponse();
 		try {
 			// Thực hiện xóa thư mục và tất cả các tài nguyên con từ Cloudinary
+			@SuppressWarnings("unchecked")
 			Map<String, String> deleteResult = cloudinary.api().deleteResourcesByPrefix(folderPath,
 					ObjectUtils.emptyMap());
 

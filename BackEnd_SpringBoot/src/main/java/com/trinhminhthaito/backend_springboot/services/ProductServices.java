@@ -22,4 +22,8 @@ public interface ProductServices {
 	MessageDataResponse getFilterProductServices(int type, int page, int perPage);
 
 	MessageDataResponse getSearchProduct(String nameP, String codeP, Number typeP);
+
+	MessageDataResponse getOutstanding();
+
+	MessageDataResponse getReOrder(String token);
 }

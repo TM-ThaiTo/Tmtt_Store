@@ -5,6 +5,7 @@ import com.trinhminhthaito.backend_springboot.dtos.response.ProductResponse;
 import com.trinhminhthaito.backend_springboot.services.ProductServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -59,6 +60,21 @@ public class ProductController {
 	public ResponseEntity<?> getFilterProduct(@RequestParam int type, @RequestParam int page,
 			@RequestParam int perPage) {
 		MessageDataResponse messageDataResponse = productServices.getFilterProductServices(type, page, perPage);
+		return ResponseEntity.ok(messageDataResponse);
+	}
+
+	// api: get product giảm giá cao nhất tới thấp nhất
+	@GetMapping("/outstanding-product")
+	public ResponseEntity<?> getOutstanding() {
+		MessageDataResponse messageDataResponse = productServices.getOutstanding();
+		return ResponseEntity.ok(messageDataResponse);
+	}
+
+	// api: get product đã mua
+	@GetMapping("/list-reorder")
+	@PreAuthorize("hasAuthority('SCOPE_USER')")
+	public ResponseEntity<?> getReOrder(@RequestHeader("Authorization") String token) {
+		MessageDataResponse messageDataResponse = productServices.getReOrder(token);
 		return ResponseEntity.ok(messageDataResponse);
 	}
 }

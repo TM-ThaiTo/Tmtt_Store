@@ -54,7 +54,7 @@ public class SecurityConfig {
 			"/api/v1/product/type",
 			"/api/v1/product/page",
 			"/api/v1/product/filter",
-
+			"/api/v1/product/outstanding-product", // get
 			// address
 			"/api/v1/address/all",
 			"/api/v1/address/provinces",

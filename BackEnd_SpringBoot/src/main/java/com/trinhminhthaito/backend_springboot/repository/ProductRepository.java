@@ -32,6 +32,10 @@ public interface ProductRepository extends MongoRepository<Product, String>, Pro
 	List<Product> findByNameContainingIgnoreCaseAndCodeContainingIgnoreCaseAndType(String name, String code,
 			Number type);
 
+	Page<Product> findTop8ByOrderByRatesDesc(Pageable pageable);
+
+	Page<Product> findTop8ByOrderByDiscountDesc(Pageable pageable);
+
 	@NonNull
 	Page<Product> findAll(@NonNull Pageable pageable);
 }

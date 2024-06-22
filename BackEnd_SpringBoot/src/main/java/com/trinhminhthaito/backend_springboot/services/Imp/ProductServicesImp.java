@@ -1,5 +1,6 @@
 package com.trinhminhthaito.backend_springboot.services.Imp;
 
+import com.trinhminhthaito.backend_springboot.config.jwt.JwtProvider;
 import com.trinhminhthaito.backend_springboot.dtos.request.productRequest.AddProductRequest;
 import com.trinhminhthaito.backend_springboot.dtos.request.productRequest.DescProductRequest.DescRequest;
 import com.trinhminhthaito.backend_springboot.dtos.request.productRequest.DetailProductRequest.ProductDetailRequest;
@@ -11,7 +12,13 @@ import com.trinhminhthaito.backend_springboot.helper.*;
 import com.trinhminhthaito.backend_springboot.models.productModels.DescItem;
 import com.trinhminhthaito.backend_springboot.models.productModels.DescProduct;
 import com.trinhminhthaito.backend_springboot.models.productModels.Product;
+import com.trinhminhthaito.backend_springboot.models.accountModels.Account;
+import com.trinhminhthaito.backend_springboot.models.orderModels.ItemsOrder;
+import com.trinhminhthaito.backend_springboot.models.orderModels.Order;
+import com.trinhminhthaito.backend_springboot.repository.OrderRepository;
 import com.trinhminhthaito.backend_springboot.repository.ProductRepository;
+import com.trinhminhthaito.backend_springboot.repository.accountRepository.AccountRepository;
+import com.trinhminhthaito.backend_springboot.services.AccountServices;
 import com.trinhminhthaito.backend_springboot.services.CloudinaryServices;
 import com.trinhminhthaito.backend_springboot.services.ProductServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +27,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,14 +40,23 @@ public class ProductServicesImp implements ProductServices {
 	private final DetailProductHelper detailProductHelper;
 	private final ProductRepository productRepository;
 	private final CloudinaryServices cloudinaryServices;
+	private final AccountRepository accountRepository;
+	private final OrderRepository orderRepository;
+	private final JwtProvider jwtProvider;
 
 	@Autowired
 	private ProductServicesImp(DetailProductHelper detailProductHelper,
 			CloudinaryServices cloudinaryServices,
-			ProductRepository productRepository) {
+			ProductRepository productRepository,
+			JwtProvider jwtProvider,
+			AccountRepository accountRepository,
+			OrderRepository orderRepository) {
 		this.detailProductHelper = detailProductHelper;
 		this.cloudinaryServices = cloudinaryServices;
 		this.productRepository = productRepository;
+		this.jwtProvider = jwtProvider;
+		this.accountRepository = accountRepository;
+		this.orderRepository = orderRepository;
 	}
 
 	// fn: check product
@@ -323,4 +342,87 @@ public class ProductServicesImp implements ProductServices {
 		return messageDataResponse;
 	}
 
+	// fn: get product giảm giá
+	@Override
+	public MessageDataResponse getOutstanding() {
+		MessageDataResponse messageDataResponse = new MessageDataResponse();
+		try {
+			// Lấy 8 sản phẩm có rate cao nhất
+			List<Product> topRatedProducts = productRepository.findTop8ByOrderByRatesDesc(PageRequest.of(0, 8))
+					.getContent();
+			// Lấy 8 sản phẩm có discount cao nhất
+			List<Product> topDiscountedProducts = productRepository.findTop8ByOrderByDiscountDesc(PageRequest.of(0, 8))
+					.getContent();
+
+			List<Product> combinedList = new ArrayList<>();
+			combinedList.addAll(topRatedProducts);
+			combinedList.addAll(topDiscountedProducts);
+
+			// Trộn ngẫu nhiên danh sách sản phẩm
+			Collections.shuffle(combinedList);
+
+			if (combinedList.isEmpty()) {
+				messageDataResponse.setCode(1);
+				messageDataResponse.setMessage("Không có sản phẩm nổi bật");
+			} else {
+				messageDataResponse.setCode(0);
+				messageDataResponse.setMessage("Success");
+				messageDataResponse.setData(combinedList);
+				messageDataResponse.setCount(combinedList.size());
+			}
+		} catch (Exception ex) {
+			messageDataResponse.setCode(-1);
+			messageDataResponse.setMessage("Lỗi server " + ex.getMessage());
+		}
+		return messageDataResponse;
+	}
+
+	// fn: getReOrder
+	@Override
+	public MessageDataResponse getReOrder(String tokenR) {
+		MessageDataResponse messageDataResponse = new MessageDataResponse();
+		try {
+			String token = jwtProvider.extractTokenFromHeader(tokenR);
+			String userName = jwtProvider.getUsernameFromToken(token);
+			Optional<Account> accountOptional = accountRepository.findByUsername(userName);
+			if (accountOptional == null) {
+				messageDataResponse.setCode(1);
+				messageDataResponse.setMessage("User Not Found");
+			} else {
+				Account account = accountOptional.get();
+				List<Order> listOrders = orderRepository.findByCustomerOrderCustomerId(account.getId());
+
+				if (listOrders == null) {
+					messageDataResponse.setCode(2);
+					messageDataResponse.setMessage("User have not order");
+					return messageDataResponse;
+				}
+
+				List<ItemsOrder> lItemsOrders = new ArrayList<>();
+				for (Order items : listOrders) {
+					for (ItemsOrder item : items.getItemsOrders()) {
+						lItemsOrders.add(item);
+					}
+				}
+
+				// Extract unique idProduct values
+				Set<String> uniqueProductIds = lItemsOrders.stream()
+						.map(ItemsOrder::getProductId)
+						.collect(Collectors.toSet());
+
+				// Convert Set to List if needed
+				List<String> idProductList = new ArrayList<>(uniqueProductIds);
+
+				List<Product> products = productRepository.findAllById(idProductList);
+
+				messageDataResponse.setCode(0);
+				messageDataResponse.setMessage("Success");
+				messageDataResponse.setData(products);
+			}
+		} catch (Exception exception) {
+			messageDataResponse.setCode(-1);
+			messageDataResponse.setMessage("Lỗi server: " + exception.getMessage());
+		}
+		return messageDataResponse;
+	}
 }

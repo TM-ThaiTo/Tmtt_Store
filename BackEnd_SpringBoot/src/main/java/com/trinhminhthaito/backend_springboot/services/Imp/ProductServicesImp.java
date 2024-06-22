@@ -18,7 +18,6 @@ import com.trinhminhthaito.backend_springboot.models.orderModels.Order;
 import com.trinhminhthaito.backend_springboot.repository.OrderRepository;
 import com.trinhminhthaito.backend_springboot.repository.ProductRepository;
 import com.trinhminhthaito.backend_springboot.repository.accountRepository.AccountRepository;
-import com.trinhminhthaito.backend_springboot.services.AccountServices;
 import com.trinhminhthaito.backend_springboot.services.CloudinaryServices;
 import com.trinhminhthaito.backend_springboot.services.ProductServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +42,7 @@ public class ProductServicesImp implements ProductServices {
 	private final AccountRepository accountRepository;
 	private final OrderRepository orderRepository;
 	private final JwtProvider jwtProvider;
+	private final ChangeValueToType changeValueToType;
 
 	@Autowired
 	private ProductServicesImp(DetailProductHelper detailProductHelper,
@@ -50,13 +50,15 @@ public class ProductServicesImp implements ProductServices {
 			ProductRepository productRepository,
 			JwtProvider jwtProvider,
 			AccountRepository accountRepository,
-			OrderRepository orderRepository) {
+			OrderRepository orderRepository,
+			ChangeValueToType changeValueToType) {
 		this.detailProductHelper = detailProductHelper;
 		this.cloudinaryServices = cloudinaryServices;
 		this.productRepository = productRepository;
 		this.jwtProvider = jwtProvider;
 		this.accountRepository = accountRepository;
 		this.orderRepository = orderRepository;
+		this.changeValueToType = changeValueToType;
 	}
 
 	// fn: check product
@@ -289,24 +291,6 @@ public class ProductServicesImp implements ProductServices {
 		return messageResponse;
 	}
 
-	// fn: filter product
-	@Override
-	public MessageDataResponse getFilterProductServices(int type, int page, int perPage) {
-		MessageDataResponse messageDataResponse = new MessageDataResponse();
-		try {
-			List<Product> products = productRepository.findByType(type);
-
-			messageDataResponse.setCode(0);
-			messageDataResponse.setMessage("suscces");
-			messageDataResponse.setData(products);
-			messageDataResponse.setCount(products.size());
-		} catch (Exception ex) {
-			messageDataResponse.setCode(-1);
-			messageDataResponse.setMessage("Lỗi server: " + ex.getMessage());
-		}
-		return messageDataResponse;
-	}
-
 	// fn: search product
 	@Override
 	public MessageDataResponse getSearchProduct(String nameP, String codeP, Number typeP) {
@@ -418,6 +402,57 @@ public class ProductServicesImp implements ProductServices {
 				messageDataResponse.setCode(0);
 				messageDataResponse.setMessage("Success");
 				messageDataResponse.setData(products);
+			}
+		} catch (Exception exception) {
+			messageDataResponse.setCode(-1);
+			messageDataResponse.setMessage("Lỗi server: " + exception.getMessage());
+		}
+		return messageDataResponse;
+	}
+
+	// fn: filter product
+	@Override
+	public MessageDataResponse getFilterProductServices(int type, int page, int perPage) {
+		MessageDataResponse messageDataResponse = new MessageDataResponse();
+		try {
+			List<Product> products = productRepository.findByType(type);
+
+			messageDataResponse.setCode(0);
+			messageDataResponse.setMessage("suscces");
+			messageDataResponse.setData(products);
+			messageDataResponse.setCount(products.size());
+		} catch (Exception ex) {
+			messageDataResponse.setCode(-1);
+			messageDataResponse.setMessage("Lỗi server: " + ex.getMessage());
+		}
+		return messageDataResponse;
+	}
+
+	// fn: search product page user
+	public MessageDataResponse getSearchProductPageUser(String value, Number page, Number perPage) {
+		MessageDataResponse messageDataResponse = new MessageDataResponse();
+		try {
+			// Gọi hàm getProductType từ ChangeValueToType để lấy loại sản phẩm
+			Number productType = changeValueToType.productTypeMap(value);
+
+			if (productType.intValue() == -1) {
+				messageDataResponse.setCode(1);
+				messageDataResponse.setMessage("Không tìm thấy loại sản phẩm phù hợp");
+			} else {
+				// Thực hiện logic tìm kiếm sản phẩm dựa trên productType
+				List<Product> products = productRepository.findByType(productType,
+						PageRequest.of(page.intValue() - 1, perPage.intValue()));
+
+				if (products.isEmpty()) {
+					messageDataResponse.setCode(2);
+					messageDataResponse.setMessage("Không tìm thấy sản phẩm");
+				} else {
+					messageDataResponse.setCode(0);
+					messageDataResponse.setMessage("Thành công");
+					messageDataResponse.setData(products);
+					messageDataResponse.setCount(products.size());
+				}
+				// messageDataResponse.setData(productType);
 			}
 		} catch (Exception exception) {
 			messageDataResponse.setCode(-1);

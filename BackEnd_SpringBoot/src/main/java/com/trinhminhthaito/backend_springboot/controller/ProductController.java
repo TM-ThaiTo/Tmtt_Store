@@ -55,14 +55,6 @@ public class ProductController {
 		return ResponseEntity.ok(messageResponse);
 	}
 
-	// api: filter product
-	@GetMapping("/filter")
-	public ResponseEntity<?> getFilterProduct(@RequestParam int type, @RequestParam int page,
-			@RequestParam int perPage) {
-		MessageDataResponse messageDataResponse = productServices.getFilterProductServices(type, page, perPage);
-		return ResponseEntity.ok(messageDataResponse);
-	}
-
 	// api: get product giảm giá cao nhất tới thấp nhất
 	@GetMapping("/outstanding-product")
 	public ResponseEntity<?> getOutstanding() {
@@ -75,6 +67,22 @@ public class ProductController {
 	@PreAuthorize("hasAuthority('SCOPE_USER')")
 	public ResponseEntity<?> getReOrder(@RequestHeader("Authorization") String token) {
 		MessageDataResponse messageDataResponse = productServices.getReOrder(token);
+		return ResponseEntity.ok(messageDataResponse);
+	}
+
+	// api: filter product
+	@GetMapping("/filter")
+	public ResponseEntity<?> getFilterProduct(@RequestParam int type, @RequestParam int page,
+			@RequestParam int perPage) {
+		MessageDataResponse messageDataResponse = productServices.getFilterProductServices(type, page, perPage);
+		return ResponseEntity.ok(messageDataResponse);
+	}
+
+	// api: search product page user
+	@GetMapping("/search")
+	public ResponseEntity<?> getSearchProductPageUser(@RequestParam String value, @RequestParam Number page,
+			@RequestParam Number perPage) {
+		MessageDataResponse messageDataResponse = productServices.getSearchProductPageUser(value, page, perPage);
 		return ResponseEntity.ok(messageDataResponse);
 	}
 }

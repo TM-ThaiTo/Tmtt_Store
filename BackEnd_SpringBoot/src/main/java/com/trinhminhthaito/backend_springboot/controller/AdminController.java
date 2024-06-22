@@ -113,7 +113,7 @@ public class AdminController {
 	}
 
 	// api: get user admin
-	@GetMapping("/user/admin")
+	@GetMapping("/user/alladmin")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<?> getAllAdmin() {
 		MessageDataResponse messageDataResponse = userServices.getAllAdmin();

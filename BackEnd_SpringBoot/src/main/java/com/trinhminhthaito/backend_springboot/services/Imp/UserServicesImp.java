@@ -140,7 +140,41 @@ public class UserServicesImp implements UserServices {
 	@Override
 	public MessageDataResponse getAllAdmin() {
 		MessageDataResponse messageDataResponse = new MessageDataResponse();
+		try {
+			List<Account> listAccounts = accountRepository.findAll();
 
+			if (listAccounts == null || listAccounts.isEmpty()) {
+				messageDataResponse.setCode(1);
+				messageDataResponse.setMessage("Account not found");
+			} else {
+				List<UserDto> lDtos = new ArrayList<>();
+				for (Account item : listAccounts) {
+					String role = item.getRoles().iterator().next();
+					UserDto userDto = new UserDto();
+					if ("ADMIN".equals(role)) {
+						User user = userRepository.findByAccountId(item.getId());
+						if (user == null) {
+							continue;
+						}
+						userDto.setId(item.getId());
+						userDto.setEmail(item.getUsername());
+						userDto.setFullName(user.getFullName());
+						userDto.setBirthDay(user.getDateOfBirth());
+						userDto.setGender(user.getGender());
+						userDto.setAddress(user.getAddress());
+						userDto.setAuthType(item.getAuthType());
+						lDtos.add(userDto);
+					}
+				}
+				messageDataResponse.setCode(0);
+				messageDataResponse.setMessage("Success");
+				messageDataResponse.setData(lDtos);
+				messageDataResponse.setCount(lDtos.size());
+			}
+		} catch (Exception ex) {
+			messageDataResponse.setCode(-1);
+			messageDataResponse.setMessage("Server error: " + ex.getMessage());
+		}
 		return messageDataResponse;
 	}
 

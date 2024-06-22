@@ -26,4 +26,6 @@ public interface ProductServices {
 	MessageDataResponse getOutstanding();
 
 	MessageDataResponse getReOrder(String token);
+
+	MessageDataResponse getSearchProductPageUser(String value, Number page, Number perPage);
 }

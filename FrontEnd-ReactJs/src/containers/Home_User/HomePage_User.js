@@ -30,11 +30,11 @@ class HomePage_User extends Component {
                         </Col>
 
                         {/* nỗi bật */}
-                        {/* <DoanhMuc
+                        <DoanhMuc
                             type="NOIBAT"
                             currentPage={1}
                             productsPerPage={8}
-                        /> */}
+                        />
 
                         {/* Carousel */}
                         <Col span={24} className="hp-03">

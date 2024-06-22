@@ -1,7 +1,9 @@
+// routeApp.js
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { PATH } from "../utils";
 import constants from '../constants/index.js';
+import ProtectedRoute from './protectedRoute.js';
 
 // các giao diện
 import HomePage from "../containers/Home_User/HomePage_User";
@@ -16,21 +18,21 @@ import ProductDetailPage from '../containers/ProductDetailPage/index.js';
 import SearchResult from '../containers/SearchFilterPage/Search/index.js';
 import FilterResult from '../containers/SearchFilterPage/Filter/index.js';
 
-const routes = [
+const routes = (isAuth) => [
     {
         path: PATH.LOGIN_USER,
         exact: true,
-        main: () => <LOGIN />
+        main: () => <ProtectedRoute component={LOGIN} isAuth={isAuth} redirectTo={PATH.HOME} />
     },
     {
         path: PATH.SIGNUP_USER,
         exact: true,
-        main: () => <SIGNUP />
+        main: () => <ProtectedRoute component={SIGNUP} isAuth={isAuth} redirectTo={PATH.HOME} />
     },
     {
         path: PATH.FORGOTPASSWORD,
         exact: true,
-        main: () => <ForgotPassword />
+        main: () => <ProtectedRoute component={ForgotPassword} isAuth={isAuth} redirectTo={PATH.HOME} />
     },
     {
         path: PATH.HOME,
@@ -78,7 +80,7 @@ const renderRoutes = (routes) => {
     return routes.map((route, index) => {
         const { path, exact, main } = route;
         return <Route key={index} path={path} exact={exact} component={main} />
-    })
+    });
 };
 
 const routeConfig = {

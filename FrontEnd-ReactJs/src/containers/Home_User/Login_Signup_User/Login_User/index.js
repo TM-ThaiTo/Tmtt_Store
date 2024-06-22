@@ -33,10 +33,7 @@ class Login_User extends Component {
             localStorage.setItem(constants.REFRESH_TOKEN_KEY, data.refreshToken);
             this.props.setIsAuth(true);
             this.props.getUser();
-
-            // if (process.env.NODE_ENV === 'production')
             localStorage.setItem(constants.ACCESS_TOKEN_KEY, data.accessToken);
-
             setTimeout(() => {
                 this.props.history.push('/');
                 window.location.reload();

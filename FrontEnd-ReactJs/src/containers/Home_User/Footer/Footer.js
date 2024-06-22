@@ -47,20 +47,20 @@ class Footer extends Component {
                                 Trường Đại Học Công Nghệ TP.HCM-HUTECH
                             </div>
                             <div className='gioithieumon'>
-                                <span>Đồ án cơ sở</span>
+                                <span>Đồ án môn học: Lập trình ứng dụng với JAVA</span>
                             </div>
                             <div className='giangvien'>
-                                <span>Giảng viên: Ths. Trịnh Công Nhựt</span>
+                                <span>Giảng viên: Ths. Nguyễn Huy Cường</span>
                             </div>
                             <div className='detai'>
-                                <span>Đề tài: Website bán máy tính</span>
+                                <span>Đề tài: Website bán máy tính và linh kiện máy tính</span>
                             </div>
                             <div className='nguoithuchien'>
                                 <span>
-                                    Sinh viên thực hiện: Trịnh Minh Thái Tố
+                                    Sinh viên: Trịnh Minh Thái Tố &nbsp; MSSV: 2180608122
                                 </span>
                                 <span>
-                                    MSSV: 2180608122
+
                                 </span>
                             </div>
                         </div>

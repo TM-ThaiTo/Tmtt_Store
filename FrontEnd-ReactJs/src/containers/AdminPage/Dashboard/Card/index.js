@@ -45,7 +45,12 @@ class CardDashboard extends Component {
     componentDidMount = async () => {
         this.getCards();
     }
-
+    formatProductPrice = (price) => {
+        return new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(price);
+    };
     render() {
         const { isLoading, orders, revenue, products, customers } = this.state;
         return (
@@ -72,7 +77,7 @@ class CardDashboard extends Component {
                                     </div>
                                     <i className="fas fa-dollar-sign card_icon"></i>
                                 </div>
-                                <span className='card-value'>{revenue}</span>
+                                <span className='card-value'>{this.formatProductPrice(revenue)}</span>
                             </div>
 
                             {/* Order mới trong ngày */}

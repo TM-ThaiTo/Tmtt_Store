@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card } from 'antd';
+import { Card, Rate } from 'antd';
 import PropTypes from 'prop-types';
 import './index.scss';
 
@@ -41,6 +41,7 @@ class ProductView extends Component {
             stock,
             action,
             height,
+            rate,
             maxWidth,
         } = this.props;
 
@@ -100,6 +101,18 @@ class ProductView extends Component {
                 {stock === 0 && (
                     <b className="Product-View-stock font-size-16px">Đang hết hàng</b>
                 )}
+
+                {/* Đánh giá sản phẩm */}
+                <div className="Product-View-rate m-b-10">
+                    {rate == null || rate === 0 ? (
+                        <span className="ant-rate-text">(Chưa có đánh giá)</span>
+                    ) : (
+                        <>
+                            <Rate disabled defaultValue={rate} />
+                            <span className="ant-rate-text">({rate} sao)</span>
+                        </>
+                    )}
+                </div>
 
                 {/* Các nút bấm thêm nếu có */}
                 <div className="d-flex m-t-10 justify-content-end">

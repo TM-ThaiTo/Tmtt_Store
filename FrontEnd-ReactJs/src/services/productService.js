@@ -1,10 +1,12 @@
 import axios from '../axios';
+import constants from '../constants';
 
-const endpoint = "/api/v1"
+const endpoint = "/api/v1/product"
+const token = localStorage.getItem(constants.REFRESH_TOKEN_KEY);
 
 // api: lấy sản phẩm theo id
 const getProductById = (id) => {
-    return axios.get(endpoint + "/product/one",
+    return axios.get(endpoint + "/one",
         {
             params: {
                 id: id,
@@ -19,18 +21,8 @@ const getAPIProductList = () => {
 }
 
 // api: GET lấy sản phẩm và phân trang
-// const getProductAndPage = () => {
-//     // return axios.get("/apis/products/list/product", { params: { PageNumber, PageSize } });
-//     return axios.get("/product/page", {
-//         params: {
-//             page: 1,
-//             size: 1
-//         },
-//     });
-// }
-
 const getProductAndPage = (PageNumber = 1, PageSize = 8) => {
-    return axios.get(endpoint + "/product/page", {
+    return axios.get(endpoint + "/page", {
         params: {
             page: PageNumber,
             size: PageSize
@@ -40,7 +32,7 @@ const getProductAndPage = (PageNumber = 1, PageSize = 8) => {
 
 // api lấy sản phẩm theo loại (vd: laptop, ...)
 const getProductType = (type, id) => {
-    return axios.get(endpoint + "/product/type", {
+    return axios.get(endpoint + "/type", {
         params:
         {
             idType: type,
@@ -51,10 +43,9 @@ const getProductType = (type, id) => {
 
 // api lấy sản phẩm đã từng mua của người dùng đã đăng nhập
 const getProductPurchased = () => {
-    const token = localStorage.getItem("refresh_token");
-    return axios.get("/apis/products/list-reorder", {
-        params: {
-            token: token
+    return axios.get(endpoint + "/list-reorder", {
+        headers: {
+            Authorization: `Bearer ${token}`
         }
     })
 }
@@ -81,7 +72,7 @@ const getFilterProductApi = (
         page,
         perPage,
     }
-    return axios.get(endpoint + "/product/filter", {
+    return axios.get(endpoint + "/filter", {
         params
     });
 }
@@ -91,11 +82,9 @@ const getFilterProductApi_v2 = (data) => {
     return axios.post("apis/products/filter_v2", data);
 }
 
-
-
 // api: lấy sản phẩm nỗi bật
 const getProductOutstandong = () => {
-    return axios.get("apis/products/outstanding-product");
+    return axios.get(endpoint + "/outstanding-product");
 }
 
 export {

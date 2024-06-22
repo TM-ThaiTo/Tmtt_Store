@@ -1,7 +1,8 @@
+// App.js
 import React, { Component, Fragment, Suspense } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-// cac route
+// các route
 import routesConfig from '../config/routeApp.js';
 import { PATH } from '../utils/constant.js';
 // các giao diện
@@ -9,7 +10,6 @@ import AdminPage from './AdminPage/index.js';
 import NotFound from '../components/NotFound/NotFound.js';
 import GlobalLoading from '../components/Loading/Global/index.js';
 import HeaderView from '../components/HeaderView/index.js';
-// import ScrollTo from '../components/ScrollTo/index.js';
 import ContactIcon from '../components/ContactIcon/index.js';
 import CustomScrollbars from '../components/Custom/ScrollBar/index.js';
 import Footer from './Home_User/Footer/Footer.js';
@@ -33,17 +33,13 @@ class App extends Component {
         if (this.props.isAuth && !prevProps.isAuth) {
             this.props.getUserRequest();
         }
-        // if (this.props.isAuth !== prevProps.isAuth) {
-        //     // Call the API if isAuth has become true
-        //     if (this.props.isAuth) {
-        //         this.props.getUserRequest();
-        //     }
-        // }
     }
 
     // fn: rendering
     render() {
-        const { renderRoutes, routes } = routesConfig;
+        const { isAuth } = this.props;
+        const routes = routesConfig.routes(isAuth);
+        const renderRoutes = routesConfig.renderRoutes;
         const isUserRoute = !window.location.pathname.startsWith(PATH.ADMIN);
         return (
             <Fragment>
@@ -54,7 +50,7 @@ class App extends Component {
 
                                 {/* route ADMIN */}
                                 <Switch>
-                                    <Route path={PATH.ADMIN} exact component={(AdminPage)} />
+                                    <Route path={PATH.ADMIN} exact component={AdminPage} />
                                 </Switch>
 
                                 {/* route USER */}
@@ -62,9 +58,8 @@ class App extends Component {
                                     <>
                                         <HeaderView />
                                         <ContactIcon />
-                                        {/* <ScrollTo /> */}
-                                        <Switch >
-                                            {renderRoutes(routes)};
+                                        <Switch>
+                                            {renderRoutes(routes)}
                                             <Route>
                                                 <NotFound />
                                             </Route>

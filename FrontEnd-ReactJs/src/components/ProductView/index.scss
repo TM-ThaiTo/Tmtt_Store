@@ -66,6 +66,21 @@
         width: auto;
         height: auto;
     }
+
+    .Product-View-rate {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+
+        .ant-rate {
+            font-size: 16px; // Tùy chỉnh kích thước sao
+        }
+
+        .ant-rate-text {
+            margin-left: 8px;
+            color: black; // Màu vàng
+        }
+    }
 }
 
 a {

@@ -625,8 +625,7 @@ class PaymentPage extends Component {
                                                     Thanh toán Online qua cổng VNPAY
                                                 </b>
                                                 <p>
-                                                    Thanh toán qua Internet Banking, Visa, Master, JCB,
-                                                    VNPAY-QR.
+                                                    Thanh toán qua Internet Banking, Visa, Master, JCB,VNPAY-QR.
                                                 </p>
                                             </div>
                                         </Col>

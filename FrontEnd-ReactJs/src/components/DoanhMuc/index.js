@@ -126,7 +126,7 @@ class DoanhMuc extends Component {
         const currentProducts = list.slice(indexOfFirstProduct, indexOfLastProduct);
 
         return currentProducts.map((product, index) => {
-            const { avt, name, price, discount, stock, id } = product;
+            const { avt, name, price, discount, stock, id, rates } = product;
             return (
                 <Col key={index} span={24} sm={12} lg={8} xl={6}>
                     <Link to={`/product/${id}`}>
@@ -136,6 +136,7 @@ class DoanhMuc extends Component {
                             price={price}
                             stock={stock}
                             avtUrl={avt}
+                            rate={rates}
                             discount={parseFloat(discount)}
                             height={400}
                         />

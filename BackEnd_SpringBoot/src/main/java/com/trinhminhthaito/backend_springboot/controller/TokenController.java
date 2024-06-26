@@ -9,6 +9,8 @@ import com.trinhminhthaito.backend_springboot.models.accountModels.Account;
 import com.trinhminhthaito.backend_springboot.repository.accountRepository.AccountRepository;
 import com.trinhminhthaito.backend_springboot.services.AccountServices;
 import com.trinhminhthaito.backend_springboot.services.AuthServices;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +25,11 @@ public class TokenController {
 	private final AccountRepository accountRepository;
 	private final AuthServices authServices;
 
+	@Autowired
 	public TokenController(JwtProvider jwtProvider,
-						   AccountRepository accountRepository,
-						   AccountServices accountServices,
-						   AuthServices authServices) {
+			AccountRepository accountRepository,
+			AccountServices accountServices,
+			AuthServices authServices) {
 		this.jwtProvider = jwtProvider;
 		this.accountRepository = accountRepository;
 		this.accountServices = accountServices;
@@ -37,21 +40,21 @@ public class TokenController {
 	@Transactional
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-	  	 var account = accountRepository.findByUsername(loginRequest.email());
-		 if (account.isEmpty()) {
-			 return ResponseEntity.badRequest().body(new MessageResponse(1, "Invalid username or password"));
-		 } // check account
+		var account = accountRepository.findByUsername(loginRequest.email());
+		if (account.isEmpty()) {
+			return ResponseEntity.badRequest().body(new MessageResponse(1, "Invalid username or password"));
+		} // check account
 
 		Account account1 = accountServices.findAccountByUserName(loginRequest.email());
-		 // check password
-		 MessageResponse response = accountServices.passwordCheck(loginRequest);
-		 if(response.getCode() != 0){
-			 return ResponseEntity.badRequest().body(response);
-		 }
+		// check password
+		MessageResponse response = accountServices.passwordCheck(loginRequest);
+		if (response.getCode() != 0) {
+			return ResponseEntity.badRequest().body(response);
+		}
 
-		 String role = account.get().getRoles().iterator().next();
-		 String username = account.get().getUsername();
-	    String jwt_AccessToken = jwtProvider.createAccessToken(role, username); // tạo AccessToken
+		String role = account.get().getRoles().iterator().next();
+		String username = account.get().getUsername();
+		String jwt_AccessToken = jwtProvider.createAccessToken(role, username); // tạo AccessToken
 		String jwt_RefreshToken = jwtProvider.createRefreshToken(role, username); // tạo RefreshToken
 
 		account1.setRefreshToken(jwt_RefreshToken);
@@ -59,7 +62,6 @@ public class TokenController {
 
 		return ResponseEntity.ok(new LoginResponse(0, "success", jwt_AccessToken, jwt_RefreshToken));
 	}
-
 
 	// api: auth user
 	@Transactional
@@ -70,6 +72,7 @@ public class TokenController {
 		return ResponseEntity.ok(messageResponse);
 	}
 
+	// api: refresh_token
 	@Transactional
 	@GetMapping("/refresh_token")
 	@PreAuthorize("hasAuthority('SCOPE_USER')")

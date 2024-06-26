@@ -433,7 +433,7 @@ public class ProductServicesImp implements ProductServices {
 		MessageDataResponse messageDataResponse = new MessageDataResponse();
 		try {
 			// Gọi hàm getProductType từ ChangeValueToType để lấy loại sản phẩm
-			Number productType = changeValueToType.productTypeMap(value);
+			Number productType = changeValueToType.productTypeMap(value.toLowerCase());
 
 			if (productType.intValue() == -1) {
 				messageDataResponse.setCode(1);

@@ -50,17 +50,23 @@ class Footer extends Component {
                                 <span>Đồ án môn học: Lập trình ứng dụng với JAVA</span>
                             </div>
                             <div className='giangvien'>
-                                <span>Giảng viên: Ths. Nguyễn Huy Cường</span>
+                                <h3>Giảng viên: Ths. Nguyễn Huy Cường</h3>
                             </div>
                             <div className='detai'>
                                 <span>Đề tài: Website bán máy tính và linh kiện máy tính</span>
                             </div>
                             <div className='nguoithuchien'>
                                 <span>
-                                    Sinh viên: Trịnh Minh Thái Tố &nbsp; MSSV: 2180608122
+                                    Trịnh Minh Thái Tố &nbsp; MSSV: 2180608122
                                 </span>
                                 <span>
-
+                                    Tạ Tống Thành &nbsp;  MSSV: 2180608613
+                                </span>
+                                <span>
+                                    Trình Minh Trí &nbsp;  MSSV: 2180608752
+                                </span>
+                                <span>
+                                    Nguyễn Thị Hoàng Yến &nbsp;  MSSV: 2180603952
                                 </span>
                             </div>
                         </div>
@@ -75,7 +81,6 @@ class Footer extends Component {
 // map redux đến react
 const mapStateToProps = state => {
     return {
-        // isLoggedIn: state.user.isLoggedIn,
         language: state.app.language,
     };
 };

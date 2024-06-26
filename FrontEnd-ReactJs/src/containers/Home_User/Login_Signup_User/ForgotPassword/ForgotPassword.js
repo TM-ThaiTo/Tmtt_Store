@@ -31,10 +31,9 @@ class ForgotPassword extends Component {
             }
             this.setState({ isSending: true });
             const data = {
-                username: username,
+                mail: username,
                 title: 2
             }
-            console.log("check data", data);
             const result = await postSendVerifyCode(data);
             if (result.code === 0) {
                 message.success('Gửi thành công, kiểm tra username');

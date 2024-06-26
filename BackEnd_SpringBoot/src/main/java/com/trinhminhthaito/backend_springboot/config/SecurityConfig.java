@@ -42,7 +42,7 @@ public class SecurityConfig {
 
 			// account
 			"/api/v1/account/logout",
-			// "/api/v1/account/auth",
+			"/api/v1/account/gg",
 
 			"/api/v1/account/signup",
 			"/api/v1/account/login",

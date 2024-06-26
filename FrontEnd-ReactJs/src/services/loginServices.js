@@ -19,7 +19,7 @@ const getAuth = () => {
 
 // POST: SignUp bằng Google
 const postLoginWithGoogle = (data) => {
-    return axios.post('/apis/gg', data);
+    return axios.post(endpoint + '/gg', data);
 }
 
 // GET: Refresh Token

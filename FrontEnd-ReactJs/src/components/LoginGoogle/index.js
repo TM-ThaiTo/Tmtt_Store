@@ -33,7 +33,7 @@ class LoginGoogle extends Component {
     //fn: Xữ lý khi đăng nhập với google
     loginWithGoogle = async (data) => {
         try {
-            const response = await postLoginWithGoogle(data);
+            const response = await postLoginWithGoogle(data.credential);
             if (response && response.code === 0) {
                 this.onLoginSuccess(response);
             }
@@ -52,6 +52,7 @@ class LoginGoogle extends Component {
             <GoogleLogin
                 onSuccess={credentialResponse => {
                     this.loginWithGoogle(credentialResponse);
+                    console.log("check data: ", credentialResponse)
                 }}
                 onError={() => {
                     console.log('Login Failed');

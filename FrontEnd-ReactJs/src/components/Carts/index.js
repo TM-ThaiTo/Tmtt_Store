@@ -14,7 +14,9 @@ class Cart extends Component {
         super(props);
         this.state = {
             carts: [],
+            isInitialized: false
         };
+        this.updateStatusOrderCalled = false; // Biến cờ
     }
 
     // fn: Hàm để lấy thông tin từ URL
@@ -29,15 +31,14 @@ class Cart extends Component {
 
     // fn: Hàm xữ lý thanh toán vnpay
     updateStatusOrder = async (queryParams) => {
-        // console.log("Kiểm tra order: ", queryParams);
         if (queryParams != null) {
             // kiểm tra trạng thái thanh toán
             if (queryParams.vnp_TransactionStatus === "00") {
                 const idCodeMenthod = queryParams.vnp_TxnRef;
                 const response = await postUpdateVnpayApi(idCodeMenthod);
                 if (response && response.code === 0) {
-                    message.success("Đặt hàng thành công vui lòng kiểm tra đơn hàng");
                     this.onDelAllCarts();
+                    // this.setState({ isInitialized: false });
                     return;
                 }
             }
@@ -45,31 +46,32 @@ class Cart extends Component {
                 const response = await delOrderVnpayApi(queryParams.vnp_TxnRef);
                 if (response && response.code === 0) {
                     return;
+                } else {
+                    return;
                 }
-                else {
-                    return
-                }
-            }
-            else {
+            } else {
                 return;
             }
-        }
-        else {
+        } else {
             return;
         }
     }
 
     // event: Lấy dữ liệu từ localStorage
     componentDidMount = async () => {
-        const cartsFromLocalStorage = JSON.parse(localStorage.getItem('carts'));
-        this.setState({ carts: cartsFromLocalStorage });
+        if (!this.state.isInitialized) {
+            const cartsFromLocalStorage = JSON.parse(localStorage.getItem('carts'));
+            this.setState({ carts: cartsFromLocalStorage, isInitialized: true });
 
-        // Lấy thông tin từ URL để thanh toán 
-        const queryParams = this.getQueryParams();
-        if (queryParams == null) {
-            return;
-        } else {
-            await this.updateStatusOrder(queryParams);
+            // Lấy thông tin từ URL để thanh toán 
+            const queryParams = this.getQueryParams();
+            if (queryParams == null) {
+                return;
+            } else if (!this.updateStatusOrderCalled) {
+                this.updateStatusOrder(queryParams);
+                // this.updateStatusOrderCalled = true; // Đặt cờ thành true sau khi gọi
+                return;
+            }
         }
     }
 
@@ -85,6 +87,7 @@ class Cart extends Component {
         const cartsFromLocalStorageString = JSON.stringify(cartsFromLocalStorage);
 
         if (cartsString !== cartsFromLocalStorageString) {
+            message.success("Đặt hàng thành công vui lòng kiểm tra đơn hàng");
             this.setState({ carts: cartsFromLocalStorage });
         }
     }
@@ -171,4 +174,3 @@ const mapDispatchToProps = dispatch => {
     };
 }
 export default connect(null, mapDispatchToProps)(Cart);
-

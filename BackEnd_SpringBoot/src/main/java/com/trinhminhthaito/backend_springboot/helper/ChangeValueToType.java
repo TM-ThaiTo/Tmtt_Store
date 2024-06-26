@@ -23,9 +23,9 @@ public class ChangeValueToType {
                 // === Disk ===//
                 { "disk", "3" },
                 { "Ổ cứng", "3" },
-                { "Bộ nhớ trong", "3" },
-                { "SSD", "3" },
-                { "HHD", "3" },
+                { "bộ nhớ trong", "3" },
+                { "ssd", "3" },
+                { "hhd", "3" },
 
                 // === Display ===//
                 { "display", "4" },
@@ -40,6 +40,7 @@ public class ChangeValueToType {
 
                 // === Laptop ===//
                 { "laptop", "5" },
+                { "Laptop", "5" },
                 { "máy tính xách tay", "5" },
 
                 // === Mainboard ===//
